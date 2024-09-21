@@ -15,17 +15,17 @@
 }
 
 [ data-theme="light"] {
-    /* colors */
-    --accent: #d7bc76;
-    --accent-dimmed: #d7bc7626;
-    --dark-bg: #ececec;
-    --dark-text: #a5a5a5;
-    --light-bg: #f2f2f2;
-    --light-nav: #f6f6f6;
-    --light-text: #2e2e2e;
-    --warning-blue: #3f82c6;
-    --warning-red: #bf4848;
-    /* values */
-    --soft-corner: 0.9375rem;
-    --round-corner: 6.25rem;
-  }
+  /* colors */
+  --accent: #d7bc76;
+  --accent-dimmed: #d7bc7626;
+  --dark-bg: #ececec;
+  --dark-text: #a5a5a5;
+  --light-bg: #f2f2f2;
+  --light-nav: #f6f6f6;
+  --light-text: #2e2e2e;
+  --warning-blue: #3f82c6;
+  --warning-red: #bf4848;
+  /* values */
+  --soft-corner: 0.9375rem;
+  --round-corner: 6.25rem;
+}

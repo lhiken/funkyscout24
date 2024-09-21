@@ -1,0 +1,7 @@
+.fa-solid#accent {
+    color: var(--accent);
+}
+
+.fa-solid#dark {
+    color: var(--dark-text);
+}

@@ -63,31 +63,29 @@
 }
 
 #auth-name {
-
-
     display: flex;
-    height: 3.375rem;
+    height: 100%;
     padding: 0.625rem 0.625rem 0.625rem 1.375rem;
     align-items: center;
     gap: 0.625rem;
     align-self: stretch;
+    flex-grow: 1;
 
     border-radius: var(--round-corner, 6.25rem);
     background: var(--dark-bg, #0D0D0D);
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset;
 
-    width: 100%;
 }
 
 #auth-submit {
     display: flex;
-    width: 3.3125rem;
-    height: 3.3125rem;
+    height: 100%;
     padding: 0.25rem 0.1875rem;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 0.625rem;
+
     aspect-ratio: 1;
     
     border-radius: var(--round-corner, 6.25rem);

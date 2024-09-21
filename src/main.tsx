@@ -8,6 +8,7 @@ import {
 import App from './app/app';
 import Error from './components/errors/error';
 import AuthPage from './app/routes/auth';
+import './utils/reload.css'
 import './index.css'
 import './vars.css'
 

@@ -12,7 +12,7 @@ const AuthPage = () => {
             id="auth-body"
          >
             <div id="auth-header">
-               Funkyscout
+               funkyscout
             </div>
             <div id="auth-box">
                <button id="auth-top">

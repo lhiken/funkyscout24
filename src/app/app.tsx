@@ -1,7 +1,6 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
-
 interface userInfo {
    userId: number,
    user: string | null,

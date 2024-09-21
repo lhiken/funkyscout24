@@ -1,6 +1,6 @@
 {
-   "name": "Funkyscout",
-   "short_name": "Funkyscout",
+   "name": "funkyscout",
+   "short_name": "funkyscout",
    "icons": [
      {
        "src": "/icons/pwa-192x192.png",
@@ -28,7 +28,7 @@
      }
    ],
    "start_url": "/",
-   "display": "fullscreen",
+   "display": "standalone",
    "background_color": "#0d0d0d",
    "theme_color": "#F7F7F7",
    "description": "FRC 846's scouting app"

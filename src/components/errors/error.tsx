@@ -21,7 +21,7 @@ const ErrorPage: React.FC = () => {
                   exit={{ opacity: 0 }}
                   id="error-box"
                >
-                  <text id='error-header'>An error has occured</text>
+                  <div id='error-header'>An error has occured</div>
                   <div id='error-status'>
                      {
                         isRouteErrorResponse(error) ?

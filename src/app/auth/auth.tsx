@@ -1,6 +1,6 @@
 import { motion } from "framer-motion"
 import { useNavigate } from "react-router-dom";
-import InstallPrompt from "../../components/auth/install-prompt";
+import { InstallPrompt, WelcomePrompt } from "../../components/auth/install-prompt";
 import './styles/auth.css'
 
 const AuthPage = () => {
@@ -23,7 +23,7 @@ const AuthPage = () => {
             <div id="auth-header">
                funkyscout
             </div>
-            {installed ? null : <InstallPrompt />}
+            {installed ? <WelcomePrompt/> : <InstallPrompt />}
             <div id="auth-box">
                <button id="auth-top">
                   <i className='fa-solid fa-chevron-down' />

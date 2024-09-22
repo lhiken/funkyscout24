@@ -27,7 +27,6 @@ const router = createBrowserRouter([
   }
 ]);
 
-//debug purposes!!
 console.log(supabase);
 
 const root = createRoot(document.getElementById('root')!);

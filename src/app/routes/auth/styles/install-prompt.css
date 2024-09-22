@@ -1,0 +1,35 @@
+#install-prompt {
+   display: flex;
+   width: 19rem;
+   padding: 1rem 1.4rem;
+   flex-direction: column;
+   font-weight: 500;
+   color: var(--warning-red);
+   font-size: 0.9375rem;
+
+   border-radius: var(--soft-corner);
+   background: rgb(40, 20, 20);
+   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.05);
+
+   border: 0.15rem solid var(--warning-red);
+}
+
+#install-prompt-header {
+   display: flex;
+   gap: 0.2rem;
+   align-items: center;
+   font-size: 1rem;
+}
+
+#install-prompt-button {
+   margin-left: auto;
+}
+
+#install-prompt-details {
+   display: flex;
+   flex-direction: column;
+   gap: 0.6rem;   
+   font-weight: 400;
+   font-size: 0.875rem;
+   overflow: hidden;
+}

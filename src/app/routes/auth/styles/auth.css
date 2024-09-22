@@ -1,0 +1,109 @@
+#auth-body {
+   background-color: var(--dark-bg);
+   align-content: center;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   gap: 1.0625rem;
+   display: flex;
+}
+
+#auth-header {
+   color: var(--accent);
+   display: flex;
+   width: 19rem;
+   height: 1.2rem;
+   flex-direction: column;
+   justify-content: center;
+   flex-shrink: 0;
+   font-weight: 500;
+}
+
+#auth-box {
+   display: flex;
+   width: 19rem;
+   padding: 1.4375rem 1.25rem;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   gap: 1.125rem;
+
+   font-weight: 500;
+   color: var(--dark-text);
+   font-size: 0.9375rem;
+
+   border-radius: var(--soft-corner);
+   background: var(--light-bg);
+   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.05);
+}
+
+#auth-top {
+   display: flex;
+   height: 3.375rem;
+   padding: 0.625rem 0.625rem 0.625rem 1.375rem;
+   align-items: center;
+   gap: 0.625rem;
+   align-self: stretch;
+
+   border-radius: var(--round-corner, 6.25rem);
+   background: var(--dark-bg, #0D0D0D);
+   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset;
+}
+
+#auth-bottom {
+   color: var(--dark-text);
+   font-size: 0.9375rem;
+
+   display: flex;
+   height: 3.375rem;
+   align-items: center;
+   gap: 0.625rem;
+   align-self: stretch;
+}
+
+#auth-name {
+   display: flex;
+   height: 100%;
+   padding: 0.625rem 0.625rem 0.625rem 1.375rem;
+   align-items: center;
+   gap: 0.625rem;
+   align-self: stretch;
+   flex-grow: 1;
+
+   border-radius: var(--round-corner, 6.25rem);
+   background: var(--dark-bg, #0D0D0D);
+   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset;
+
+}
+
+#auth-submit {
+   display: flex;
+   height: 100%;
+   padding: 0.25rem 0.1875rem;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   gap: 0.625rem;
+   aspect-ratio: 1;
+
+   border-radius: var(--round-corner, 6.25rem);
+   background: var(--accent, #CDA745);
+   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+
+   font-size: 1.65rem;
+   color: var(--dark-bg);
+}
+
+button,
+input[type="submit"],
+input[type="reset"] {
+   background: none;
+   border: none;
+   padding: 0;
+   font: inherit;
+   outline: inherit;
+   color: inherit;
+   cursor: pointer;
+
+   -webkit-tap-highlight-color: transparent;
+}

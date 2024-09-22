@@ -7,7 +7,7 @@ import {
 
 import App from './app/app';
 import Error from './components/errors/error';
-import AuthPage from './app/routes/auth';
+import AuthPage from './app/routes/auth/authpage';
 import './utils/reload.css'
 import './index.css'
 import './vars.css'

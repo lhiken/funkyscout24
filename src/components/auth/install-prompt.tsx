@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { motion } from "framer-motion"
-import TextTransition from "react-text-transition";
 import './install-prompt.css'
 
 const InstallPrompt = () => {
@@ -28,9 +27,7 @@ const InstallPrompt = () => {
                <i className="fa-solid fa-xmark" />
                Uh oh!
                <div id="install-prompt-button">
-                  <TextTransition>
                   {expand ? <i className="fa-solid fa-chevron-up"/> : <i className="fa-solid fa-chevron-down"/>}
-                  </TextTransition>
                </div>
             </div>
             <motion.div

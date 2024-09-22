@@ -8,7 +8,7 @@ const ErrorPage: React.FC = () => {
    const navigate = useNavigate();
 
    const handleReturn = () => {
-      navigate("/auth");
+      navigate("/");
    }
 
    return (
@@ -35,7 +35,7 @@ const ErrorPage: React.FC = () => {
                   exit={{ opacity: 0 }}
                   id="error-return"
                   onClick={handleReturn}>
-                  Return to Main
+                  Return to Home
                </motion.div>
             </div>
          </AnimatePresence>

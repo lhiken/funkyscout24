@@ -10,11 +10,11 @@ const ToolBar: React.FC = () => {
         </div>
         </button>
         <button >
-        <i className="fa-solid fa-gauge"></i>
+        <i className="fa-solid fa-gauge"id="toolbar-button-icon"></i>
         <div>Dashboard</div>
         </button>
         <button id="toolbar-button">
-        <i className="fa-solid fa-binoculars"></i>
+        <i className="fa-solid fa-binoculars"id="toolbar-button-icon"></i>
         <div>Scouting</div>
         </button>
        </div>

@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { motion } from "framer-motion"
 import TextTransition from "react-text-transition";
-import './styles/auth.css'
-import './styles/install-prompt.css'
+import './install-prompt.css'
 
 const InstallPrompt = () => {
-   const [expand, setExpand] = useState(false);
+   const [expand, setExpand] = useState(true);
 
    const animateDropdown = {
       expand: {
@@ -53,40 +52,4 @@ const InstallPrompt = () => {
    )
 }
 
-const AuthPage = () => {
-   const installed = window.matchMedia('(display-mode: standalone)').matches;
-
-   return (
-      <>
-         <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ opacity: 0 }}
-
-            id="auth-body"
-         >
-            <div id="auth-header">
-               funkyscout
-            </div>
-            {installed ? null : <InstallPrompt />}
-            <div id="auth-box">
-               <button id="auth-top">
-                  <i className='fa-solid fa-chevron-down' />
-                  Event
-               </button>
-               <div id='auth-bottom'>
-                  <button id="auth-name">
-                     <i className='fa-solid fa-chevron-down' />
-                     Name
-                  </button>
-                  <button id="auth-submit">
-                     <i className="fa-solid fa-arrow-right" />
-                  </button>
-               </div>
-            </div>
-         </motion.div>
-      </>
-   );
-}
-
-export default AuthPage;
+export default InstallPrompt;

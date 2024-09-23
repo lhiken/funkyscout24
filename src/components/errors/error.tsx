@@ -2,7 +2,7 @@ import { useRouteError, isRouteErrorResponse, useNavigate } from "react-router-d
 import { motion, AnimatePresence } from "framer-motion"
 import './error.css'
 
-const ErrorPage: React.FC = () => {
+const ErrorPage = () => {
    const error = useRouteError();
 
    const navigate = useNavigate();

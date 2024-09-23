@@ -63,6 +63,15 @@ const AuthPage = () => {
             return event.event_code.toLowerCase().includes(query.toLowerCase());
          })
 
+
+   //debug purposes
+
+   useEffect(() => {
+      if(selectedEvent) {
+         console.log(selectedEvent);
+      }
+   }, [selectedEvent])
+
    return (
       <>
          <motion.div

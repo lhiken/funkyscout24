@@ -17,7 +17,7 @@ const AuthPage = () => {
    interface EventData {
       id: number,
       event_code: string,
-      event_date: string
+      event_date: string | null,
    }
 
    const [events, setEvents] = useState<EventData[]>();
@@ -83,51 +83,33 @@ const AuthPage = () => {
          }
       }
    }
+
+
    useEffect(() => {
-      if (selectedEvent) {
-         /*TODO: Implement a way such that whenever
-         a event is selected, we call a function that 
-         retrieves the names of the scouters for that
-         event.
-
-         Reference the code given above to you by your
-         instructor for retrieving event data, and apply
-         this to scouter names.
-         */
-         let fetch = true;
-         if (fetch == true) {
-            getScouters().then(
-               result => setScouters(result),
-               error => setScouters(error),
-            )
-            console.log(scouters);
-         }
-         return () => {
-            fetch = false;
-         }
-
-
-      }
+      getScouters().then(
+         result => setScouters(result),
+         error => setScouters(error),
+      )
    }, [selectedEvent])
 
 
-   const [query, setQuery] = useState<string>('');
+   const [eventQuery, setEventQuery] = useState('');
 
-   const filteredEvents =
-      query == ''
+   const queriedEvents =
+      eventQuery == ''
          ? events
          : events?.filter((event) => {
-            return event.event_code.toLowerCase().includes(query.toLowerCase());
+            return event.event_code.toLowerCase().includes(eventQuery.toLowerCase());
          })
 
+   const [scouterQuery, setScouterQuery] = useState('');
 
-   const filteredScouters =
-      query == ''
+   const queriedScouters =
+      scouterQuery == ''
          ? scouters
          : scouters?.filter((scouter) => {
-            return scouter.name;
+            return scouter.name.toLowerCase().includes(scouterQuery.toLowerCase());
          })
-
 
    return (
       <>
@@ -143,7 +125,7 @@ const AuthPage = () => {
             {installed ? <WelcomePrompt /> : <InstallPrompt />}
             <div id="auth-box">
                <Field id="auth-top">
-                  <Combobox value={selectedEvent} onChange={setSelectedEvent} onClose={() => setQuery('')}>
+                  <Combobox value={selectedEvent} onChange={setSelectedEvent} onClose={() => setEventQuery('')}>
                      {({ open }) => (
                         <>
                            <ComboboxButton>
@@ -151,7 +133,7 @@ const AuthPage = () => {
                            </ComboboxButton>
                            <ComboboxInput
                               aria-label="Event"
-                              onChange={(input) => setQuery(input.target.value)}
+                              onChange={(input) => setEventQuery(input.target.value)}
                               displayValue={(event: EventData | null) => event?.event_code ?? ''}
                               placeholder="Event"
                               id="auth-input"
@@ -164,13 +146,13 @@ const AuthPage = () => {
                                     initial={{ opacity: 0, y: -20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, y: -20 }}
-                                    onAnimationComplete={() => setQuery('')}
+                                    onAnimationComplete={() => setEventQuery('')}
                                     anchor={{ to: 'top', gap: '0.8rem' }}
                                     id="auth-dropdown-container"
                                  >
                                     <div id="auth-dropdown-header">Events</div>
                                     <div id="auth-dropdown-line" />
-                                    {filteredEvents?.map((event) => (
+                                    {queriedEvents?.map((event) => (
                                        <ComboboxOption key={event.id} value={event} id="auth-dropdown-option">
                                           {event.event_code}
                                        </ComboboxOption>
@@ -182,62 +164,53 @@ const AuthPage = () => {
                      )}
                   </Combobox>
                </Field>
-
-
-               {/* <div id='auth-bottom'>
-                  <div id="auth-name">
-                     <i className='fa-solid fa-chevron-down' />
-                     <input defaultValue={"Name"}></input>
-                  </div>
-                 
-               </div> */}
                <Field id='auth-bottom'>
                   <div id="auth-name">
-                  <Combobox value={selectedScouters} onChange={setSelectedScouters} onClose={() => setQuery('')} >
- 
-                     {({ open }) => (
-                        <>
-                           <ComboboxButton >
-                              <i className="fa-solid fa-chevron-down" ></i>
-                              
-                           </ComboboxButton>
-                           <ComboboxInput
-                              aria-label="Name"
-                              onChange={(input) => setQuery(input.target.value)}
-                              displayValue={(scouter: ScouterData | null) => scouter?.name ?? ''}
-                              placeholder="Name"
-                              
-                           />
-                           <AnimatePresence>
-                              {open && (
-                                 <ComboboxOptions
-                                    static
-                                    as={motion.div}
-                                    initial={{ opacity: 0, y: -20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -20 }}
-                                    onAnimationComplete={() => setQuery('')}
-                                    anchor={{ to: 'top', gap: '0.8rem' }}
-                                    id="auth-dropdown-container"
-                                 >
-                                    <div id="auth-dropdown-header">Scouters</div>
-                                    <div id="auth-dropdown-line" />
-                                    {filteredScouters?.map((scouter) => (
-                                       <ComboboxOption key={scouter.id} value={scouter} id="auth-dropdown-option">
-                                          {scouter.name}
-                                       </ComboboxOption>
-                                    ))}
-                                 </ComboboxOptions>
-                              )}
-                           </AnimatePresence>
-                        </>
-                     )}
-                  </Combobox>
+                     <Combobox value={selectedScouters} onChange={setSelectedScouters} onClose={() => setScouterQuery('')} >
+
+                        {({ open }) => (
+                           <>
+                              <ComboboxButton >
+                                 <i className="fa-solid fa-chevron-down" ></i>
+
+                              </ComboboxButton>
+                              <ComboboxInput
+                                 aria-label="Name"
+                                 onChange={(input) => setScouterQuery(input.target.value)}
+                                 displayValue={(scouter: ScouterData | null) => scouter?.name ?? ''}
+                                 placeholder="Name"
+
+                              />
+                              <AnimatePresence>
+                                 {open && (
+                                    <ComboboxOptions
+                                       static
+                                       as={motion.div}
+                                       initial={{ opacity: 0, y: -20 }}
+                                       animate={{ opacity: 1, y: 0 }}
+                                       exit={{ opacity: 0, y: -20 }}
+                                       onAnimationComplete={() => setScouterQuery('')}
+                                       anchor={{ to: 'top', gap: '0.8rem' }}
+                                       id="auth-dropdown-container"
+                                    >
+                                       <div id="auth-dropdown-header">Scouters</div>
+                                       <div id="auth-dropdown-line" />
+                                       {queriedScouters?.map((scouter) => (
+                                          <ComboboxOption key={scouter.id} value={scouter} id="auth-dropdown-option">
+                                             {scouter.name}
+                                          </ComboboxOption>
+                                       ))}
+                                    </ComboboxOptions>
+                                 )}
+                              </AnimatePresence>
+                           </>
+                        )}
+                     </Combobox>
                   </div>
                   <button id="auth-submit" onClick={handleAuthSubmit}>
                      <i className="fa-solid fa-arrow-right" />
                   </button>
-                  
+
                </Field>
 
             </div>

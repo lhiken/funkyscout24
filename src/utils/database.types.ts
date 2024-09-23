@@ -31,17 +31,17 @@ export type Database = {
         Row: {
           event_code: string
           id: number
-          name: string | null
+          name: string
         }
         Insert: {
           event_code: string
           id?: number
-          name?: string | null
+          name?: string
         }
         Update: {
           event_code?: string
           id?: number
-          name?: string | null
+          name?: string
         }
         Relationships: []
       }
@@ -49,17 +49,17 @@ export type Database = {
         Row: {
           event_code: string
           id: number
-          name: string | null
+          name: string
         }
         Insert: {
           event_code: string
           id: number
-          name?: string | null
+          name?: string
         }
         Update: {
           event_code?: string
           id?: number
-          name?: string | null
+          name?: string
         }
         Relationships: []
       }
@@ -67,17 +67,17 @@ export type Database = {
         Row: {
           event_code: string
           id: number
-          name: string | null
+          name: string
         }
         Insert: {
           event_code: string
           id?: number
-          name?: string | null
+          name?: string
         }
         Update: {
           event_code?: string
           id?: number
-          name?: string | null
+          name?: string
         }
         Relationships: []
       }

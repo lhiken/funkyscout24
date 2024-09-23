@@ -14,7 +14,7 @@
   --round-corner: 6.25rem;
 }
 
-[ data-theme="light"] {
+[data-theme="light"] {
   /* colors */
   --accent: #d7bc76;
   --accent-dim: #d7bc7626;

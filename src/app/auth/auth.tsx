@@ -52,6 +52,65 @@ const AuthPage = () => {
       }
    }, []);
 
+   //debug purposes
+
+   interface ScouterData {
+      id: number,
+      name: string,
+   }
+
+   const [scouters, setScouters] = useState<ScouterData[]>();
+   const [selectedScouters, setSelectedScouters] = useState<ScouterData | null>(null)
+
+   const getScouters = async () => {
+      if (selectedEvent) {
+         try {
+            const { data: scouters, error } = await supabase
+               .from(`scouters`)
+               .select('id, name')
+               .eq('event_code', selectedEvent.event_code)
+
+            if (error) {
+               throw error;
+            }
+
+            return scouters!.map(scouter => ({
+               id: scouter.id,
+               name: scouter.name,
+            }));
+         } catch (error) {
+            console.log(error);
+         }
+      }
+   }
+   useEffect(() => {
+      if (selectedEvent) {
+         /*TODO: Implement a way such that whenever
+         a event is selected, we call a function that 
+         retrieves the names of the scouters for that
+         event.
+
+         Reference the code given above to you by your
+         instructor for retrieving event data, and apply
+         this to scouter names.
+         */
+         let fetch = true;
+         if (fetch == true) {
+            getScouters().then(
+               result => setScouters(result),
+               error => setScouters(error),
+            )
+            console.log(scouters);
+         }
+         return () => {
+            fetch = false;
+         }
+
+
+      }
+   }, [selectedEvent])
+
+
    const [query, setQuery] = useState<string>('');
 
    const filteredEvents =
@@ -61,13 +120,14 @@ const AuthPage = () => {
             return event.event_code.toLowerCase().includes(query.toLowerCase());
          })
 
-   //debug purposes
 
-   useEffect(() => {
-      if (selectedEvent) {
-         console.log(selectedEvent);
-      }
-   }, [selectedEvent])
+   const filteredScouters =
+      query == ''
+         ? scouters
+         : scouters?.filter((scouter) => {
+            return scouter.name;
+         })
+
 
    return (
       <>
@@ -113,7 +173,6 @@ const AuthPage = () => {
                                     {filteredEvents?.map((event) => (
                                        <ComboboxOption key={event.id} value={event} id="auth-dropdown-option">
                                           {event.event_code}
-
                                        </ComboboxOption>
                                     ))}
                                  </ComboboxOptions>
@@ -123,15 +182,64 @@ const AuthPage = () => {
                      )}
                   </Combobox>
                </Field>
-               <div id='auth-bottom'>
+
+
+               {/* <div id='auth-bottom'>
                   <div id="auth-name">
                      <i className='fa-solid fa-chevron-down' />
                      <input defaultValue={"Name"}></input>
                   </div>
+                 
+               </div> */}
+               <Field id='auth-bottom'>
+                  <div id="auth-name">
+                  <Combobox value={selectedScouters} onChange={setSelectedScouters} onClose={() => setQuery('')} >
+ 
+                     {({ open }) => (
+                        <>
+                           <ComboboxButton >
+                              <i className="fa-solid fa-chevron-down" ></i>
+                              
+                           </ComboboxButton>
+                           <ComboboxInput
+                              aria-label="Name"
+                              onChange={(input) => setQuery(input.target.value)}
+                              displayValue={(scouter: ScouterData | null) => scouter?.name ?? ''}
+                              placeholder="Name"
+                              
+                           />
+                           <AnimatePresence>
+                              {open && (
+                                 <ComboboxOptions
+                                    static
+                                    as={motion.div}
+                                    initial={{ opacity: 0, y: -20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -20 }}
+                                    onAnimationComplete={() => setQuery('')}
+                                    anchor={{ to: 'top', gap: '0.8rem' }}
+                                    id="auth-dropdown-container"
+                                 >
+                                    <div id="auth-dropdown-header">Scouters</div>
+                                    <div id="auth-dropdown-line" />
+                                    {filteredScouters?.map((scouter) => (
+                                       <ComboboxOption key={scouter.id} value={scouter} id="auth-dropdown-option">
+                                          {scouter.name}
+                                       </ComboboxOption>
+                                    ))}
+                                 </ComboboxOptions>
+                              )}
+                           </AnimatePresence>
+                        </>
+                     )}
+                  </Combobox>
+                  </div>
                   <button id="auth-submit" onClick={handleAuthSubmit}>
                      <i className="fa-solid fa-arrow-right" />
                   </button>
-               </div>
+                  
+               </Field>
+
             </div>
          </motion.div>
       </>

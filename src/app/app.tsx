@@ -12,26 +12,27 @@ const userInfo = {
    userId: 0,
    user: null,
 }
-const NavbarDisplay =() =>{
+
+const NavbarDisplay = () => {
    const currentPage = useLocation()
-   const paths: readonly string[] = ['/dashboard'];
+   const paths = ['/dashboard'];
    const check = paths.includes(currentPage.pathname);
-   if (check){
-      return (<>
-      <Navbar/>
-      </>)
+   if (check) {
+      return (
+         <Navbar />
+      )
    }
    return null;
 }
 
-const TopbarDisplay =() =>{
+const TopbarDisplay = () => {
    const currentPage = useLocation()
-   const paths: readonly string[] = ['/dashboard'];
+   const paths = ['/dashboard', '/auth'];
    const check = paths.includes(currentPage.pathname);
-   if (check){
-      return (<>
-      <Topbar/>
-      </>)
+   if (check) {
+      return (
+         <Topbar />
+      )
    }
    return null;
 }

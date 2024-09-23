@@ -11,18 +11,18 @@ export type Database = {
     Tables: {
       events: {
         Row: {
-          created_at: string
           event_code: string
+          event_date: string | null
           id: number
         }
         Insert: {
-          created_at?: string
           event_code: string
+          event_date?: string | null
           id?: number
         }
         Update: {
-          created_at?: string
           event_code?: string
+          event_date?: string | null
           id?: number
         }
         Relationships: []

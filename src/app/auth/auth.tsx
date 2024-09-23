@@ -17,28 +17,26 @@ const AuthPage = () => {
    interface EventData {
       id: number,
       event_code: string,
+      event_date: string
    }
 
    const [events, setEvents] = useState<EventData[]>();
    const [selectedEvent, setSelectedEvent] = useState<EventData | null>(null);
 
    const getEvents = async () => {
-      try {
-         const { data: events, error } = await supabase
-            .from('events')
-            .select('id, event_code')
+      const { data: events, error } = await supabase
+         .from('events')
+         .select('id, event_code, event_date')
 
-         if (error) {
-            throw error;
-         }
-
-         return events!.map(event => ({
-            id: event.id,
-            event_code: event.event_code,
-         }));
-      } catch (error) {
-         console.log(error);
+      if (error) {
+         throw error;
       }
+
+      return events!.map(event => ({
+         id: event.id,
+         event_code: event.event_code,
+         event_date: event.event_date,
+      }));
    }
 
    useEffect(() => {
@@ -63,11 +61,10 @@ const AuthPage = () => {
             return event.event_code.toLowerCase().includes(query.toLowerCase());
          })
 
-
    //debug purposes
 
    useEffect(() => {
-      if(selectedEvent) {
+      if (selectedEvent) {
          console.log(selectedEvent);
       }
    }, [selectedEvent])
@@ -101,24 +98,25 @@ const AuthPage = () => {
                            />
                            <AnimatePresence>
                               {open && (
-                              <ComboboxOptions
-                                 static
-                                 as={motion.div}
-                                 initial={{ opacity: 0, y: -20 }}
-                                 animate={{ opacity: 1, y: 0 }}
-                                 exit={{ opacity: 0, y: -20 }}
-                                 onAnimationComplete={() => setQuery('')}
-                                 anchor={{ to: 'top', gap: '0.8rem' }}
-                                 id="auth-dropdown-container"
-                              >
-                                 <div id="auth-dropdown-header">Events</div>
-                                 <div id="auth-dropdown-line" />
-                                 {filteredEvents?.map((event) => (
-                                    <ComboboxOption key={event.id} value={event} id="auth-dropdown-option">
-                                       {event.event_code}
-                                    </ComboboxOption>
-                                 ))}
-                              </ComboboxOptions>
+                                 <ComboboxOptions
+                                    static
+                                    as={motion.div}
+                                    initial={{ opacity: 0, y: -20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -20 }}
+                                    onAnimationComplete={() => setQuery('')}
+                                    anchor={{ to: 'top', gap: '0.8rem' }}
+                                    id="auth-dropdown-container"
+                                 >
+                                    <div id="auth-dropdown-header">Events</div>
+                                    <div id="auth-dropdown-line" />
+                                    {filteredEvents?.map((event) => (
+                                       <ComboboxOption key={event.id} value={event} id="auth-dropdown-option">
+                                          {event.event_code}
+
+                                       </ComboboxOption>
+                                    ))}
+                                 </ComboboxOptions>
                               )}
                            </AnimatePresence>
                         </>

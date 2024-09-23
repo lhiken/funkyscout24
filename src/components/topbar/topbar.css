@@ -20,11 +20,13 @@
 
 #topbar {
    display: flex;
-   position: absolute;
-   top: 0rem;
-   left: 0px;
+   margin: auto;
+   position: fixed;
+   inset: 0px;
    width: 100%;
+   max-width: 25rem;
    padding: 1.75rem 2rem;
    justify-content: space-between;
    flex-direction: row;
+   z-index: -10;
 }

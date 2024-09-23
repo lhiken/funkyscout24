@@ -130,7 +130,7 @@ input::placeholder {
    flex-direction: column;
    color: var(--light-text);
 
-   border-radius: 0.2rem;
+   border-radius: 0.6rem;
    border: solid 2px var(--light-bg);
    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.05);
 }

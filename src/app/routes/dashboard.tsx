@@ -1,6 +1,11 @@
-import ToolBar from "../../components/toolbar/toolbar"
+import Navbar from "../../components/navbar/navbar"
+
 const DashBoard = () => {
-    return <ToolBar/>
+    return (
+        <>    
+            <Navbar />
+        </>
+    )
 
 }
 export default DashBoard;

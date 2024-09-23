@@ -12,7 +12,6 @@ import DashBoard from './app/routes/dashboard';
 import './utils/styles/reload.css'
 import './utils/styles/index.css'
 import './utils/styles/vars.css'
-import supabase from './utils/supabase';
 
 const router = createBrowserRouter([
   {
@@ -31,8 +30,6 @@ const router = createBrowserRouter([
     ]
   }
 ]);
-
-console.log(supabase);
 
 const root = createRoot(document.getElementById('root')!);
 

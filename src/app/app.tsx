@@ -12,6 +12,7 @@ const userInfo = {
 }
 
 const App = () => {
+
    const navigate = useNavigate();
 
    useEffect(() => {

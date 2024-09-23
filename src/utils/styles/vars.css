@@ -1,7 +1,7 @@
 :root {
   /* colors */
   --accent: #cda745;
-  --accent-dimmed: #cda74526;
+  --accent-dim: #cda74526;
   --dark-bg: #0d0d0d;
   --dark-text: #4d4c4c;
   --light-bg: #121212;
@@ -17,7 +17,7 @@
 [ data-theme="light"] {
   /* colors */
   --accent: #d7bc76;
-  --accent-dimmed: #d7bc7626;
+  --accent-dim: #d7bc7626;
   --dark-bg: #ececec;
   --dark-text: #a5a5a5;
   --light-bg: #f2f2f2;

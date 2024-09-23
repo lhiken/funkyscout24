@@ -1,5 +1,7 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import Navbar from "../components/navbar/navbar";
+import Topbar from "../components/topbar/topbar";
 
 interface userInfo {
    userId: number,
@@ -9,6 +11,29 @@ interface userInfo {
 const userInfo = {
    userId: 0,
    user: null,
+}
+const NavbarDisplay =() =>{
+   const currentPage = useLocation()
+   const paths: readonly string[] = ['/dashboard'];
+   const check = paths.includes(currentPage.pathname);
+   if (check){
+      return (<>
+      <Navbar/>
+      </>)
+   }
+   return null;
+}
+
+const TopbarDisplay =() =>{
+   const currentPage = useLocation()
+   const paths: readonly string[] = ['/dashboard'];
+   const check = paths.includes(currentPage.pathname);
+   if (check){
+      return (<>
+      <Topbar/>
+      </>)
+   }
+   return null;
 }
 
 const App = () => {
@@ -25,6 +50,8 @@ const App = () => {
       <>
          <div id='app'>
             <Outlet />
+            <NavbarDisplay />
+            <TopbarDisplay />
          </div>
       </>
    );

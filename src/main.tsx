@@ -13,10 +13,6 @@ import './utils/styles/reload.css'
 import './utils/styles/index.css'
 import './utils/styles/vars.css'
 
-window.addEventListener("load", () => {
-  document.body.classList.remove("preload");
-})
-
 const router = createBrowserRouter([
   {
     path: "/",

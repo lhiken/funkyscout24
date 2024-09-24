@@ -8,13 +8,13 @@ const updateTheme = () => {
    const theme = localStorage.getItem('current_theme');
 
    if (theme) {
-      if(theme == 'dark') {
-         setTheme('dark');
-      } else if (theme == 'light') {
-         setTheme('dark');
+      if(theme == 'theme-dark') {
+         setTheme('theme-dark');
+      } else if (theme == 'theme-light') {
+         setTheme('theme-dark');
       }
    } else {
-      setTheme('dark');
+      setTheme('theme-dark');
    }
 }
 

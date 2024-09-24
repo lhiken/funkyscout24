@@ -77,8 +77,14 @@ const WelcomePrompt = () => {
 
    return (
       <>
-         <div id="welcome-prompt" onClick={() => setExpand(!expand)}>
-            <div id="install-prompt-header">
+         <motion.div
+            id="welcome-prompt" 
+            onClick={() => setExpand(!expand)}
+            initial={{ y: 80, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={ { type: "spring", stiffness: 400, damping: 20} }
+            exit={{ opacity: 0 }}
+         >            <div id="install-prompt-header">
                <i className="fa-solid fa-check" />
                Welcome
                <div id="install-prompt-button">
@@ -98,7 +104,7 @@ const WelcomePrompt = () => {
                <div>App was installed!</div>
                <div>Please enable permissions in your device's settings for notifications.</div>
             </motion.div>
-         </div>
+         </motion.div>
       </>
    )
 }

@@ -1,7 +1,18 @@
 import { motion } from 'framer-motion';
+import { setTheme } from '../../utils/theme';
 import './topbar.css';
 
+
 const Topbar = () => {
+   const handleThemeSwitch = () => {
+      if (localStorage.getItem("current_theme") == "theme-dark") {
+         setTheme("theme-light");
+      } else {
+         setTheme("theme-dark");
+      }
+   }
+
+   handleThemeSwitch();
 
    return (<>
       <motion.div
@@ -11,7 +22,7 @@ const Topbar = () => {
          id="topbar"
       >
          <div id="topbar">
-            <button id="topbar-button">
+            <button id="topbar-button" onClick={handleThemeSwitch}>
                <i className="fa-solid fa-moon" id="topbar-icon" />
             </button>
             <button id="topbar-button">

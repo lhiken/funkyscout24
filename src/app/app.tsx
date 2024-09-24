@@ -1,5 +1,6 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { updateTheme } from "../utils/theme";
 import Navbar from "../components/navbar/navbar";
 import Topbar from "../components/topbar/topbar";
 
@@ -47,9 +48,13 @@ const App = () => {
       }
    }, [navigate]);
 
+   useEffect(() => {
+      updateTheme();
+   });
+
    return (
       <>
-         <div id='app'>
+         <div id='app' className="preload">
             <Outlet />
             <NavbarDisplay />
             <TopbarDisplay />

@@ -7,9 +7,11 @@
    align-items: center;
    gap: 0.625rem;
    flex-shrink: 0;
+   margin: 2rem;
    border-radius: 6.25rem;
    background: var(--light-bg, #121212);
    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.05);
+   cursor: pointer;
 }
 
 #topbar-icon {
@@ -20,13 +22,11 @@
 
 #topbar {
    display: flex;
-   margin: auto;
-   position: fixed;
-   inset: 0px;
+   position: absolute;
+   max-width: 28rem;
    width: 100%;
-   max-width: 25rem;
-   padding: 1.75rem 2rem;
+   top: 0rem;
    justify-content: space-between;
-   flex-direction: row;
-   z-index: -10;
+   align-items: center;
+   flex-shrink: 0;
 }

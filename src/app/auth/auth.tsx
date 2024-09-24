@@ -11,7 +11,9 @@ const AuthPage = () => {
    const navigate = useNavigate();
 
    const handleAuthSubmit = () => {
-      navigate("/dashboard");
+      if (selectedEvent && selectedScouter) {
+         navigate("/dashboard");
+      }
    }
 
    interface EventData {
@@ -52,46 +54,44 @@ const AuthPage = () => {
       }
    }, []);
 
-   //debug purposes
-
    interface ScouterData {
       id: number,
       name: string,
    }
 
    const [scouters, setScouters] = useState<ScouterData[]>();
-   const [selectedScouters, setSelectedScouters] = useState<ScouterData | null>(null)
-
-   const getScouters = async () => {
-      if (selectedEvent) {
-         try {
-            const { data: scouters, error } = await supabase
-               .from(`scouters`)
-               .select('id, name')
-               .eq('event_code', selectedEvent.event_code)
-
-            if (error) {
-               throw error;
-            }
-
-            return scouters!.map(scouter => ({
-               id: scouter.id,
-               name: scouter.name,
-            }));
-         } catch (error) {
-            console.log(error);
-         }
-      }
-   }
-
+   const [selectedScouter, setselectedScouter] = useState<ScouterData | null>(null)
 
    useEffect(() => {
-      getScouters().then(
-         result => setScouters(result),
-         error => setScouters(error),
-      )
-   }, [selectedEvent])
+      const fetchScouters = async () => {
+         try {
+            if (selectedEvent) {
+               const { data: scouters, error } = await supabase
+                  .from('scouters')
+                  .select('id, name')
+                  .eq('event_code', selectedEvent.event_code);
 
+               if (error) {
+                  console.error(error);
+               }
+
+               return scouters!.map(scouter => ({
+                  id: scouter.id,
+                  name: scouter.name,
+               }));
+            }
+         } catch (error) {
+            console.log(error);
+            return []; 
+         }
+      }
+
+      if (selectedEvent) {
+         fetchScouters()
+         .then(res => setScouters(res))
+         .catch(err => console.error(err));
+      }
+   }, [selectedEvent]);
 
    const [eventQuery, setEventQuery] = useState('');
 
@@ -122,14 +122,16 @@ const AuthPage = () => {
             <div id="auth-header">
                funkyscout
             </div>
-            {installed ? <WelcomePrompt /> : <InstallPrompt />}
+            <AnimatePresence>
+               {installed ? <WelcomePrompt /> : <InstallPrompt />}
+            </AnimatePresence>
             <div id="auth-box">
                <Field id="auth-top">
                   <Combobox value={selectedEvent} onChange={setSelectedEvent} onClose={() => setEventQuery('')}>
                      {({ open }) => (
                         <>
                            <ComboboxButton>
-                              <i className="fa-solid fa-chevron-down"></i>
+                              <i className="fa-solid fa-chevron-down" />
                            </ComboboxButton>
                            <ComboboxInput
                               aria-label="Event"
@@ -165,21 +167,22 @@ const AuthPage = () => {
                   </Combobox>
                </Field>
                <Field id='auth-bottom'>
-                  <div id="auth-name">
-                     <Combobox value={selectedScouters} onChange={setSelectedScouters} onClose={() => setScouterQuery('')} >
+                  <div id="auth-name" className={selectedEvent == null ? "inactive" : "active"}                  >
+                     <Combobox value={selectedScouter} onChange={setselectedScouter} onClose={() => setScouterQuery('')} >
 
                         {({ open }) => (
                            <>
-                              <ComboboxButton >
-                                 <i className="fa-solid fa-chevron-down" ></i>
-
+                              <ComboboxButton disabled={ selectedEvent == null }>
+                                 <i className="fa-solid fa-chevron-down" />
                               </ComboboxButton>
                               <ComboboxInput
+                                 disabled={selectedEvent == null}
                                  aria-label="Name"
                                  onChange={(input) => setScouterQuery(input.target.value)}
                                  displayValue={(scouter: ScouterData | null) => scouter?.name ?? ''}
                                  placeholder="Name"
-
+                                 id="auth-input"
+                                 className={selectedEvent == null ? "inactive" : "active"}
                               />
                               <AnimatePresence>
                                  {open && (
@@ -207,12 +210,10 @@ const AuthPage = () => {
                         )}
                      </Combobox>
                   </div>
-                  <button id="auth-submit" onClick={handleAuthSubmit}>
+                  <button id="auth-submit" onClick={handleAuthSubmit} className={selectedEvent && selectedScouter ? "active" : "inactive"}>
                      <i className="fa-solid fa-arrow-right" />
                   </button>
-
                </Field>
-
             </div>
          </motion.div>
       </>

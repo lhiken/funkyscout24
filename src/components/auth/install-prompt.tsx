@@ -22,7 +22,14 @@ const InstallPrompt = () => {
 
    return (
       <>
-         <div id="install-prompt" onClick={() => setExpand(!expand)}>
+         <motion.div
+            id="install-prompt" 
+            onClick={() => setExpand(!expand)}
+            initial={{ y: 80, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={ { type: "spring", stiffness: 400, damping: 20} }
+            exit={{ opacity: 0 }}
+         >
             <div id="install-prompt-header">
                <i className="fa-solid fa-xmark" />
                oh no!
@@ -45,13 +52,13 @@ const InstallPrompt = () => {
                <div>On iOS/Safari: Click <i className="fa-solid fa-arrow-up-from-bracket" /> at the bottom &gt; <i className="fa-regular fa-square-plus" /> Add to Home Screen &gt; <i className="fa-solid fa-circle-arrow-down" /> Add.</div>
                <div>This app wasn't meant to be used without installing so please install! </div>
             </motion.div>
-         </div>
+         </motion.div>
       </>
    )
 }
 
 const WelcomePrompt = () => {
-   const [expand, setExpand] = useState(true);
+   const [expand, setExpand] = useState(false);
 
    const animateDropdown = {
       expand: {

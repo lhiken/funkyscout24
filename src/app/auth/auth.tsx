@@ -138,7 +138,8 @@ const AuthPage = () => {
                               onChange={(input) => setEventQuery(input.target.value)}
                               displayValue={(event: EventData | null) => event?.event_code ?? ''}
                               placeholder="Event"
-                              id="auth-input"
+                              autoComplete="off"
+                              className="auth-input"
                            />
                            <AnimatePresence>
                               {open && (
@@ -181,8 +182,8 @@ const AuthPage = () => {
                                  onChange={(input) => setScouterQuery(input.target.value)}
                                  displayValue={(scouter: ScouterData | null) => scouter?.name ?? ''}
                                  placeholder="Name"
-                                 id="auth-input"
-                                 className={selectedEvent == null ? "inactive" : "active"}
+                                 autoComplete="off"
+                                 className={(selectedEvent == null ? "inactive" : "active") + " auth-input"}
                               />
                               <AnimatePresence>
                                  {open && (

@@ -164,7 +164,7 @@ input::placeholder {
    border-radius: 20rem;
 }
 
-#auth-input {
+.auth-input {
    color: var(--light-text);
    width: 9rem;
 }
@@ -189,10 +189,10 @@ input::placeholder {
    color: var(--accent-dim);
 }
 
-#auth-input.active::placeholder {
+.auth-input.active::placeholder {
    color: var(--dark-text);
 }
 
-#auth-input.inactive::placeholder {
+.auth-input.inactive::placeholder {
    color: var(--dark-text-dim);
 }

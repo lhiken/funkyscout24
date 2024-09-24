@@ -50,7 +50,7 @@ const App = () => {
 
    useEffect(() => {
       updateTheme();
-   });
+   }, []);
 
    return (
       <>

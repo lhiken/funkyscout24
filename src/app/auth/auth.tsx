@@ -6,20 +6,36 @@ import { Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOption
 import supabase from "../../utils/supabase"
 import './styles/auth.css'
 
+interface EventData {
+   id: number,
+   event_code: string,
+   event_date: string | null,
+}
+
+interface ScouterData {
+   id: number,
+   name: string,
+}
+
 const AuthPage = () => {
    const installed = window.matchMedia('(display-mode: standalone)').matches;
    const navigate = useNavigate();
 
-   const handleAuthSubmit = () => {
-      if (selectedEvent && selectedScouter) {
-         navigate("/dashboard");
+   const validateUser = (user: ScouterData) => {
+      for (const scouter of scouters!) {
+         if (scouter.name == user.name) {
+            return true;
+         }
       }
+      return false;
    }
 
-   interface EventData {
-      id: number,
-      event_code: string,
-      event_date: string | null,
+   const handleAuthSubmit = () => {
+      if (selectedEvent && selectedScouter && validateUser(selectedScouter)) {
+         localStorage.setItem('user', selectedScouter!.name);
+         localStorage.setItem('event', selectedEvent!.event_code);
+         navigate("/dashboard");
+      }
    }
 
    const [events, setEvents] = useState<EventData[]>();
@@ -53,11 +69,6 @@ const AuthPage = () => {
          fetch = false;
       }
    }, []);
-
-   interface ScouterData {
-      id: number,
-      name: string,
-   }
 
    const [scouters, setScouters] = useState<ScouterData[]>();
    const [selectedScouter, setselectedScouter] = useState<ScouterData | null>(null)

@@ -55,7 +55,7 @@ const App = () => {
    return (
       <>
          <div id='app' className="preload">
-            <Outlet />
+               <Outlet />
             <NavbarDisplay />
             <TopbarDisplay />
          </div>

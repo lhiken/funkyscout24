@@ -82,14 +82,14 @@ const AuthPage = () => {
             }
          } catch (error) {
             console.log(error);
-            return []; 
+            return [];
          }
       }
 
       if (selectedEvent) {
          fetchScouters()
-         .then(res => setScouters(res))
-         .catch(err => console.error(err));
+            .then(res => setScouters(res))
+            .catch(err => console.error(err));
       }
    }, [selectedEvent]);
 
@@ -113,77 +113,35 @@ const AuthPage = () => {
 
    return (
       <>
-         <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ opacity: 0 }}
-            id="auth-body"
-         >
-            <div id="auth-header">
-               funkyscout
-            </div>
-            <AnimatePresence>
-               {installed ? <WelcomePrompt /> : <InstallPrompt />}
-            </AnimatePresence>
-            <div id="auth-box">
-               <Field id="auth-top">
-                  <Combobox value={selectedEvent} onChange={setSelectedEvent} onClose={() => setEventQuery('')}>
-                     {({ open }) => (
-                        <>
-                           <ComboboxButton>
-                              <i className="fa-solid fa-chevron-down" />
-                           </ComboboxButton>
-                           <ComboboxInput
-                              aria-label="Event"
-                              onChange={(input) => setEventQuery(input.target.value)}
-                              displayValue={(event: EventData | null) => event?.event_code ?? ''}
-                              placeholder="Event"
-                              autoComplete="off"
-                              className="auth-input"
-                           />
-                           <AnimatePresence>
-                              {open && (
-                                 <ComboboxOptions
-                                    static
-                                    as={motion.div}
-                                    initial={{ opacity: 0, y: -20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -20 }}
-                                    onAnimationComplete={() => setEventQuery('')}
-                                    anchor={{ to: 'top', gap: '0.8rem' }}
-                                    id="auth-dropdown-container"
-                                 >
-                                    <div id="auth-dropdown-header">Events</div>
-                                    <div id="auth-dropdown-line" />
-                                    {queriedEvents?.map((event) => (
-                                       <ComboboxOption key={event.id} value={event} id="auth-dropdown-option">
-                                          {event.event_code}
-                                       </ComboboxOption>
-                                    ))}
-                                 </ComboboxOptions>
-                              )}
-                           </AnimatePresence>
-                        </>
-                     )}
-                  </Combobox>
-               </Field>
-               <Field id='auth-bottom'>
-                  <div id="auth-name" className={selectedEvent == null ? "inactive" : "active"}                  >
-                     <Combobox value={selectedScouter} onChange={setselectedScouter} onClose={() => setScouterQuery('')} >
-
+         <AnimatePresence>
+            <motion.div
+               initial={{ y: 20, opacity: 0 }}
+               animate={{ y: 0, opacity: 1 }}
+               exit={{ opacity: 0 }}
+               key="auth"
+               id="auth-body"
+            >
+               <div id="auth-header">
+                  funkyscout
+               </div>
+               <AnimatePresence>
+                  {installed ? <WelcomePrompt /> : <InstallPrompt />}
+               </AnimatePresence>
+               <div id="auth-box">
+                  <Field id="auth-top">
+                     <Combobox value={selectedEvent} onChange={setSelectedEvent} onClose={() => setEventQuery('')}>
                         {({ open }) => (
                            <>
-                              <ComboboxButton disabled={ selectedEvent == null }>
+                              <ComboboxButton>
                                  <i className="fa-solid fa-chevron-down" />
                               </ComboboxButton>
                               <ComboboxInput
-                                 disabled={selectedEvent == null}
-                                 aria-label="Name"
-                                 onChange={(input) => setScouterQuery(input.target.value)}
-                                 displayValue={(scouter: ScouterData | null) => scouter?.name ?? ''}
-                                 placeholder="Name"
+                                 aria-label="Event"
+                                 onChange={(input) => setEventQuery(input.target.value)}
+                                 displayValue={(event: EventData | null) => event?.event_code ?? ''}
+                                 placeholder="Event"
                                  autoComplete="off"
-                                 className={(selectedEvent == null ? "inactive" : "active") + " auth-input"}
+                                 className="auth-input"
                               />
                               <AnimatePresence>
                                  {open && (
@@ -193,15 +151,15 @@ const AuthPage = () => {
                                        initial={{ opacity: 0, y: -20 }}
                                        animate={{ opacity: 1, y: 0 }}
                                        exit={{ opacity: 0, y: -20 }}
-                                       onAnimationComplete={() => setScouterQuery('')}
+                                       onAnimationComplete={() => setEventQuery('')}
                                        anchor={{ to: 'top', gap: '0.8rem' }}
                                        id="auth-dropdown-container"
                                     >
-                                       <div id="auth-dropdown-header">Scouters</div>
+                                       <div id="auth-dropdown-header">Events</div>
                                        <div id="auth-dropdown-line" />
-                                       {queriedScouters?.map((scouter) => (
-                                          <ComboboxOption key={scouter.id} value={scouter} id="auth-dropdown-option">
-                                             {scouter.name}
+                                       {queriedEvents?.map((event) => (
+                                          <ComboboxOption key={event.id} value={event} id="auth-dropdown-option">
+                                             {event.event_code}
                                           </ComboboxOption>
                                        ))}
                                     </ComboboxOptions>
@@ -210,13 +168,58 @@ const AuthPage = () => {
                            </>
                         )}
                      </Combobox>
-                  </div>
-                  <button id="auth-submit" onClick={handleAuthSubmit} className={selectedEvent && selectedScouter ? "active" : "inactive"}>
-                     <i className="fa-solid fa-arrow-right" />
-                  </button>
-               </Field>
-            </div>
-         </motion.div>
+                  </Field>
+                  <Field id='auth-bottom'>
+                     <div id="auth-name" className={selectedEvent == null ? "inactive" : "active"}                  >
+                        <Combobox value={selectedScouter} onChange={setselectedScouter} onClose={() => setScouterQuery('')} >
+
+                           {({ open }) => (
+                              <>
+                                 <ComboboxButton disabled={selectedEvent == null}>
+                                    <i className="fa-solid fa-chevron-down" />
+                                 </ComboboxButton>
+                                 <ComboboxInput
+                                    disabled={selectedEvent == null}
+                                    aria-label="Name"
+                                    onChange={(input) => setScouterQuery(input.target.value)}
+                                    displayValue={(scouter: ScouterData | null) => scouter?.name ?? ''}
+                                    placeholder="Name"
+                                    autoComplete="off"
+                                    className={(selectedEvent == null ? "inactive" : "active") + " auth-input"}
+                                 />
+                                 <AnimatePresence>
+                                    {open && (
+                                       <ComboboxOptions
+                                          static
+                                          as={motion.div}
+                                          initial={{ opacity: 0, y: -20 }}
+                                          animate={{ opacity: 1, y: 0 }}
+                                          exit={{ opacity: 0, y: -20 }}
+                                          onAnimationComplete={() => setScouterQuery('')}
+                                          anchor={{ to: 'top', gap: '0.8rem' }}
+                                          id="auth-dropdown-container"
+                                       >
+                                          <div id="auth-dropdown-header">Scouters</div>
+                                          <div id="auth-dropdown-line" />
+                                          {queriedScouters?.map((scouter) => (
+                                             <ComboboxOption key={scouter.id} value={scouter} id="auth-dropdown-option">
+                                                {scouter.name}
+                                             </ComboboxOption>
+                                          ))}
+                                       </ComboboxOptions>
+                                    )}
+                                 </AnimatePresence>
+                              </>
+                           )}
+                        </Combobox>
+                     </div>
+                     <button id="auth-submit" onClick={handleAuthSubmit} className={selectedEvent && selectedScouter ? "active" : "inactive"}>
+                        <i className="fa-solid fa-arrow-right" />
+                     </button>
+                  </Field>
+               </div>
+            </motion.div>
+         </AnimatePresence>
       </>
    );
 }

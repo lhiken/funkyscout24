@@ -17,6 +17,12 @@ html * {
   box-sizing: border-box;
 }
 
+@media (max-width: 500px) and (min-width: 400px) {
+  html {
+    font-size: 17px; 
+  }
+}
+
 #root {
   height: 100vh;
   margin: 0 auto;

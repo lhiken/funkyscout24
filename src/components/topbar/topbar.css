@@ -7,7 +7,6 @@
    align-items: center;
    gap: 0.625rem;
    flex-shrink: 0;
-   margin: 2rem;
    border-radius: 6.25rem;
    background: var(--light-bg, #121212);
    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.05);
@@ -21,12 +20,60 @@
 }
 
 #topbar {
+   margin: 1rem 0rem 0rem 0rem;
    display: flex;
    position: absolute;
    max-width: 28rem;
    width: 100%;
-   top: 0rem;
-   justify-content: space-between;
+   top: -0.5rem;
+   justify-content: center;
    align-items: center;
    flex-shrink: 0;
+}
+
+#topbar-wrapper {
+   display: flex;
+   justify-content: space-between;
+   width: 86%;
+}
+
+#topbar-settings {
+   display: flex;
+   flex-direction: column;
+   gap: 0.5rem;
+}
+
+.topbar-settings-options {
+   background-color: var(--light-bg);
+   color: var(--dark-text);
+   display: flex;
+   width: 3rem;
+   font-size: 1.4rem;
+   align-items: center;
+   padding: 0.5rem 0 0.5rem 0;
+   margin: 0;
+   flex-direction: column;
+   border-radius: 100px;
+   border: solid 2px var(--light-nav);
+   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.05);
+}
+
+.topbar-option {
+   border-radius: 100px;
+   width: 2.5rem;
+   height: 2.5rem;
+   transition: 0.2s;
+}
+
+.topbar-option:active {
+   background-color: var(--light-nav);
+   color: var(--accent);
+}
+
+.topbar-option-line {
+   background-color: var(--light-nav);
+   height: 0.2rem;
+   width: 2rem;
+   margin: 0.1rem 0 0.1rem 0;
+   border-radius: 100px;
 }

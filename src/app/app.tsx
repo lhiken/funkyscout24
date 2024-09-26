@@ -4,16 +4,6 @@ import { updateTheme } from "../utils/theme";
 import Navbar from "../components/navbar/navbar";
 import Topbar from "../components/topbar/topbar";
 
-interface userInfo {
-   userId: number,
-   user: string | null,
-}
-
-const userInfo = {
-   userId: 0,
-   user: null,
-}
-
 const NavbarDisplay = () => {
    const currentPage = useLocation()
    const paths = ['/dashboard'];
@@ -39,14 +29,18 @@ const TopbarDisplay = () => {
 }
 
 const App = () => {
-
+   const currentPage = useLocation();
    const navigate = useNavigate();
 
    useEffect(() => {
-      if (userInfo.userId == 0) {
-         navigate("/auth");
+      if (currentPage.pathname == '/') {
+         if (localStorage.getItem('user')) {
+            navigate("/dashboard")
+         } else {
+            navigate("/auth");
+         }
       }
-   }, [navigate]);
+   }, [navigate, currentPage.pathname]);
 
    useEffect(() => {
       updateTheme();
@@ -54,8 +48,8 @@ const App = () => {
 
    return (
       <>
-         <div id='app' className="preload">
-               <Outlet />
+         <div id='app'>
+            <Outlet />
             <NavbarDisplay />
             <TopbarDisplay />
          </div>

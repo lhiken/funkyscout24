@@ -1,8 +1,9 @@
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useLocation, useNavigate, useOutlet } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { updateTheme } from "../utils/theme";
 import Navbar from "../components/navbar/navbar";
 import Topbar from "../components/topbar/topbar";
+import { AnimatePresence } from "framer-motion";
 
 const NavbarDisplay = () => {
    const currentPage = useLocation()
@@ -46,10 +47,19 @@ const App = () => {
       updateTheme();
    }, []);
 
+   const AppOutlet = () => {
+      const appOutlet = useOutlet();
+      const [outlet] = useState(appOutlet);
+
+      return <>{outlet}</>
+   }
+   
    return (
       <>
          <div id='app'>
-            <Outlet />
+            <AnimatePresence mode="wait">
+               <AppOutlet key={currentPage.pathname}/>
+            </AnimatePresence>
             <NavbarDisplay />
             <TopbarDisplay />
          </div>

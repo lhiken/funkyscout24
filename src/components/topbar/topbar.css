@@ -48,10 +48,11 @@
    color: var(--dark-text);
    display: flex;
    width: 3rem;
-   font-size: 1.3rem;
+   font-size: 1.35rem;
    align-items: center;
    padding: 0.5rem 0 0.5rem 0;
    margin: 0;
+   gap: 0.2rem;
    flex-direction: column;
    border-radius: 100px;
    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.05);
@@ -62,10 +63,11 @@
    width: 2.5rem;
    height: 2.5rem;
    transition: 0.2s;
+   background-color: var(--light-nav);
 }
 
 .topbar-option:active {
-   background-color: var(--light-nav);
+   background-color: var(--accent-dim);
    color: var(--accent);
 }
 
@@ -73,6 +75,5 @@
    background-color: var(--light-nav);
    height: 0.2rem;
    width: 2rem;
-   margin: 0.1rem 0 0.1rem 0;
    border-radius: 100px;
 }

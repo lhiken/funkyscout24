@@ -15,27 +15,29 @@ const Navbar = () => {
             exit={{ opacity: 0 }}
             id="navbar"
          >
-         <div id="navbar">
-            <button id="navbar-button"
-               className={ currentPage.pathname == '/data' ? 'selected' : 'dim' }   
-            >
-               <i className="fa-solid fa-clipboard-list" id="navbar-button-icon"></i>
-               <div id="navbar-text">View Data
+            <div id="navbar">
+               <div id="navbar-wrapper">
+                  <button id="navbar-button"
+                     className={currentPage.pathname == '/data' ? 'selected' : 'dim'}
+                  >
+                     <i className="fa-solid fa-clipboard-list" id="navbar-button-icon"></i>
+                     <div id="navbar-text">View Data
+                     </div>
+                  </button>
+                  <button id="navbar-button"
+                     className={currentPage.pathname == '/dashboard' ? 'selected' : 'dim'}
+                  >
+                     <i className="fa-solid fa-gauge" id="navbar-button-icon"></i>
+                     <div id="navbar-text">Dashboard</div>
+                  </button>
+                  <button id="navbar-button"
+                     className={currentPage.pathname == '/scouting' ? 'selected' : 'dim'}
+                  >
+                     <i className="fa-solid fa-binoculars" id="navbar-button-icon"></i>
+                     <div id="navbar-text">Scouting</div>
+                  </button>
                </div>
-            </button>
-            <button id="navbar-button" 
-               className={ currentPage.pathname == '/dashboard' ? 'selected' : 'dim' }   
-            >
-               <i className="fa-solid fa-gauge" id="navbar-button-icon"></i>
-               <div id="navbar-text">Dashboard</div>
-            </button>
-            <button id="navbar-button"
-               className={ currentPage.pathname == '/scouting' ? 'selected' : 'dim' }   
-            >
-               <i className="fa-solid fa-binoculars" id="navbar-button-icon"></i>
-               <div id="navbar-text">Scouting</div>
-            </button>
-         </div>
+            </div>
          </motion.div>
       </>
    );

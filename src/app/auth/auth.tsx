@@ -14,7 +14,7 @@ interface EventData {
 
 interface ScouterData {
    id: number,
-   name: string,
+   name: string
 }
 
 const AuthPage = () => {
@@ -77,8 +77,8 @@ const AuthPage = () => {
       const fetchScouters = async () => {
          try {
             if (selectedEvent) {
-               const { data: scouters, error } = await supabase
-                  .from('scouters')
+               const { data: users, error } = await supabase
+                  .from('users')
                   .select('id, name')
                   .eq('event_code', selectedEvent.event_code);
 
@@ -86,7 +86,7 @@ const AuthPage = () => {
                   console.error(error);
                }
 
-               return scouters!.map(scouter => ({
+               return users!.map(scouter => ({
                   id: scouter.id,
                   name: scouter.name,
                }));

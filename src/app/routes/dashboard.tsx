@@ -13,10 +13,6 @@ const Dashboard = () => {
                 id="dashboard"
             >
                 <div id="dashboard-main">
-                    <div id="dashboard-main-header">
-                        Dashboard | {localStorage.getItem('event')}
-                        <i className="fa-solid fa-signal" />
-                    </div>
                     <div id="dashboard-scouting">
                         <div id="dashboard-section">
                             <div id='dashboard-section-header'>

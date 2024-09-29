@@ -7,6 +7,31 @@ export type Json =
   | Json[]
 
 export type Database = {
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          operationName?: string
+          query?: string
+          variables?: Json
+          extensions?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
   public: {
     Tables: {
       events: {
@@ -27,57 +52,66 @@ export type Database = {
         }
         Relationships: []
       }
-      scouters: {
+      users: {
         Row: {
           event_code: string
           id: number
           name: string
+          shift_progress: number
         }
         Insert: {
           event_code: string
           id?: number
-          name?: string
+          name: string
+          shift_progress: number
         }
         Update: {
           event_code?: string
           id?: number
           name?: string
+          shift_progress?: number
         }
         Relationships: []
       }
-      scouters_2024cacc: {
+      users_2024cmptx: {
         Row: {
           event_code: string
           id: number
           name: string
+          shift_progress: number
         }
         Insert: {
           event_code: string
           id: number
-          name?: string
+          name: string
+          shift_progress: number
         }
         Update: {
           event_code?: string
           id?: number
           name?: string
+          shift_progress?: number
         }
         Relationships: []
       }
-      scouters_2024test: {
+      users_2024practice: {
         Row: {
           event_code: string
           id: number
           name: string
+          shift_progress: number
         }
         Insert: {
           event_code: string
-          id?: number
-          name?: string
+          id: number
+          name: string
+          shift_progress: number
         }
         Update: {
           event_code?: string
           id?: number
           name?: string
+          shift_progress?: number
         }
         Relationships: []
       }

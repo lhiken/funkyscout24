@@ -5,6 +5,7 @@
     { "path": "./tsconfig.node.json" }
   ],
   "compilerOptions": {
-    "lib": ["WebWorker"]
+    "target": "es6",
+    "lib": ["WebWorker","dom"]
   }
 }

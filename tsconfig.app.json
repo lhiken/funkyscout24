@@ -20,5 +20,5 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "service-worker.js"]
+  "include": ["src", "service-worker.js", "service-worker", "src/service-worker.ts", "src/sw-register.ts", "src/vite-env.d.ts"]
 }

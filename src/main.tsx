@@ -13,7 +13,8 @@ import AuthPage from './app/auth/auth';
 import Dashboard from './app/routes/dashboard';
 import './utils/styles/reload.css'
 import './utils/styles/index.css'
-import './utils/styles/vars.css'
+import registerWorker from './sw-register';
+
 
 /* const router = createBrowserRouter([
   {
@@ -53,6 +54,7 @@ const router = createBrowserRouter(
 )
 
 const root = createRoot(document.getElementById('root')!);
+registerWorker();
 
 root.render(
   <StrictMode>

@@ -1,24 +1,32 @@
+
 const addResourcesToCache = async (resources: Iterable<RequestInfo>) => {
    const cache = await caches.open("v1");
    await cache.addAll(resources);
 };
 
+const urlToCache = [
+   "main.tsx",
+   "./app/auth/auth.tsx"
+]
+
 
 self.addEventListener("install", (event) => {
    event.waitUntil(
-      addResourcesToCache([
-         "main.tsx",
-         "auth.tsx"
-
-      ]).then(() => {
+      addResourcesToCache(
+         urlToCache
+      ).then(() => {
          console.log('All resources cached!');
       }).catch((error) => {
          console.error('Caching failed:', error);
       }))
 });
-self.addEventListener('activate', event => {
-   console.log('Service Worker activating...');
-});
+
 self.addEventListener('fetch', (event) => {
-   event.respondWith(caches.match(event.request));
+   console.log(`hi, ${event.request.url}`); 
+   /*event.respondWith(
+      caches.match(event.request)
+      .then(response =>{
+         return response || fetch(event.request);
+      })
+   )*/
 });

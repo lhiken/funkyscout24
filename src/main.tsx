@@ -13,7 +13,9 @@ import AuthPage from './app/auth/auth';
 import Dashboard from './app/routes/dashboard';
 import './utils/styles/reload.css'
 import './utils/styles/index.css'
+import './utils/styles/vars.css'
 import registerWorker from './sw-register';
+import './service-worker';
 
 
 /* const router = createBrowserRouter([

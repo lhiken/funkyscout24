@@ -14,6 +14,7 @@ export default defineConfig({
         enabled: true
       },
       workbox: {
+        globPatterns: ['**/*.{tsx,ts,js,css,html,ico,png,svg}'],
         navigateFallback: "/index.html"
       }
     })

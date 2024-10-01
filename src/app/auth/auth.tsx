@@ -80,7 +80,9 @@ const AuthPage = () => {
                const { data: users, error } = await supabase
                   .from('users')
                   .select('id, name')
-                  .eq('event_code', selectedEvent.event);
+                  .eq('event', selectedEvent.event);
+
+               console.log(users);
 
                if (error) {
                   console.error(error);
@@ -210,6 +212,7 @@ const AuthPage = () => {
                                        anchor={{ to: 'top', gap: '0.8rem' }}
                                        id="auth-dropdown-container"
                                     >
+                                       {scouters!.length == 0 ? <div>Loading...</div> : null}
                                        <div id="auth-dropdown-header">Scouters</div>
                                        <div id="auth-dropdown-line" />
                                        {queriedScouters?.map((scouter) => (

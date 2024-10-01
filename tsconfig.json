@@ -6,6 +6,8 @@
   ],
   "compilerOptions": {
     "target": "es6",
-    "lib": ["WebWorker","dom"]
+    "module": "esnext",
+    "lib": ["webworker","dom"],
+    "skipLibCheck": true
   }
 }

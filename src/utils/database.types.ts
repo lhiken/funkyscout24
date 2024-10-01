@@ -34,84 +34,390 @@ export type Database = {
   }
   public: {
     Tables: {
+      event_2024casf: {
+        Row: {
+          alliance: boolean
+          author: string | null
+          event: string
+          match: number
+          team: number
+        }
+        Insert: {
+          alliance: boolean
+          author?: string | null
+          event: string
+          match: number
+          team: number
+        }
+        Update: {
+          alliance?: boolean
+          author?: string | null
+          event?: string
+          match?: number
+          team?: number
+        }
+        Relationships: []
+      }
+      event_2024test: {
+        Row: {
+          alliance: boolean
+          author: string | null
+          event: string
+          match: number
+          team: number
+        }
+        Insert: {
+          alliance: boolean
+          author?: string | null
+          event: string
+          match: number
+          team: number
+        }
+        Update: {
+          alliance?: boolean
+          author?: string | null
+          event?: string
+          match?: number
+          team?: number
+        }
+        Relationships: []
+      }
+      event_data: {
+        Row: {
+          alliance: boolean
+          author: string | null
+          event: string
+          match: number
+          team: number
+        }
+        Insert: {
+          alliance: boolean
+          author?: string | null
+          event: string
+          match: number
+          team: number
+        }
+        Update: {
+          alliance?: boolean
+          author?: string | null
+          event?: string
+          match?: number
+          team?: number
+        }
+        Relationships: []
+      }
       events: {
         Row: {
-          event_code: string
-          event_date: string | null
+          date: string
+          event: string
           id: number
         }
         Insert: {
-          event_code: string
-          event_date?: string | null
+          date: string
+          event: string
           id?: number
         }
         Update: {
-          event_code?: string
-          event_date?: string | null
+          date?: string
+          event?: string
           id?: number
+        }
+        Relationships: []
+      }
+      match_data: {
+        Row: {
+          alliance: boolean
+          amp: number
+          author: string
+          auto: Json
+          climb: boolean
+          comment: string
+          defense: number
+          disabled: number
+          event: string
+          match: number
+          miss: number
+          speaker: number
+          team: number
+        }
+        Insert: {
+          alliance: boolean
+          amp: number
+          author: string
+          auto: Json
+          climb: boolean
+          comment: string
+          defense: number
+          disabled: number
+          event: string
+          match: number
+          miss: number
+          speaker: number
+          team: number
+        }
+        Update: {
+          alliance?: boolean
+          amp?: number
+          author?: string
+          auto?: Json
+          climb?: boolean
+          comment?: string
+          defense?: number
+          disabled?: number
+          event?: string
+          match?: number
+          miss?: number
+          speaker?: number
+          team?: number
+        }
+        Relationships: []
+      }
+      matches_2024casf: {
+        Row: {
+          alliance: boolean
+          amp: number
+          author: string
+          auto: Json
+          climb: boolean
+          comment: string
+          defense: number
+          disabled: number
+          event: string
+          match: number
+          miss: number
+          speaker: number
+          team: number
+        }
+        Insert: {
+          alliance: boolean
+          amp: number
+          author: string
+          auto: Json
+          climb: boolean
+          comment: string
+          defense: number
+          disabled: number
+          event: string
+          match: number
+          miss: number
+          speaker: number
+          team: number
+        }
+        Update: {
+          alliance?: boolean
+          amp?: number
+          author?: string
+          auto?: Json
+          climb?: boolean
+          comment?: string
+          defense?: number
+          disabled?: number
+          event?: string
+          match?: number
+          miss?: number
+          speaker?: number
+          team?: number
+        }
+        Relationships: []
+      }
+      matches_2024test: {
+        Row: {
+          alliance: boolean
+          amp: number
+          author: string
+          auto: Json
+          climb: boolean
+          comment: string
+          defense: number
+          disabled: number
+          event: string
+          match: number
+          miss: number
+          speaker: number
+          team: number
+        }
+        Insert: {
+          alliance: boolean
+          amp: number
+          author: string
+          auto: Json
+          climb: boolean
+          comment: string
+          defense: number
+          disabled: number
+          event: string
+          match: number
+          miss: number
+          speaker: number
+          team: number
+        }
+        Update: {
+          alliance?: boolean
+          amp?: number
+          author?: string
+          auto?: Json
+          climb?: boolean
+          comment?: string
+          defense?: number
+          disabled?: number
+          event?: string
+          match?: number
+          miss?: number
+          speaker?: number
+          team?: number
+        }
+        Relationships: []
+      }
+      team_data: {
+        Row: {
+          avg_amp: number
+          avg_score: number
+          avg_speaker: number
+          defense: number
+          event: string
+          failures: number
+          team: number
+        }
+        Insert: {
+          avg_amp: number
+          avg_score: number
+          avg_speaker: number
+          defense: number
+          event: string
+          failures: number
+          team: number
+        }
+        Update: {
+          avg_amp?: number
+          avg_score?: number
+          avg_speaker?: number
+          defense?: number
+          event?: string
+          failures?: number
+          team?: number
+        }
+        Relationships: []
+      }
+      teams_2024casf: {
+        Row: {
+          avg_amp: number
+          avg_score: number
+          avg_speaker: number
+          defense: number
+          event: string
+          failures: number
+          team: number
+        }
+        Insert: {
+          avg_amp: number
+          avg_score: number
+          avg_speaker: number
+          defense: number
+          event: string
+          failures: number
+          team: number
+        }
+        Update: {
+          avg_amp?: number
+          avg_score?: number
+          avg_speaker?: number
+          defense?: number
+          event?: string
+          failures?: number
+          team?: number
+        }
+        Relationships: []
+      }
+      teams_2024test: {
+        Row: {
+          avg_amp: number
+          avg_score: number
+          avg_speaker: number
+          defense: number
+          event: string
+          failures: number
+          team: number
+        }
+        Insert: {
+          avg_amp: number
+          avg_score: number
+          avg_speaker: number
+          defense: number
+          event: string
+          failures: number
+          team: number
+        }
+        Update: {
+          avg_amp?: number
+          avg_score?: number
+          avg_speaker?: number
+          defense?: number
+          event?: string
+          failures?: number
+          team?: number
         }
         Relationships: []
       }
       users: {
         Row: {
-          event_code: string
+          event: string
           id: number
+          matches: number
           name: string
-          shift_progress: number
         }
         Insert: {
-          event_code: string
+          event: string
           id?: number
+          matches: number
           name: string
-          shift_progress: number
         }
         Update: {
-          event_code?: string
+          event?: string
           id?: number
+          matches?: number
           name?: string
-          shift_progress?: number
         }
         Relationships: []
       }
-      users_2024cmptx: {
+      users_2024casf: {
         Row: {
-          event_code: string
+          event: string
           id: number
+          matches: number
           name: string
-          shift_progress: number
         }
         Insert: {
-          event_code: string
+          event: string
           id: number
+          matches: number
           name: string
-          shift_progress: number
         }
         Update: {
-          event_code?: string
+          event?: string
           id?: number
+          matches?: number
           name?: string
-          shift_progress?: number
         }
         Relationships: []
       }
-      users_2024practice: {
+      users_2024test: {
         Row: {
-          event_code: string
+          event: string
           id: number
+          matches: number
           name: string
-          shift_progress: number
         }
         Insert: {
-          event_code: string
+          event: string
           id: number
+          matches: number
           name: string
-          shift_progress: number
         }
         Update: {
-          event_code?: string
+          event?: string
           id?: number
+          matches?: number
           name?: string
-          shift_progress?: number
         }
         Relationships: []
       }

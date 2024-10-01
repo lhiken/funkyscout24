@@ -5,13 +5,17 @@ ___
 
 #### Preface
 
-Funkyscout uses react with typescript. 
+Funkyscout uses React with Typescript and Vite.
 
 #### Development
 
-For local development, clone the repo and open a terminal window in your funkyscout folder, and run the following commands. Make sure you have node.js installed beforehand.
+Clone the repo and open a terminal window in your funkyscout folder, and run the following commands. Make sure you have node.js installed beforehand.
 
 ```
-npm install vite
+npm install
 npm run dev
 ```
+
+#### Database Structure
+
+The [database](https://supabase.com/dashboard/project/ogjtjvjcrnmbkzowovvc) (Request access if you do not have access) is hosted on Supabase.

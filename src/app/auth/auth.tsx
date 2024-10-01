@@ -8,8 +8,8 @@ import './styles/auth.css'
 
 interface EventData {
    id: number,
-   event_code: string,
-   event_date: string | null,
+   event: string,
+   date: string,
 }
 
 interface ScouterData {
@@ -33,7 +33,7 @@ const AuthPage = () => {
    const handleAuthSubmit = () => {
       if (selectedEvent && selectedScouter && validateUser(selectedScouter)) {
          localStorage.setItem('user', selectedScouter!.name);
-         localStorage.setItem('event', selectedEvent!.event_code);
+         localStorage.setItem('event', selectedEvent!.event);
          navigate("/dashboard");
       }
    }
@@ -44,7 +44,7 @@ const AuthPage = () => {
    const getEvents = async () => {
       const { data: events, error } = await supabase
          .from('events')
-         .select('id, event_code, event_date')
+         .select('id, event, date')
 
       if (error) {
          throw error;
@@ -52,8 +52,8 @@ const AuthPage = () => {
 
       return events!.map(event => ({
          id: event.id,
-         event_code: event.event_code,
-         event_date: event.event_date,
+         event: event.event,
+         date: event.date,
       }));
    }
 
@@ -80,7 +80,7 @@ const AuthPage = () => {
                const { data: users, error } = await supabase
                   .from('users')
                   .select('id, name')
-                  .eq('event_code', selectedEvent.event_code);
+                  .eq('event_code', selectedEvent.event);
 
                if (error) {
                   console.error(error);
@@ -110,7 +110,7 @@ const AuthPage = () => {
       eventQuery == ''
          ? events
          : events?.filter((event) => {
-            return event.event_code.toLowerCase().includes(eventQuery.toLowerCase());
+            return event.event.toLowerCase().includes(eventQuery.toLowerCase());
          })
 
    const [scouterQuery, setScouterQuery] = useState('');
@@ -149,7 +149,7 @@ const AuthPage = () => {
                            <ComboboxInput
                               aria-label="Event"
                               onChange={(input) => setEventQuery(input.target.value)}
-                              displayValue={(event: EventData | null) => event?.event_code ?? ''}
+                              displayValue={(event: EventData | null) => event?.event ?? ''}
                               placeholder="Event"
                               autoComplete="off"
                               className="auth-input"
@@ -170,7 +170,7 @@ const AuthPage = () => {
                                     <div id="auth-dropdown-line" />
                                     {queriedEvents?.map((event) => (
                                        <ComboboxOption key={event.id} value={event} id="auth-dropdown-option">
-                                          {event.event_code}
+                                          {event.event}
                                        </ComboboxOption>
                                     ))}
                                  </ComboboxOptions>

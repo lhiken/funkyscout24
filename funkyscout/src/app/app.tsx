@@ -5,7 +5,6 @@ import Navbar from "../components/navbar/navbar";
 import Topbar from "../components/topbar/topbar";
 import { AnimatePresence } from "framer-motion";
 
-
 const NavbarDisplay = () => {
    const currentPage = useLocation()
    const paths = ['/dashboard'];

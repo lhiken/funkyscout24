@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 import { Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOptions, Field } from "@headlessui/react"
 import supabase from "../../utils/supabase"
 import './styles/auth.css'
+import { fetchEvent } from "../../utils/localdb"
 
 interface EventData {
    id: number,
@@ -34,6 +35,7 @@ const AuthPage = () => {
       if (selectedEvent && selectedScouter && validateUser(selectedScouter)) {
          localStorage.setItem('user', selectedScouter!.name);
          localStorage.setItem('event', selectedEvent!.event);
+         fetchEvent(selectedEvent.event);
          navigate("/dashboard");
       }
    }

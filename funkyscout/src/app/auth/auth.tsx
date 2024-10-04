@@ -5,7 +5,7 @@ import { useEffect, useState } from "react"
 import { Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOptions, Field } from "@headlessui/react"
 import supabase from "../../utils/supabase"
 import './styles/auth.css'
-import { fetchEvent } from "../../utils/localdb"
+import { initializeEvent } from "../../utils/datacache"
 
 interface EventData {
    id: number,
@@ -35,7 +35,7 @@ const AuthPage = () => {
       if (selectedEvent && selectedScouter && validateUser(selectedScouter)) {
          localStorage.setItem('user', selectedScouter!.name);
          localStorage.setItem('event', selectedEvent!.event);
-         fetchEvent(selectedEvent.event);
+         initializeEvent(selectedEvent.event, selectedScouter.name);
          navigate("/dashboard");
       }
    }
@@ -83,8 +83,6 @@ const AuthPage = () => {
                   .from('users')
                   .select('id, name')
                   .eq('event', selectedEvent.event);
-
-               console.log(users);
 
                if (error) {
                   console.error(error);
@@ -214,9 +212,9 @@ const AuthPage = () => {
                                        anchor={{ to: 'top', gap: '0.8rem' }}
                                        id="auth-dropdown-container"
                                     >
-                                       {scouters!.length == 0 ? <div>Loading...</div> : null}
                                        <div id="auth-dropdown-header">Scouters</div>
                                        <div id="auth-dropdown-line" />
+                                       {scouters!.length == 0 ? <div id="auth-dropdown-option">No data</div> : null}
                                        {queriedScouters?.map((scouter) => (
                                           <ComboboxOption key={scouter.id} value={scouter} id="auth-dropdown-option">
                                              {scouter.name}

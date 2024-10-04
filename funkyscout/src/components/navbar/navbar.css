@@ -20,12 +20,13 @@
    position: absolute;
    max-width: 28rem;
    bottom: 0rem;
-   height: 5rem;
+   height: 6rem;
    width: 100%;
 }
 
 #navbar-wrapper {
    height: 5rem;
+   margin: 0 1rem;
    padding: 0 2rem;
    display: flex;
    justify-content: space-evenly;

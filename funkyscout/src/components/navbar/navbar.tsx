@@ -5,7 +5,6 @@ import './navbar.css';
 
 const Navbar = () => {
    const currentPage = useLocation()
-   console.log(currentPage.pathname);
 
    return (
       <>

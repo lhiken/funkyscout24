@@ -1,7 +1,10 @@
 import { motion } from 'framer-motion'
 import './styles/dashboard.css'
+import { useNavigate } from 'react-router-dom'
 
 const Dashboard = () => {
+    const navgiate = useNavigate();
+
     return (
         <>
             <motion.div
@@ -22,7 +25,7 @@ const Dashboard = () => {
                                 Next Shift • No data
                             </div>
                         </div>
-                        <button id='dashboard-scouting-submit'>
+                        <button id='dashboard-scouting-submit' onClick={() => navgiate('/scouting')}>
                             <i className="fa-solid fa-arrow-right" />
                         </button>
                     </div>
@@ -32,7 +35,7 @@ const Dashboard = () => {
                                 Scouting Overview
                             </div>
                             <div id='dashboard-section-details'>
-                                0 Matches left
+                                 Matches left
                             </div>
                             <div id='dashboard-section-details' className='dim'>
                                 0 of 0 pits done

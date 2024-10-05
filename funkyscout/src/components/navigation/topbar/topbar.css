@@ -23,12 +23,15 @@
    margin: 1rem 0rem 0rem 0rem;
    display: flex;
    position: absolute;
-   max-width: 28rem;
    width: 100%;
    top: -0.5rem;
    justify-content: center;
    align-items: center;
    flex-shrink: 0;
+
+   @media (min-width: 500px) {
+      max-width: 24rem;
+   }
 }
 
 #topbar-wrapper {

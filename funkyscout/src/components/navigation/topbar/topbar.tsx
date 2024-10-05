@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { setTheme } from '../../utils/theme';
+import { setTheme } from '../../../utils/theme';
 import './topbar.css';
 
 interface Settings {

@@ -8,6 +8,6 @@
     "target": "es6",
     "module": "esnext",
     "lib": ["webworker","dom"],
-    "skipLibCheck": true
+    "skipLibCheck": true,
   }
 }

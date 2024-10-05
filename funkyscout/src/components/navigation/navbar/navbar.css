@@ -18,10 +18,13 @@
 
 #navbar {
    position: absolute;
-   max-width: 28rem;
    bottom: 0rem;
    height: 6rem;
    width: 100%;
+
+   @media (min-width: 500px) {
+      max-width: 24rem;
+  }
 }
 
 #navbar-wrapper {

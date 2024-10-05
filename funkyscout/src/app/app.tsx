@@ -1,8 +1,8 @@
 import { useLocation, useNavigate, useOutlet } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { updateTheme } from "../utils/theme";
-import Navbar from "../components/navbar/navbar";
-import Topbar from "../components/topbar/topbar";
+import Navbar from "../components/navigation/navbar/navbar";
+import Topbar from "../components/navigation/topbar/topbar";
 import { AnimatePresence } from "framer-motion";
 
 const NavbarDisplay = () => {

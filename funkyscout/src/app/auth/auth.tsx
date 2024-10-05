@@ -1,11 +1,11 @@
 import { AnimatePresence, motion } from "framer-motion"
 import { useNavigate } from "react-router-dom"
-import { InstallPrompt, WelcomePrompt } from "../../components/auth/install-prompt"
+import { InstallPrompt, WelcomePrompt } from "../../components/routes/auth/install-prompt"
 import { useEffect, useState } from "react"
 import { Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOptions, Field } from "@headlessui/react"
 import supabase from "../../utils/supabase"
 import './styles/auth.css'
-import { initializeEvent } from "../../utils/datacache"
+import { initializeDB } from "../../utils/datacache"
 
 interface EventData {
    id: number,
@@ -35,7 +35,7 @@ const AuthPage = () => {
       if (selectedEvent && selectedScouter && validateUser(selectedScouter)) {
          localStorage.setItem('user', selectedScouter!.name);
          localStorage.setItem('event', selectedEvent!.event);
-         initializeEvent(selectedEvent.event, selectedScouter.name);
+         initializeDB(selectedEvent.event);
          navigate("/dashboard");
       }
    }

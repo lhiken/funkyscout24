@@ -2,8 +2,10 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import ProgressRing from "../../components/routes/dash/progress-ring";
 import "./styles/dashboard.css";
-import { getCount, getNextMatch } from "../../utils/datacache";
+import { getCount, getNextMatch } from "../../utils/database/datacache";
 import { useState } from "react";
+import TextTransition from "react-text-transition";
+import { getMatchData } from "../../utils/helpers/fetch";
 
 const Dashboard = () => {
    const navgiate = useNavigate();
@@ -11,23 +13,85 @@ const Dashboard = () => {
    const event = localStorage.getItem("event");
    const user = localStorage.getItem("user");
 
-   const [assignedMatches, setAssignedMatches] = useState(0);
-   const [completeMatches, setCompleteMatches] = useState(0);
+   const [assignedMatches, setAssignedMatches] = useState(
+      Number(localStorage.getItem("matches_assigned")),
+   );
+   const [completeMatches, setCompleteMatches] = useState(
+      Number(localStorage.getItem("matches_done")),
+   );
 
-   getCount(event!, "event_data", {key: "author", val: user!})
+   getCount(event!, "event_data", { key: "author", val: user! })
       .then((res) => {
+         localStorage.setItem("matches_assigned", String(res));
          setAssignedMatches(res);
       });
 
-   getCount(event!, "match_data", {key: "author", val: user!})
+   getCount(event!, "match_data", { key: "author", val: user! })
       .then((res) => {
+         localStorage.setItem("matches_done", String(res));
          setCompleteMatches(res);
       });
 
-   getNextMatch(event!, user!);
-   
-   
-   
+   const [nextMatch, setNextMatch] = useState(
+      localStorage.getItem("dashboard-status")
+         ? JSON.parse(localStorage.getItem("dashboard-status")!).match
+         : 0,
+   );
+   const [nextAlliance, setNextAlliance] = useState(
+      localStorage.getItem("dashboard-status")
+         ? JSON.parse(localStorage.getItem("dashboard-status")!).alliance
+         : true,
+   );
+   const [nextMatchTime, setNextMatchTime] = useState(
+      localStorage.getItem("dashboard-status")
+         ? JSON.parse(localStorage.getItem("dashboard-status")!).time
+         : "9:00 AM",
+   );
+
+   getNextMatch(event!, user!)
+   .then((res) => {
+      if (res) {
+         const dashboardStatus = {
+            match: res.match,
+            alliance: res.alliance,
+         };
+
+         localStorage.setItem("dashboard-status", JSON.stringify(dashboardStatus));
+         setNextMatch(res.match);
+         setNextAlliance(res.alliance);
+
+         return getMatchData(res.match);
+      } else {
+         setNextMatch(0);
+         throw new Error("No match data found");
+      }
+   })
+   .then((matchData) => {
+      if (matchData && matchData.startTime) {
+         const date = new Date(matchData.startTime * 1000);
+         const localTime = date.toLocaleString([], {
+            hour: "numeric",
+            minute: "2-digit",
+         });
+
+         const status = localStorage.getItem("dashboard-status");
+         if (status) {
+            const updatedStatus = {
+               ...JSON.parse(status),
+               time: localTime,
+            };
+            localStorage.setItem("dashboard-status", JSON.stringify(updatedStatus));
+         }
+
+         setNextMatchTime(localTime);
+      }
+   })
+   .catch((error) => {
+      console.error("Error fetching match data:", error);
+
+   });
+
+
    return (
       <>
          <div id="profile-nav">
@@ -47,7 +111,28 @@ const Dashboard = () => {
                         Start Scouting
                      </div>
                      <div id="dashboard-section-details">
-                        Next Shift • No data
+                        {nextMatch != 0
+                           ? (
+                              <div className="transition">
+                                 Next Shift •&nbsp;
+                                 <TextTransition className={nextAlliance ? "red" : "blue"}>
+                                    Q{nextMatch}
+                                 </TextTransition>
+                                 &nbsp;at&nbsp;
+                                 <TextTransition>
+                                    {nextMatchTime != ""
+                                       ? (
+                                          <>
+                                             <span className={nextAlliance ? "red" : "blue"}>
+                                                {nextMatchTime}
+                                             </span>
+                                          </>
+                                       )
+                                       : null}
+                                 </TextTransition>
+                              </div>
+                           )
+                           : "All shifts completed"}
                      </div>
                   </div>
                   <button
@@ -62,14 +147,22 @@ const Dashboard = () => {
                      <div id="dashboard-section-header">
                         Scouting Overview
                      </div>
-                     <div id="dashboard-section-details">
+                     <div id="dashboard-section-details" className="transition">
+                        <TextTransition>
+                           {assignedMatches - completeMatches == 0
+                              ? null
+                              : assignedMatches - completeMatches}
+                        </TextTransition>
                         {assignedMatches - completeMatches == 0
                            ? "All matches done!"
-                           : assignedMatches - completeMatches +
-                              " matches left"}
+                           : <>&nbsp;matches left</>}
                      </div>
-                     <div id="dashboard-section-details" className="dim">
-                        {completeMatches} completed
+                     <div
+                        id="dashboard-section-details"
+                        className="transition dim"
+                     >
+                        <TextTransition>{completeMatches}
+                        </TextTransition>&nbsp;complete
                      </div>
                      <div id="dashboard-section-seperator" />
                      <div id="dashboard-section-details">

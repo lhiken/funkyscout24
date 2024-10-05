@@ -6,37 +6,33 @@ import Topbar from "../components/navigation/topbar/topbar";
 import { AnimatePresence } from "framer-motion";
 
 const NavbarDisplay = () => {
-   const currentPage = useLocation()
-   const paths = ['/dashboard'];
+   const currentPage = useLocation();
+   const paths = ["/dashboard"];
    const check = paths.includes(currentPage.pathname);
    if (check) {
-      return (
-         <Navbar />
-      )
+      return <Navbar />;
    }
    return null;
-}
+};
 
 const TopbarDisplay = () => {
-   const currentPage = useLocation()
-   const paths = ['/dashboard', '/auth'];
+   const currentPage = useLocation();
+   const paths = ["/dashboard", "/auth"];
    const check = paths.includes(currentPage.pathname);
    if (check) {
-      return (
-         <Topbar />
-      )
+      return <Topbar />;
    }
    return null;
-}
+};
 
 const App = () => {
    const currentPage = useLocation();
    const navigate = useNavigate();
 
    useEffect(() => {
-      if (currentPage.pathname == '/') {
-         if (localStorage.getItem('user')) {
-            navigate("/dashboard")
+      if (currentPage.pathname == "/") {
+         if (localStorage.getItem("user")) {
+            navigate("/dashboard");
          } else {
             navigate("/auth");
          }
@@ -51,20 +47,20 @@ const App = () => {
       const appOutlet = useOutlet();
       const [outlet] = useState(appOutlet);
 
-      return <>{outlet}</>
-   }
-   
+      return <>{outlet}</>;
+   };
+
    return (
       <>
-         <div id='app'>
+         <div id="app">
             <AnimatePresence mode="wait">
-               <AppOutlet key={currentPage.pathname}/>
+                  <AppOutlet key={currentPage.pathname} />
             </AnimatePresence>
             <NavbarDisplay />
             <TopbarDisplay />
          </div>
       </>
    );
-}
+};
 
 export default App;

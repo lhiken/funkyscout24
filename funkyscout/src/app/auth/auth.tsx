@@ -1,11 +1,12 @@
 import { AnimatePresence, motion } from "framer-motion"
-import { useNavigate } from "react-router-dom"
 import { InstallPrompt, WelcomePrompt } from "../../components/routes/auth/install-prompt"
 import { useEffect, useState } from "react"
 import { Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOptions, Field } from "@headlessui/react"
-import supabase from "../../utils/supabase"
+import supabase from "../../utils/database/supabase"
 import './styles/auth.css'
-import { initializeDB } from "../../utils/datacache"
+import { useNavigate } from "react-router-dom"
+import LoadingScreen from "../../components/loading/loading"
+import { initializeDB } from "../../utils/database/datacache"
 
 interface EventData {
    id: number,
@@ -31,12 +32,21 @@ const AuthPage = () => {
       return false;
    }
 
+   const [loading, setLoading] = useState(false);
+
    const handleAuthSubmit = () => {
       if (selectedEvent && selectedScouter && validateUser(selectedScouter)) {
-         localStorage.setItem('user', selectedScouter!.name);
-         localStorage.setItem('event', selectedEvent!.event);
-         initializeDB(selectedEvent.event);
-         navigate("/dashboard");
+         localStorage.setItem('user', selectedScouter.name);
+         localStorage.setItem('event', selectedEvent.event);
+         setLoading(true);
+         initializeDB(selectedEvent.event)
+         .then(() => {
+            console.log('Initialized DB')
+            navigate('/dashboard');
+         })
+         .catch(err => {
+            console.error("Init failed: " + err)
+         })
       }
    }
 
@@ -126,6 +136,7 @@ const AuthPage = () => {
 
    return (
       <>
+         {loading ? <LoadingScreen label={'Fetching Data'}/> : null}
          <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}

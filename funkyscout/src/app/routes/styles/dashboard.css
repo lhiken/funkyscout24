@@ -83,6 +83,11 @@
    line-height: 1.625rem;
 }
 
+.transition {
+   display: flex;
+   flex-direction: row;
+}
+
 #dashboard-section-details.dim {
    color: var(--dark-text);
    font-weight: 400;
@@ -142,4 +147,12 @@
 #dashboard-header {
    display: flex;
    justify-content: space-between;
+}
+
+.red {
+   color: var(--warning-red);
+}
+
+.blue {
+   color: var(--warning-blue)
 }

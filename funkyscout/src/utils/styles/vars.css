@@ -14,6 +14,9 @@
   /* values */
   --soft-corner: 0.9375rem;
   --round-corner: 6.25rem;
+
+  /* utils */
+  --progress-ring-flood: #000000;
 }
 
 .theme-light {
@@ -32,4 +35,8 @@
   /* values */
   --soft-corner: 0.9375rem;
   --round-corner: 6.25rem;
+
+  /* utils */
+  --progress-ring-flood: #946e1c;
+
 }

@@ -2,7 +2,6 @@ import { openDB } from "idb";
 import supabase from "./supabase";
 import { Tables } from "./database.types";
 
-const version = 2;
 
 /* To store match data we use indexeddb, a built in
  * browser feature that's essentially localStorage
@@ -29,6 +28,7 @@ const initializeDB = async (event: string) => {
    const matchData = await fetchMatches(event);
 
    try {
+      const version: number = 3;
       const db = await openDB(event, version, {
          upgrade(db) {
             if (
@@ -104,7 +104,6 @@ const writeTable = async <dataType>(
    }
 };
 
-
 //Not recommended for things that require performance!
 //There is probably a better alternative out there!
 const getCount = async (
@@ -139,12 +138,20 @@ const getNextMatch = async (database: string, user: string) => {
    const eventStore = tx.objectStore("event_data");
    const matchStore = tx.objectStore("match_data");
 
-   const assignedMatches = await eventStore.index("eventAuthor").getAll(user);
-   const completeMatches = await matchStore.index("matchAuthor").getAll(user);
+   const assignedMatches = await eventStore.index("eventAuthors").getAll(user);
+   const completeMatches = await matchStore.index("matchAuthors").getAll(user);
 
-   console.log(assignedMatches);
-   console.log(completeMatches);
+   const nextMatch = assignedMatches.find((assignedMatch) =>
+      !completeMatches.some((completeMatch) =>
+         completeMatch.match == assignedMatch.match
+      )
+   );
+
+   if (nextMatch) {
+      return nextMatch;
+   } else {
+      return null;
+   }
 };
-
 
 export { getCount, getNextMatch, initializeDB };

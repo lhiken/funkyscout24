@@ -39,8 +39,8 @@ const ProgressRing = (
                   />
 
                   <feFlood
-                     floodColor="black"
-                     floodOpacity="01"
+                     floodColor="var(--progress-ring-flood)"
+                     floodOpacity="1"
                      result="color"
                   />
                   <feComposite

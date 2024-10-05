@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Tables } from "../../utils/database.types";
 import ProgressRing from "../../components/routes/dash/progress-ring";
 import "./styles/dashboard.css";
 import { getCount, getNextMatch } from "../../utils/datacache";

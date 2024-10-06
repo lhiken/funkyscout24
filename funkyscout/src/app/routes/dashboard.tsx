@@ -3,11 +3,101 @@ import { useNavigate } from "react-router-dom";
 import ProgressRing from "../../components/routes/dash/progress-ring";
 import "./styles/dashboard.css";
 import { getCount, getNextMatch } from "../../utils/database/datacache";
-import { useEffect, useState } from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
 import TextTransition from "react-text-transition";
-import { getMatchData } from "../../utils/helpers/fetch";
+import { getEventData, getMatchData } from "../../utils/helpers/fetch";
 import supabase from "../../utils/database/supabase";
 import Dashbar from "../../components/navigation/topbar/dashbar";
+import { openDB } from "idb";
+
+const MatchCard = forwardRef(
+   (
+      { match, alliance, time, team, placeholder }: {
+         match?: number;
+         alliance?: boolean;
+         time?: number;
+         team?: number;
+         placeholder: boolean;
+      },
+      ref: React.Ref<HTMLDivElement>,
+   ) => {
+      if (match && !placeholder) {
+         const date = new Date((time ? time : 0) * 1000);
+         const localTime = date.toLocaleString([], {
+            hour: "numeric",
+            minute: "2-digit",
+            hour12: false,
+         });
+
+         return (
+            <motion.div
+               initial={{ y: 20, opacity: 0 }}
+               animate={{ y: 0, opacity: 1 }}
+               exit={{ y: -20, opacity: 0 }}
+               transition={{ duration: 0.4 }}
+               ref={ref}
+               id="match-card"
+            >
+               <div id="match-card-top">
+                  <div id="match-card-match">Q{match}</div>
+                  <div id="match-card-detail">
+                     <div
+                        style={alliance
+                           ? {
+                              color: "var(--warning-red)",
+                              fontSize: "1.5rem",
+                           }
+                           : {
+                              color: "var(--warning-blue)",
+                              fontSize: "1.5rem",
+                           }}
+                     >
+                        •
+                     </div>
+                     {localTime}
+                  </div>
+               </div>
+               <div id="match-card-bottom">FRC {team}</div>
+            </motion.div>
+         );
+      } else if (placeholder) {
+         return (
+            <motion.div
+               initial={{ y: 20, opacity: 0 }}
+               animate={{ y: 0, opacity: 1 }}
+               exit={{ y: -20, opacity: 0 }}
+               transition={{ duration: 0.4 }}
+               ref={ref}
+               id="match-card"
+            >
+               <div id="match-card-top">
+                  <div id="match-card-match" className="placeholder">
+                     &#10240;&nbsp; &#10240;
+                  </div>
+                  <div id="match-card-detail" className="placeholder">
+                     <div
+                        style={alliance
+                           ? {
+                              color: "var(--warning-red)",
+                              fontSize: "1.5rem",
+                           }
+                           : {
+                              color: "var(--warning-blue)",
+                              fontSize: "1.5rem",
+                           }}
+                     >
+                        &#10240;
+                     </div>
+                  </div>
+               </div>
+               <div id="match-card-bottom">
+                  <div className="placeholder"></div>
+               </div>
+            </motion.div>
+         );
+      }
+   },
+);
 
 const Dashboard = () => {
    const navgiate = useNavigate();
@@ -68,7 +158,6 @@ const Dashboard = () => {
                   match: res.match,
                   alliance: res.alliance,
                };
-               console.log("hi");
                localStorage.setItem(
                   "dashboard-status",
                   JSON.stringify(dashboardStatus),
@@ -110,7 +199,59 @@ const Dashboard = () => {
          });
    }, [event, user]);
 
-   /*
+   const [personalSchedule, setPersonalSchedule] = useState<
+      personalSchedule[]
+   >();
+
+   useEffect(() => {
+      const fetchSchedule = async () => {
+         const db = await openDB(event!);
+         const schedule: scheduleData[] = await db.getAllFromIndex(
+            "event_data",
+            "eventAuthors",
+            user,
+         );
+
+         let personalSchedule: personalSchedule[] = [];
+
+         await getEventData()
+            .then((res) => {
+               for (const selectedMatch of schedule) {
+                  const matchData = res.find((match) =>
+                     match.match == selectedMatch.match
+                  );
+
+                  if (matchData) {
+                     personalSchedule = personalSchedule.concat({
+                        match: selectedMatch.match,
+                        team: selectedMatch.team,
+                        alliance: selectedMatch.alliance,
+                        time: matchData.startTime,
+                     });
+                  }
+               }
+            })
+            .catch((error) => {
+               console.log(error);
+
+               for (const selectedMatch of schedule) {
+                  personalSchedule = personalSchedule.concat({
+                     match: selectedMatch.match,
+                     team: selectedMatch.team,
+                     alliance: selectedMatch.alliance,
+                     time: 0,
+                  });
+               }
+            });
+
+         setPersonalSchedule(personalSchedule);
+      };
+
+      fetchSchedule().then(() => {
+         scrollSchedule(3);
+      });
+   }, [event, user, nextMatch]);
+
    interface scheduleData {
       event: string;
       match: number;
@@ -119,26 +260,21 @@ const Dashboard = () => {
       author: string;
    }
 
-   const [schedule, setSchedule] = useState<scheduleData[] | undefined>(
-      undefined,
-   );
-   const hasFetched = useRef(false); // Ref to track if data has been fetched
+   interface personalSchedule {
+      match: number;
+      team: number;
+      time: number;
+      alliance: boolean;
+   }
 
-   const getSchedule = async (event: string, user: string) => {
-      const db = await openDB(event);
-      const value: scheduleData[] = await db.getAllFromIndex(
-         "event_data",
-         "eventAuthors",
-         user,
-      );
-      setSchedule(value);
+   const matchRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+   const scrollSchedule = (match: number) => {
+      if (matchRefs.current[match]) {
+         matchRefs.current[match]?.scrollIntoView({ behavior: "smooth" });
+      }
    };
 
-   if (!hasFetched.current) {
-      getSchedule(event!, user!);
-      hasFetched.current = true;
-   }
-   */
    return (
       <>
          <motion.div
@@ -155,135 +291,179 @@ const Dashboard = () => {
                   <div className="dashboard-stats left">
                      <div className="dashboard-stats next">
                         <div id="dashboard-stats-header">
-                           Next Up
+                           Statistics
+                        </div>
+                        <div id="details">
+                           <div id="details-header">
+                              Match Q{nextMatch}
+                           </div>
+                           <div id="details-time">
+                              {nextMatchTime.slice(0, 5)}
+                           </div>
+                           
+                           <div id="details-time">
+                              {nextMatchTime.slice(4)}
+                           </div>
                         </div>
                      </div>
-                     <div className="dashboard-stats button">
-                        <i
-                           className="fa-solid fa-robot"
-                           style={{
-                              fontSize: "1rem",
-                              height: "1.5rem",
-                              width: "1.5rem",
-                              alignContent: "center",
-                              justifyContent: "center"
-                           }}
-                        />
-                        <div id="dashboard-stats-text">
-                           Teams
+                     <div id="buttons">
+                        <div
+                           className="dashboard-stats button"
+                           id="team-button"
+                        >
+                           <i
+                              className="fa-solid fa-robot"
+                              style={{
+                                 fontSize: "1rem",
+                                 height: "1.5rem",
+                                 width: "1.5rem",
+                                 alignContent: "center",
+                                 justifyContent: "center",
+                              }}
+                           />
                         </div>
-                     </div>
-                     <div className="dashboard-stats button">
-                     <i
-                           className="fa-solid fa-screwdriver-wrench"
-                           style={{
-                              fontSize: "1.1rem",
-                              height: "1.5rem",
-                              width: "1.5rem",
-                              alignContent: "center",
-                              justifyContent: "center"
-                           }}
-                        />
-                        <div id="dashboard-stats-text">
-                           Driver Kit
+                        <div
+                           className="dashboard-stats button"
+                           id="driver-button"
+                        >
+                           <i
+                              className="fa-solid fa-screwdriver-wrench"
+                              style={{
+                                 fontSize: "1.1rem",
+                                 height: "1.5rem",
+                                 width: "1.5rem",
+                                 alignContent: "center",
+                                 justifyContent: "center",
+                              }}
+                           />
                         </div>
                      </div>
                   </div>
+
                   <div className="dashboard-stats right">
                      <div id="dashboard-stats-header">
                         Schedule
                      </div>
-                  </div>
-               </div>
-               <div id="dashboard-scouting">
-                  <div id="dashboard-section">
-                     <div id="dashboard-section-header">
-                        Start Scouting
-                     </div>
-                     <div id="dashboard-section-details">
-                        {nextMatch != 0
-                           ? (
-                              <div className="transition">
-                                 Next Shift •&nbsp;
-                                 <TextTransition
-                                    className={nextAlliance ? "red" : "blue"}
-                                 >
-                                    Q{nextMatch}
-                                 </TextTransition>
-                                 &nbsp;at&nbsp;
-                                 <TextTransition>
-                                    {nextMatchTime != ""
-                                       ? (
-                                          <>
-                                             <span
-                                                className={nextAlliance
-                                                   ? "red"
-                                                   : "blue"}
-                                             >
-                                                {nextMatchTime}
-                                             </span>
-                                          </>
-                                       )
-                                       : null}
-                                 </TextTransition>
-                              </div>
-                           )
-                           : "All shifts completed"}
+                     <div id="dashboard-stats-schedule">
+                        {personalSchedule && personalSchedule.length > 0
+                           ? personalSchedule?.map((match, index) => (
+                              <MatchCard
+                                 key={index}
+                                 ref={(
+                                    element: HTMLDivElement | null,
+                                 ) => (matchRefs.current[index + 1] = element)}
+                                 match={match.match}
+                                 team={match.team}
+                                 alliance={match.alliance}
+                                 time={match.time}
+                                 placeholder={false}
+                              />
+                           ))
+                           : (
+                              <>
+                                 <MatchCard placeholder={true} />
+                                 <MatchCard placeholder={true} />
+                                 <MatchCard placeholder={true} />
+                                 <MatchCard placeholder={true} />
+                              </>
+                           )}
                      </div>
                   </div>
-                  <button
-                     id="dashboard-scouting-submit"
-                     onClick={() => navgiate("/scouting")}
-                  >
-                     <i className="fa-solid fa-arrow-right" />
-                  </button>
                </div>
-               <div id="dashboard-scouting-overview">
-                  <div id="overview-left">
-                     <div id="dashboard-section-header">
-                        Scouting Overview
+               <div id="dashboard-bottom">
+                  <div id="dashboard-scouting">
+                     <div id="dashboard-section">
+                        <div id="dashboard-section-header">
+                           Start Scouting
+                        </div>
+                        <div id="dashboard-section-details">
+                           {nextMatch != 0
+                              ? (
+                                 <div className="transition">
+                                    Next Shift •&nbsp;
+                                    <TextTransition
+                                       className={nextAlliance ? "red" : "blue"}
+                                    >
+                                       Q{nextMatch}
+                                    </TextTransition>
+                                    &nbsp;at&nbsp;
+                                    <TextTransition>
+                                       {nextMatchTime != ""
+                                          ? (
+                                             <>
+                                                <span
+                                                   className={nextAlliance
+                                                      ? "red"
+                                                      : "blue"}
+                                                >
+                                                   {nextMatchTime}
+                                                </span>
+                                             </>
+                                          )
+                                          : null}
+                                    </TextTransition>
+                                 </div>
+                              )
+                              : "All shifts completed"}
+                        </div>
                      </div>
-                     <div id="dashboard-section-details" className="transition">
-                        <TextTransition>
-                           {assignedMatches - completeMatches == 0
-                              ? null
-                              : assignedMatches - completeMatches}
-                        </TextTransition>
-                        {assignedMatches - completeMatches == 0
-                           ? "All matches done!"
-                           : <>&nbsp;matches left</>}
-                     </div>
-                     <div
-                        id="dashboard-section-details"
-                        className="transition dim"
+                     <button
+                        id="dashboard-scouting-submit"
+                        onClick={() => navgiate("/scouting")}
                      >
-                        <TextTransition>{completeMatches}
-                        </TextTransition>&nbsp;complete
-                     </div>
-                     <div id="dashboard-section-seperator" />
-                     <div id="dashboard-section-details">
-                        Pit Notes{" "}
-                        <i
-                           className="fa-solid fa-arrow-up-right-from-square"
-                           id="pit-button"
-                        >
-                        </i>
-                     </div>
-                     <div id="dashboard-section-details" className="dim">
-                        0 of 0 complete
-                     </div>
+                        <i className="fa-solid fa-arrow-right" />
+                     </button>
                   </div>
-                  <div id="dashboard-overview-progress">
-                     <ProgressRing
-                        stroke={1.3}
-                        radius={4.5}
-                        progress={assignedMatches != 0
-                           ? Math.round(
-                              (completeMatches / assignedMatches) * 100,
-                           ) / 100
-                           : 1}
-                        label={`${completeMatches} of ${assignedMatches}`}
-                     />
+                  <div id="dashboard-scouting-overview">
+                     <div id="overview-left">
+                        <div id="dashboard-section-header">
+                           Scouting Overview
+                        </div>
+                        <div
+                           id="dashboard-section-details"
+                           className="transition"
+                        >
+                           <TextTransition>
+                              {assignedMatches - completeMatches == 0
+                                 ? null
+                                 : assignedMatches - completeMatches}
+                           </TextTransition>
+                           {assignedMatches - completeMatches == 0
+                              ? "All matches done!"
+                              : <>&nbsp;matches left</>}
+                        </div>
+                        <div
+                           id="dashboard-section-details"
+                           className="transition dim"
+                        >
+                           <TextTransition>{completeMatches}
+                           </TextTransition>&nbsp;complete
+                        </div>
+                        <div id="dashboard-section-seperator" />
+                        <div id="dashboard-section-details">
+                           Pit Notes{" "}
+                           <i
+                              className="fa-solid fa-arrow-up-right-from-square"
+                              id="pit-button"
+                           >
+                           </i>
+                        </div>
+                        <div id="dashboard-section-details" className="dim">
+                           0 of 0 complete
+                        </div>
+                     </div>
+                     <div id="dashboard-overview-progress">
+                        <ProgressRing
+                           stroke={1.3}
+                           radius={4.5}
+                           progress={assignedMatches != 0
+                              ? Math.round(
+                                 (completeMatches / assignedMatches) * 100,
+                              ) / 100
+                              : 1}
+                           label={`${completeMatches} of ${assignedMatches}`}
+                        />
+                     </div>
                   </div>
                </div>
             </div>

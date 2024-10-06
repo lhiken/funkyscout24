@@ -257,13 +257,19 @@ const AuthPage = () => {
                                           Scouters
                                        </div>
                                        <div id="auth-dropdown-line" />
-                                       {scouters!.length == 0
-                                          ? (
+                                       {scouters
+                                          ? (scouters.length == 0
+                                             ? (
+                                                <div id="auth-dropdown-option">
+                                                   No data
+                                                </div>
+                                             )
+                                             : null)
+                                          : (
                                              <div id="auth-dropdown-option">
                                                 No data
                                              </div>
-                                          )
-                                          : null}
+                                          )}
                                        {queriedScouters?.map((scouter) => (
                                           <ComboboxOption
                                              key={scouter.id}

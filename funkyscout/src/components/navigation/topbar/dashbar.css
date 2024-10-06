@@ -1,6 +1,6 @@
 #topbar-user {
    margin-top: 1rem;
-   color: var(--dark-nav);
+   color: var(--light-nav);
    font-size: 2.4rem;
 }
 
@@ -15,10 +15,9 @@
    gap: 0.625rem;
    flex-shrink: 0;
    border-radius: 6.25rem;
-   background: var(--light-bg, #121212);
+   background: var(--dark-nav, #121212);
    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.05);
    cursor: pointer;
-   border: solid 2px var(--accent-dim);
 }
 
 #topbar-left {
@@ -36,4 +35,5 @@
 
 #topbar-username {
    font-size: 0.935rem;
+   color: var(--light-text)
 }

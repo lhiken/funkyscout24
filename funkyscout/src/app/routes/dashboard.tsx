@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import ProgressRing from "../../components/routes/dash/progress-ring";
 import "./styles/dashboard.css";
 import { getCount, getNextMatch } from "../../utils/database/datacache";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TextTransition from "react-text-transition";
 import { getMatchData } from "../../utils/helpers/fetch";
 import supabase from "../../utils/database/supabase";
@@ -22,25 +22,27 @@ const Dashboard = () => {
       Number(localStorage.getItem("matches_done")),
    );
 
-   getCount(event!, "event_data", { key: "author", val: user! })
-      .then((res) => {
-         localStorage.setItem("matches_assigned", String(res));
-         setAssignedMatches(res);
-      });
+   useEffect(() => {
+      getCount(event!, "event_data", { key: "author", val: user! })
+         .then((res) => {
+            localStorage.setItem("matches_assigned", String(res));
+            setAssignedMatches(res);
+         });
 
-   getCount(event!, "match_data", { key: "author", val: user! })
-      .then(async (res) => {
-         localStorage.setItem("matches_done", String(res));
+      getCount(event!, "match_data", { key: "author", val: user! })
+         .then(async (res) => {
+            localStorage.setItem("matches_done", String(res));
 
-         await supabase
-            .from("users")
-            .update({ matches: res })
-            .eq("name", user!)
-            .eq("event", event!)
-            .select();
+            await supabase
+               .from("users")
+               .update({ matches: res })
+               .eq("name", user!)
+               .eq("event", event!)
+               .select();
 
-         setCompleteMatches(res);
-      });
+            setCompleteMatches(res);
+         });
+   }, [event, user]);
 
    const [nextMatch, setNextMatch] = useState(
       localStorage.getItem("dashboard-status")
@@ -58,54 +60,85 @@ const Dashboard = () => {
          : "9:00 AM",
    );
 
-   getNextMatch(event!, user!)
-      .then(async (res) => {
-         if (res) {
-            const dashboardStatus = {
-               match: res.match,
-               alliance: res.alliance,
-            };
-
-            localStorage.setItem(
-               "dashboard-status",
-               JSON.stringify(dashboardStatus),
-            );
-            setNextMatch(res.match);
-            setNextAlliance(res.alliance);
-
-            return getMatchData(res.match);
-         } else {
-            setNextMatch(0);
-            throw new Error("No match data found");
-         }
-      })
-      .then((matchData) => {
-         if (matchData && matchData.startTime) {
-            const date = new Date(matchData.startTime * 1000);
-            const localTime = date.toLocaleString([], {
-               hour: "numeric",
-               minute: "2-digit",
-            });
-
-            const status = localStorage.getItem("dashboard-status");
-            if (status) {
-               const updatedStatus = {
-                  ...JSON.parse(status),
-                  time: localTime,
+   useEffect(() => {
+      getNextMatch(event!, user!)
+         .then(async (res) => {
+            if (res) {
+               const dashboardStatus = {
+                  match: res.match,
+                  alliance: res.alliance,
                };
+               console.log("hi");
                localStorage.setItem(
                   "dashboard-status",
-                  JSON.stringify(updatedStatus),
+                  JSON.stringify(dashboardStatus),
                );
+               setNextMatch(res.match);
+               setNextAlliance(res.alliance);
+
+               return getMatchData(res.match);
+            } else {
+               setNextMatch(0);
+               throw new Error("No match data found");
             }
+         })
+         .then((matchData) => {
+            if (matchData && matchData.startTime) {
+               const date = new Date(matchData.startTime * 1000);
+               const localTime = date.toLocaleString([], {
+                  hour: "numeric",
+                  minute: "2-digit",
+               });
 
-            setNextMatchTime(localTime);
-         }
-      })
-      .catch((error) => {
-         console.error("Error fetching match data:", error);
-      });
+               const status = localStorage.getItem("dashboard-status");
+               if (status) {
+                  const updatedStatus = {
+                     ...JSON.parse(status),
+                     time: localTime,
+                  };
+                  localStorage.setItem(
+                     "dashboard-status",
+                     JSON.stringify(updatedStatus),
+                  );
+               }
 
+               setNextMatchTime(localTime);
+            }
+         })
+         .catch((error) => {
+            console.error("Error fetching match data:", error);
+         });
+   }, [event, user]);
+
+   /*
+   interface scheduleData {
+      event: string;
+      match: number;
+      team: number;
+      alliance: boolean;
+      author: string;
+   }
+
+   const [schedule, setSchedule] = useState<scheduleData[] | undefined>(
+      undefined,
+   );
+   const hasFetched = useRef(false); // Ref to track if data has been fetched
+
+   const getSchedule = async (event: string, user: string) => {
+      const db = await openDB(event);
+      const value: scheduleData[] = await db.getAllFromIndex(
+         "event_data",
+         "eventAuthors",
+         user,
+      );
+      setSchedule(value);
+   };
+
+   if (!hasFetched.current) {
+      getSchedule(event!, user!);
+      hasFetched.current = true;
+   }
+   */
    return (
       <>
          <motion.div
@@ -118,6 +151,50 @@ const Dashboard = () => {
          >
             <Dashbar />
             <div id="dashboard-main">
+               <div className="dashboard-stats">
+                  <div className="dashboard-stats left">
+                     <div className="dashboard-stats next">
+                        <div id="dashboard-stats-header">
+                           Next Up
+                        </div>
+                     </div>
+                     <div className="dashboard-stats button">
+                        <i
+                           className="fa-solid fa-robot"
+                           style={{
+                              fontSize: "1rem",
+                              height: "1.5rem",
+                              width: "1.5rem",
+                              alignContent: "center",
+                              justifyContent: "center"
+                           }}
+                        />
+                        <div id="dashboard-stats-text">
+                           Teams
+                        </div>
+                     </div>
+                     <div className="dashboard-stats button">
+                     <i
+                           className="fa-solid fa-screwdriver-wrench"
+                           style={{
+                              fontSize: "1.1rem",
+                              height: "1.5rem",
+                              width: "1.5rem",
+                              alignContent: "center",
+                              justifyContent: "center"
+                           }}
+                        />
+                        <div id="dashboard-stats-text">
+                           Driver Kit
+                        </div>
+                     </div>
+                  </div>
+                  <div className="dashboard-stats right">
+                     <div id="dashboard-stats-header">
+                        Schedule
+                     </div>
+                  </div>
+               </div>
                <div id="dashboard-scouting">
                   <div id="dashboard-section">
                      <div id="dashboard-section-header">

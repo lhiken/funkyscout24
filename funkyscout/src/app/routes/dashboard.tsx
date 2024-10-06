@@ -6,6 +6,7 @@ import { getCount, getNextMatch } from "../../utils/database/datacache";
 import { useState } from "react";
 import TextTransition from "react-text-transition";
 import { getMatchData } from "../../utils/helpers/fetch";
+import supabase from "../../utils/database/supabase";
 
 const Dashboard = () => {
    const navgiate = useNavigate();
@@ -27,8 +28,16 @@ const Dashboard = () => {
       });
 
    getCount(event!, "match_data", { key: "author", val: user! })
-      .then((res) => {
+      .then(async (res) => {
          localStorage.setItem("matches_done", String(res));
+         
+         await supabase
+         .from("users")
+         .update({ matches: res })
+         .eq("name", user!)
+         .eq("event", event!)
+         .select();
+
          setCompleteMatches(res);
       });
 
@@ -49,48 +58,52 @@ const Dashboard = () => {
    );
 
    getNextMatch(event!, user!)
-   .then((res) => {
-      if (res) {
-         const dashboardStatus = {
-            match: res.match,
-            alliance: res.alliance,
-         };
-
-         localStorage.setItem("dashboard-status", JSON.stringify(dashboardStatus));
-         setNextMatch(res.match);
-         setNextAlliance(res.alliance);
-
-         return getMatchData(res.match);
-      } else {
-         setNextMatch(0);
-         throw new Error("No match data found");
-      }
-   })
-   .then((matchData) => {
-      if (matchData && matchData.startTime) {
-         const date = new Date(matchData.startTime * 1000);
-         const localTime = date.toLocaleString([], {
-            hour: "numeric",
-            minute: "2-digit",
-         });
-
-         const status = localStorage.getItem("dashboard-status");
-         if (status) {
-            const updatedStatus = {
-               ...JSON.parse(status),
-               time: localTime,
+      .then(async (res) => {
+         if (res) {
+            const dashboardStatus = {
+               match: res.match,
+               alliance: res.alliance,
             };
-            localStorage.setItem("dashboard-status", JSON.stringify(updatedStatus));
+
+            localStorage.setItem(
+               "dashboard-status",
+               JSON.stringify(dashboardStatus),
+            );
+            setNextMatch(res.match);
+            setNextAlliance(res.alliance);
+
+            return getMatchData(res.match);
+         } else {
+            setNextMatch(0);
+            throw new Error("No match data found");
          }
+      })
+      .then((matchData) => {
+         if (matchData && matchData.startTime) {
+            const date = new Date(matchData.startTime * 1000);
+            const localTime = date.toLocaleString([], {
+               hour: "numeric",
+               minute: "2-digit",
+            });
 
-         setNextMatchTime(localTime);
-      }
-   })
-   .catch((error) => {
-      console.error("Error fetching match data:", error);
+            const status = localStorage.getItem("dashboard-status");
+            if (status) {
+               const updatedStatus = {
+                  ...JSON.parse(status),
+                  time: localTime,
+               };
+               localStorage.setItem(
+                  "dashboard-status",
+                  JSON.stringify(updatedStatus),
+               );
+            }
 
-   });
-
+            setNextMatchTime(localTime);
+         }
+      })
+      .catch((error) => {
+         console.error("Error fetching match data:", error);
+      });
 
    return (
       <>
@@ -115,7 +128,9 @@ const Dashboard = () => {
                            ? (
                               <div className="transition">
                                  Next Shift •&nbsp;
-                                 <TextTransition className={nextAlliance ? "red" : "blue"}>
+                                 <TextTransition
+                                    className={nextAlliance ? "red" : "blue"}
+                                 >
                                     Q{nextMatch}
                                  </TextTransition>
                                  &nbsp;at&nbsp;
@@ -123,7 +138,11 @@ const Dashboard = () => {
                                     {nextMatchTime != ""
                                        ? (
                                           <>
-                                             <span className={nextAlliance ? "red" : "blue"}>
+                                             <span
+                                                className={nextAlliance
+                                                   ? "red"
+                                                   : "blue"}
+                                             >
                                                 {nextMatchTime}
                                              </span>
                                           </>

@@ -5,7 +5,9 @@
    top: 0;
    left: 0;
    z-index: 1000;
-   background-color: var(--dark-nav);
+   background-color: var(--bg-transparent);
+   -webkit-backdrop-filter: blur(40px);
+           backdrop-filter: blur(40px);
    display: flex;
    flex-direction: column;
    justify-content: center;

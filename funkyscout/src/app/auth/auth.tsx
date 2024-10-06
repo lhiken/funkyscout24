@@ -136,7 +136,6 @@ const AuthPage = () => {
 
    return (
       <>
-         {loading ? <LoadingScreen label={'Fetching Data'}/> : null}
          <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -145,6 +144,7 @@ const AuthPage = () => {
             key="auth"
             id="auth-body"
          >
+            {loading ? <LoadingScreen label={'Fetching Data'}/> : null}
             <div id="auth-header">
                funkyscout
             </div>

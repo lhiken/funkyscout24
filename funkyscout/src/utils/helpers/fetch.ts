@@ -45,7 +45,6 @@ const getMatchData = async (match: string) => {
          throw Error;
       }
    } catch {
-      console.log('using TBA')
       const response = await fetch(
          `https://www.thebluealliance.com/api/v3/event/${event}/matches/simple`,
          {

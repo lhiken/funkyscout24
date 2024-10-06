@@ -8,53 +8,29 @@ const ProgressRing = (
       label: string;
    },
 ) => {
+   stroke *= 16;
+   radius *= 16;
+
    const normalizedRadius = radius - stroke * 0.5;
    const circumference = normalizedRadius * 2 * Math.PI;
-   const strokeDashoffset = circumference - progress * circumference + "rem";
+   const strokeDashoffset = circumference - progress * circumference;
 
    return (
       <>
          <svg
-            height={radius * 2 + "rem"}
-            width={radius * 2 + "rem"}
+            height={radius * 2}
+            width={radius * 2}
             className="progress-ring"
+            viewBox={`0 0 ${radius * 2} ${radius * 2}`}  
          >
             <defs>
                <filter id="inset-shadow">
-                  <feOffset
-                     dx="0"
-                     dy="0"
-                  />
-
-                  <feGaussianBlur
-                     stdDeviation="3"
-                     result="offset-blur"
-                  />
-
-                  <feComposite
-                     operator="out"
-                     in="SourceGraphic"
-                     in2="offset-blur"
-                     result="inverse"
-                  />
-
-                  <feFlood
-                     floodColor="var(--progress-ring-flood)"
-                     floodOpacity="1"
-                     result="color"
-                  />
-                  <feComposite
-                     operator="in"
-                     in="color"
-                     in2="inverse"
-                     result="shadow"
-                  />
-
-                  <feComposite
-                     operator="over"
-                     in="shadow"
-                     in2="SourceGraphic"
-                  />
+                  <feOffset dx="0" dy="0" />
+                  <feGaussianBlur stdDeviation="3" result="offset-blur" />
+                  <feComposite operator="out" in="SourceGraphic" in2="offset-blur" result="inverse" />
+                  <feFlood floodColor="var(--progress-ring-flood)" floodOpacity="1" result="color" />
+                  <feComposite operator="in" in="color" in2="inverse" result="shadow" />
+                  <feComposite operator="over" in="shadow" in2="SourceGraphic" />
                </filter>
             </defs>
             <circle
@@ -62,19 +38,18 @@ const ProgressRing = (
                stroke="var(--accent)"
                strokeLinecap="round"
                fill="transparent"
-               strokeWidth={stroke + "rem"}
-               strokeDasharray={circumference + "rem" + " " + circumference +
-                  "rem"}
-               style={{ strokeDashoffset }}
-               r={normalizedRadius + "rem"}
-               cx={radius + "rem"}
-               cy={radius + "rem"}
+               strokeWidth={stroke}  
+               strokeDasharray={circumference + "px " + circumference} 
+               style={{ strokeDashoffset: strokeDashoffset }}  
+               r={normalizedRadius}  
+               cx={radius}  
+               cy={radius} 
             />
             <text
                x="50%"
                y="50%"
                textAnchor="middle"
-               dy="0rem"
+               dy="0px"  
                fill="var(--light-text)"
                className="progress-text-header"
             >
@@ -84,7 +59,7 @@ const ProgressRing = (
                x="50%"
                y="50%"
                textAnchor="middle"
-               dy="1.35rem"
+               dy="21.6px" 
                fill="var(--dark-text)"
                className="progress-text"
             >
@@ -95,10 +70,10 @@ const ProgressRing = (
                stroke="var(--accent-dim)"
                strokeLinecap="round"
                fill="transparent"
-               strokeWidth={stroke + "rem"}
-               r={normalizedRadius + "rem"}
-               cx={radius + "rem"}
-               cy={radius + "rem"}
+               strokeWidth={stroke}  
+               r={normalizedRadius} 
+               cx={radius}
+               cy={radius}
             />
          </svg>
       </>

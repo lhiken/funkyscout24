@@ -17,6 +17,7 @@
 
   /* utils */
   --progress-ring-flood: #000000;
+  --bg-transparent: #0000003b;
 }
 
 .theme-light {
@@ -38,5 +39,5 @@
 
   /* utils */
   --progress-ring-flood: #946e1c;
-
+  --bg-transparent: #ffffff3b;
 }

@@ -1,10 +1,10 @@
-import { motion } from "framer-motion"
-import { useLocation } from 'react-router-dom';
+import { motion } from "framer-motion";
+import { useLocation } from "react-router-dom";
 
-import './navbar.css';
+import "./navbar.css";
 
 const Navbar = () => {
-   const currentPage = useLocation()
+   const currentPage = useLocation();
 
    return (
       <>
@@ -16,23 +16,42 @@ const Navbar = () => {
          >
             <div id="navbar">
                <div id="navbar-wrapper">
-                  <button id="navbar-button"
-                     className={currentPage.pathname == '/data' ? 'selected' : 'dim'}
+                  <button
+                     id="navbar-button"
+                     className={currentPage.pathname == "/data"
+                        ? "selected"
+                        : "dim"}
                   >
-                     <i className="fa-solid fa-clipboard-list" id="navbar-button-icon"></i>
-                     <div id="navbar-text">View Data
+                     <i
+                        className="fa-solid fa-clipboard-list"
+                        id="navbar-button-icon"
+                     >
+                     </i>
+                     <div id="navbar-text">
+                        View Data
                      </div>
                   </button>
-                  <button id="navbar-button"
-                     className={currentPage.pathname == '/dashboard' ? 'selected' : 'dim'}
+                  <button
+                     id="navbar-button"
+                     className={currentPage.pathname == "/dashboard"
+                        ? "selected"
+                        : "dim"}
                   >
-                     <i className="fa-solid fa-gauge" id="navbar-button-icon"></i>
+                     <i className="fa-solid fa-gauge" id="navbar-button-icon">
+                     </i>
                      <div id="navbar-text">Dashboard</div>
                   </button>
-                  <button id="navbar-button"
-                     className={currentPage.pathname == '/scouting' ? 'selected' : 'dim'}
+                  <button
+                     id="navbar-button"
+                     className={currentPage.pathname == "/scouting"
+                        ? "selected"
+                        : "dim"}
                   >
-                     <i className="fa-solid fa-binoculars" id="navbar-button-icon"></i>
+                     <i
+                        className="fa-solid fa-binoculars"
+                        id="navbar-button-icon"
+                     >
+                     </i>
                      <div id="navbar-text">Scouting</div>
                   </button>
                </div>
@@ -40,6 +59,6 @@ const Navbar = () => {
          </motion.div>
       </>
    );
-}
+};
 
 export default Navbar;

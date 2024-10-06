@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { setTheme } from "../../../utils/theme";
-import "./topbar.css";
+import "./dashbar.css";
 
 interface Settings {
    active: boolean;
@@ -41,7 +41,7 @@ const Settings = (
    );
 };
 
-const Topbar = () => {
+const Dashbar = () => {
    const [dropdown, setDropdown] = useState(false);
    const [notificationEnabled, setNotificationEnabled] = useState(false);
 
@@ -59,7 +59,7 @@ const Topbar = () => {
       return;
    };
 
-   const handleMenuToggle = () => {
+   const handleProfileToggle = () => {
       return;
    };
 
@@ -85,9 +85,15 @@ const Topbar = () => {
          >
             <div id="topbar">
                <div id="topbar-wrapper">
-                  <button id="topbar-button" onClick={handleMenuToggle}>
-                     <i className="fa-solid fa-compass" id="topbar-icon" />
-                  </button>
+                  <div id="topbar-left">
+                     <button id="topbar-profile" onClick={handleProfileToggle}>
+                        <i className="fa-solid fa-user" id="topbar-user" />
+                     </button>
+                     <div id="topbar-text">
+                        <div id="topbar-header">Funkyscout</div>
+                        <div id="topbar-username">{localStorage.getItem('user') ? localStorage.getItem('user') : 'Not signed in'}</div>
+                     </div>
+                  </div>
                   <div id="topbar-settings">
                      <button id="topbar-button" onClick={handleSettingsClick}>
                         <i className="fa-solid fa-gear" id="topbar-icon" />
@@ -107,4 +113,4 @@ const Topbar = () => {
    );
 };
 
-export default Topbar;
+export default Dashbar;

@@ -7,6 +7,7 @@ import { useState } from "react";
 import TextTransition from "react-text-transition";
 import { getMatchData } from "../../utils/helpers/fetch";
 import supabase from "../../utils/database/supabase";
+import Dashbar from "../../components/navigation/topbar/dashbar";
 
 const Dashboard = () => {
    const navgiate = useNavigate();
@@ -30,13 +31,13 @@ const Dashboard = () => {
    getCount(event!, "match_data", { key: "author", val: user! })
       .then(async (res) => {
          localStorage.setItem("matches_done", String(res));
-         
+
          await supabase
-         .from("users")
-         .update({ matches: res })
-         .eq("name", user!)
-         .eq("event", event!)
-         .select();
+            .from("users")
+            .update({ matches: res })
+            .eq("name", user!)
+            .eq("event", event!)
+            .select();
 
          setCompleteMatches(res);
       });
@@ -107,8 +108,6 @@ const Dashboard = () => {
 
    return (
       <>
-         <div id="profile-nav">
-         </div>
          <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -117,6 +116,7 @@ const Dashboard = () => {
             key="dashboard"
             id="dashboard"
          >
+            <Dashbar />
             <div id="dashboard-main">
                <div id="dashboard-scouting">
                   <div id="dashboard-section">

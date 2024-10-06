@@ -17,7 +17,7 @@ const NavbarDisplay = () => {
 
 const TopbarDisplay = () => {
    const currentPage = useLocation();
-   const paths = ["/dashboard", "/auth"];
+   const paths = ["/auth"];
    const check = paths.includes(currentPage.pathname);
    if (check) {
       return <Topbar />;
@@ -54,7 +54,7 @@ const App = () => {
       <>
          <div id="app">
             <AnimatePresence mode="wait">
-                  <AppOutlet key={currentPage.pathname} />
+               <AppOutlet key={currentPage.pathname} />
             </AnimatePresence>
             <NavbarDisplay />
             <TopbarDisplay />

@@ -1,0 +1,39 @@
+#topbar-user {
+   margin-top: 1rem;
+   color: var(--dark-nav);
+   font-size: 2.4rem;
+}
+
+#topbar-profile {
+   overflow: hidden;
+   display: flex;
+   position: flex;
+   width: 3rem;
+   height: 3rem;
+   justify-content: center;
+   align-items: center;
+   gap: 0.625rem;
+   flex-shrink: 0;
+   border-radius: 6.25rem;
+   background: var(--light-bg, #121212);
+   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.05);
+   cursor: pointer;
+   border: solid 2px var(--accent-dim);
+}
+
+#topbar-left {
+   display: flex;
+   flex-direction: row;
+   gap: 0.5rem;
+}
+
+#topbar-header {
+   height: 1.6rem;
+   color: var(--accent);
+   font-weight: 500;
+   font-size: 1rem;
+}
+
+#topbar-username {
+   font-size: 0.935rem;
+}

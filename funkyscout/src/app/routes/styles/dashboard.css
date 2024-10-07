@@ -184,6 +184,7 @@
    flex-direction: column;
    background-color: var(--dark-nav);
    flex-grow: 1;
+   width: 50%;
 
    border-radius: 1rem;
    overflow: hidden;
@@ -238,7 +239,7 @@
    gap: 0.5rem;
    overflow-y: scroll;
    scroll-snap-type: y mandatory;
-   overflow-x: hidden;
+   overflow-x: visible;
 }
 
 #match-card {
@@ -313,7 +314,7 @@
 
 
 #details-header {
-   width: 6rem;
+   width: 8rem;
    color: var(--light-text);
 }
 
@@ -332,7 +333,12 @@
 }
 
 #buttons {
-   @media (max-height: 750px) {
+   @media (max-height: 820px) {
       display: none;
    }
+}
+
+.placeholder-container {
+   height: 1.434rem;
+   justify-content: center;
 }

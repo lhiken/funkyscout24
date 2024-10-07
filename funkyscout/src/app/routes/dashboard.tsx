@@ -90,7 +90,7 @@ const MatchCard = forwardRef(
                      </div>
                   </div>
                </div>
-               <div id="match-card-bottom">
+               <div id="match-card-bottom" className="placeholder-container">
                   <div className="placeholder"></div>
                </div>
             </motion.div>
@@ -275,6 +275,29 @@ const Dashboard = () => {
       }
    };
 
+   const getTimeDifference = (startTime: Date, endTime: Date) => {
+      const diff = startTime.getTime() - endTime.getTime();
+
+      console.log(startTime);
+      console.log(endTime);
+
+      const seconds = Math.floor(diff / 1000);
+      const minutes = Math.floor(seconds / 60);
+      const hours = Math.floor(minutes / 60);
+
+      if (hours > 0) {
+         return `${hours % 24}h ${minutes % 60}m`;
+      } else if (minutes > 0) {
+         return `${minutes % 60}m`;
+      } else if (hours < 0) {
+         return `${Math.abs(hours % 24)}h ${Math.abs(minutes % 60)}m ago`;
+      } else if (minutes < 0) {
+         return `${Math.abs(hours % 24)}h ${Math.abs(minutes % 60)}m ago`;
+      } else {
+         return `now`;
+      }
+   };
+
    return (
       <>
          <motion.div
@@ -291,19 +314,41 @@ const Dashboard = () => {
                   <div className="dashboard-stats left">
                      <div className="dashboard-stats next">
                         <div id="dashboard-stats-header">
-                           Statistics
+                           Next Match
                         </div>
                         <div id="details">
-                           <div id="details-header">
-                              Match Q{nextMatch}
+                           <div
+                              id="details-header"
+                              style={{ display: "flex", flexDirection: "row" }}
+                           >
+                              | Qual {nextMatch ? nextMatch : 0}
+                              {" •"}&nbsp;
+                              <TextTransition>
+                                 {personalSchedule &&
+                                       personalSchedule.length > 0
+                                    ? (
+                                       personalSchedule[nextMatch - 1].team
+                                    )
+                                    : null}
+                              </TextTransition>
                            </div>
                            <div id="details-time">
-                              {nextMatchTime.slice(0, 5)}
+                              {nextMatchTime ? nextMatchTime.slice(0, 5) : null}
                            </div>
-                           
                            <div id="details-time">
-                              {nextMatchTime.slice(4)}
+                              {nextMatchTime ? nextMatchTime.slice(5) : null}
                            </div>
+                           <TextTransition>
+                              | {personalSchedule && personalSchedule.length > 0
+                                 ? getTimeDifference(
+                                    new Date(
+                                       personalSchedule[nextMatch - 1].time *
+                                          1000,
+                                    ),
+                                    new Date(Date.now()),
+                                 )
+                                 : "No time data"}
+                           </TextTransition>
                         </div>
                      </div>
                      <div id="buttons">
@@ -314,7 +359,7 @@ const Dashboard = () => {
                            <i
                               className="fa-solid fa-robot"
                               style={{
-                                 fontSize: "1rem",
+                                 fontSize: "1.4rem",
                                  alignContent: "center",
                                  justifyContent: "center",
                               }}
@@ -327,7 +372,7 @@ const Dashboard = () => {
                            <i
                               className="fa-solid fa-screwdriver-wrench"
                               style={{
-                                 fontSize: "1.1rem",
+                                 fontSize: "1.4rem",
                                  alignContent: "center",
                                  justifyContent: "center",
                               }}

@@ -315,8 +315,6 @@ const Dashboard = () => {
                               className="fa-solid fa-robot"
                               style={{
                                  fontSize: "1rem",
-                                 height: "1.5rem",
-                                 width: "1.5rem",
                                  alignContent: "center",
                                  justifyContent: "center",
                               }}
@@ -330,8 +328,6 @@ const Dashboard = () => {
                               className="fa-solid fa-screwdriver-wrench"
                               style={{
                                  fontSize: "1.1rem",
-                                 height: "1.5rem",
-                                 width: "1.5rem",
                                  alignContent: "center",
                                  justifyContent: "center",
                               }}

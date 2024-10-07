@@ -248,7 +248,7 @@ const Dashboard = () => {
       };
 
       fetchSchedule().then(() => {
-         scrollSchedule(3);
+         setTimeout(() => scrollSchedule(nextMatch), 500)
       });
    }, [event, user, nextMatch]);
 
@@ -277,10 +277,7 @@ const Dashboard = () => {
 
    const getTimeDifference = (startTime: Date, endTime: Date) => {
       const diff = startTime.getTime() - endTime.getTime();
-
-      console.log(startTime);
-      console.log(endTime);
-
+      
       const seconds = Math.floor(diff / 1000);
       const minutes = Math.floor(seconds / 60);
       const hours = Math.floor(minutes / 60);
@@ -322,7 +319,7 @@ const Dashboard = () => {
                               style={{ display: "flex", flexDirection: "row" }}
                            >
                               | Qual {nextMatch ? nextMatch : 0}
-                              {" •"}&nbsp;
+                              {personalSchedule && personalSchedule.length > 0 ? " •" : null}&nbsp;
                               <TextTransition>
                                  {personalSchedule &&
                                        personalSchedule.length > 0
@@ -335,11 +332,14 @@ const Dashboard = () => {
                            <div id="details-time">
                               {nextMatchTime ? nextMatchTime.slice(0, 5) : null}
                            </div>
-                           <div id="details-time">
+                           <div id="details-time" className="details-timesign">
                               {nextMatchTime ? nextMatchTime.slice(5) : null}
                            </div>
-                           <TextTransition>
-                              | {personalSchedule && personalSchedule.length > 0
+                           <div style={{
+                              display: 'flex',
+                              flexDirection: 'row'
+                           }}>|&nbsp;<TextTransition className="details-timediff">
+                              {personalSchedule && personalSchedule.length > 0
                                  ? getTimeDifference(
                                     new Date(
                                        personalSchedule[nextMatch - 1].time *
@@ -348,7 +348,7 @@ const Dashboard = () => {
                                     new Date(Date.now()),
                                  )
                                  : "No time data"}
-                           </TextTransition>
+                           </TextTransition></div>
                         </div>
                      </div>
                      <div id="buttons">

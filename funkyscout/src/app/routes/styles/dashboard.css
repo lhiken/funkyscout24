@@ -176,7 +176,7 @@
    gap: 1rem;
    height: 100%;
    justify-content: space-between;
-   min-height: 2rem;
+   min-height: 9rem;
 }
 
 .dashboard-stats.right {
@@ -225,6 +225,8 @@
    font-size: 1rem;
    height: 4rem;
    width: 4rem;
+
+   min-height: unset;
 }
 
 #dashboard-stats-text {
@@ -240,6 +242,7 @@
    overflow-y: scroll;
    scroll-snap-type: y mandatory;
    overflow-x: visible;
+   border-radius: 0.7rem;
 }
 
 #match-card {
@@ -341,4 +344,16 @@
 .placeholder-container {
    height: 1.434rem;
    justify-content: center;
+}
+
+.details-timediff {
+   @media (max-height: 750px) {
+      color: #00000000
+   }
+}
+
+.details-timesign {
+   @media (max-height: 700px) {
+      display: none;
+   }
 }

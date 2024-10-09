@@ -14,6 +14,7 @@ import Dashboard from './app/routes/dashboard';
 import './utils/styles/reload.css'
 import './utils/styles/index.css'
 import './utils/styles/vars.css'
+import Auto from './scoutingDev/auto';
 
 /* const router = createBrowserRouter([
   {
@@ -47,6 +48,10 @@ const router = createBrowserRouter(
       <Route
         element={<Dashboard/>}
         path="/dashboard"
+      />
+      <Route
+        element={<Auto/>}
+        path="/auto"
       />
     </Route>
   )

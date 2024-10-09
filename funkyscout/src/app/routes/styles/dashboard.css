@@ -16,7 +16,7 @@
 
    display: flex;
    flex-direction: column;
-   margin: 6rem 0 7rem 0rem;
+   margin: 5.5rem 0 7rem 0rem;
    padding: 0 1rem 0 1rem;
    width: 100%;
    height: 100%;
@@ -176,7 +176,7 @@
    gap: 1rem;
    height: 100%;
    justify-content: space-between;
-   min-height: 2rem;
+   min-height: 9rem;
 }
 
 .dashboard-stats.right {
@@ -184,6 +184,7 @@
    flex-direction: column;
    background-color: var(--dark-nav);
    flex-grow: 1;
+   width: 50%;
 
    border-radius: 1rem;
    overflow: hidden;
@@ -224,6 +225,8 @@
    font-size: 1rem;
    height: 4rem;
    width: 4rem;
+
+   min-height: unset;
 }
 
 #dashboard-stats-text {
@@ -238,7 +241,8 @@
    gap: 0.5rem;
    overflow-y: scroll;
    scroll-snap-type: y mandatory;
-   overflow-x: hidden;
+   overflow-x: visible;
+   border-radius: 0.7rem;
 }
 
 #match-card {
@@ -313,15 +317,15 @@
 
 
 #details-header {
-   width: 6rem;
+   width: 8rem;
    color: var(--light-text);
 }
 
 #details-time {
    color: var(--accent);
-   font-size: 3rem;
+   font-size: 2.2rem;
    font-weight: 500;
-   line-height: 3rem;
+   line-height: 2rem;
    margin: 1rem 0;
 }
 
@@ -332,7 +336,24 @@
 }
 
 #buttons {
+   @media (max-height: 790px) {
+      display: none;
+   }
+}
+
+.placeholder-container {
+   height: 1.434rem;
+   justify-content: center;
+}
+
+.details-timediff {
    @media (max-height: 750px) {
+      color: #00000000
+   }
+}
+
+.details-timesign {
+   @media (max-height: 700px) {
       display: none;
    }
 }

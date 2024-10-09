@@ -108,7 +108,6 @@ const Dashbar = () => {
                   </div>
                </div>
             </div>
-            <div id="topbar-seperator"/>
          </motion.div>
       </>
    );

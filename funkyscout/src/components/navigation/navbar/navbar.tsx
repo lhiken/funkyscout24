@@ -1,10 +1,15 @@
 import { motion } from "framer-motion";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import "./navbar.css";
 
 const Navbar = () => {
    const currentPage = useLocation();
+   const navigatePage = useNavigate();
+   const navigate = (pathname: string) => {
+      if (pathname != currentPage.pathname)
+      navigatePage(pathname)
+   }
 
    return (
       <>
@@ -21,6 +26,7 @@ const Navbar = () => {
                      className={currentPage.pathname == "/data"
                         ? "selected"
                         : "dim"}
+                     onClick={() => navigate("/data")}
                   >
                      <i
                         className="fa-solid fa-clipboard-list"
@@ -36,6 +42,7 @@ const Navbar = () => {
                      className={currentPage.pathname == "/dashboard"
                         ? "selected"
                         : "dim"}
+                     onClick={() => navigate("/dashboard")}
                   >
                      <i className="fa-solid fa-gauge" id="navbar-button-icon">
                      </i>
@@ -46,6 +53,7 @@ const Navbar = () => {
                      className={currentPage.pathname == "/scouting"
                         ? "selected"
                         : "dim"}
+                     onClick={() => navigate("/scouting")}
                   >
                      <i
                         className="fa-solid fa-binoculars"

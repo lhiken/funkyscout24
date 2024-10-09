@@ -248,7 +248,7 @@ const Dashboard = () => {
       };
 
       fetchSchedule().then(() => {
-         setTimeout(() => scrollSchedule(nextMatch), 500)
+         setTimeout(() => scrollSchedule(nextMatch), 500);
       });
    }, [event, user, nextMatch]);
 
@@ -277,7 +277,7 @@ const Dashboard = () => {
 
    const getTimeDifference = (startTime: Date, endTime: Date) => {
       const diff = startTime.getTime() - endTime.getTime();
-      
+
       const seconds = Math.floor(diff / 1000);
       const minutes = Math.floor(seconds / 60);
       const hours = Math.floor(minutes / 60);
@@ -319,7 +319,9 @@ const Dashboard = () => {
                               style={{ display: "flex", flexDirection: "row" }}
                            >
                               | Qual {nextMatch ? nextMatch : 0}
-                              {personalSchedule && personalSchedule.length > 0 ? " •" : null}&nbsp;
+                              {personalSchedule && personalSchedule.length > 0
+                                 ? " •"
+                                 : null}&nbsp;
                               <TextTransition>
                                  {personalSchedule &&
                                        personalSchedule.length > 0
@@ -330,25 +332,33 @@ const Dashboard = () => {
                               </TextTransition>
                            </div>
                            <div id="details-time">
-                              {nextMatchTime ? nextMatchTime.slice(0, 5) : null}
+                              {nextMatchTime
+                                 ? nextMatchTime.slice(0, 5)
+                                 : "0:00"}
                            </div>
                            <div id="details-time" className="details-timesign">
-                              {nextMatchTime ? nextMatchTime.slice(5) : null}
+                              {nextMatchTime ? nextMatchTime.slice(5) : "AM"}
                            </div>
-                           <div style={{
-                              display: 'flex',
-                              flexDirection: 'row'
-                           }}>|&nbsp;<TextTransition className="details-timediff">
-                              {personalSchedule && personalSchedule.length > 0
-                                 ? getTimeDifference(
-                                    new Date(
-                                       personalSchedule[nextMatch - 1].time *
-                                          1000,
-                                    ),
-                                    new Date(Date.now()),
-                                 )
-                                 : "No time data"}
-                           </TextTransition></div>
+                           <div
+                              style={{
+                                 display: "flex",
+                                 flexDirection: "row",
+                              }}
+                              className="details-timediff"
+                           >
+                              |&nbsp;<TextTransition className="details-timediff">
+                                 {personalSchedule &&
+                                       personalSchedule.length > 0
+                                    ? getTimeDifference(
+                                       new Date(
+                                          personalSchedule[nextMatch - 1].time *
+                                             1000,
+                                       ),
+                                       new Date(Date.now()),
+                                    )
+                                    : "No time data"}
+                              </TextTransition>
+                           </div>
                         </div>
                      </div>
                      <div id="buttons">

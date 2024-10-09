@@ -3,7 +3,7 @@ import {
    InstallPrompt,
    WelcomePrompt,
 } from "../../components/routes/auth/install-prompt";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
    Combobox,
    ComboboxButton,
@@ -79,54 +79,48 @@ const AuthPage = () => {
       }));
    };
 
-   useEffect(() => {
-      let fetch = true;
-      if (fetch == true) {
-         getEvents().then(
-            (result) => setEvents(result),
-            (error) => setEvents(error),
-         );
-      }
-      return () => {
-         fetch = false;
-      };
-   }, []);
+   const handleEventSelection = () => {
+      setEvents(undefined);
+      getEvents().then(
+         (result) => setEvents(result),
+         (error) => setEvents(error),
+      );
+   };
 
    const [scouters, setScouters] = useState<ScouterData[]>();
    const [selectedScouter, setselectedScouter] = useState<ScouterData | null>(
       null,
    );
 
-   useEffect(() => {
-      const fetchScouters = async () => {
-         try {
-            if (selectedEvent) {
-               const { data: users, error } = await supabase
-                  .from("users")
-                  .select("id, name")
-                  .eq("event", selectedEvent.event);
+   const fetchScouters = async () => {
+      try {
+         if (selectedEvent) {
+            const { data: users, error } = await supabase
+               .from("users")
+               .select("id, name")
+               .eq("event", selectedEvent.event);
 
-               if (error) {
-                  console.error(error);
-               }
-
-               return users!.map((scouter) => ({
-                  id: scouter.id,
-                  name: scouter.name,
-               }));
+            if (error) {
+               console.error(error);
             }
-         } catch (error) {
-            console.log(error);
-            return [];
-         }
-      };
 
-      if (selectedEvent) {
-         fetchScouters()
-            .then((res) => setScouters(res))
-            .catch((err) => console.error(err));
+            return users!.map((scouter) => ({
+               id: scouter.id,
+               name: scouter.name,
+            }));
+         }
+      } catch (error) {
+         console.log(error);
+         return [];
       }
-   }, [selectedEvent]);
+   };
+
+   const handleScouterSelection = () => {
+      setScouters(undefined);
+      fetchScouters()
+         .then((res) => setScouters(res))
+         .catch((err) => console.error(err));
+   };
 
    const [eventQuery, setEventQuery] = useState("");
 
@@ -168,7 +162,7 @@ const AuthPage = () => {
                   >
                      {({ open }) => (
                         <>
-                           <ComboboxButton>
+                           <ComboboxButton onClick={handleEventSelection}>
                               <i className="fa-solid fa-chevron-down" />
                            </ComboboxButton>
                            <ComboboxInput
@@ -180,6 +174,7 @@ const AuthPage = () => {
                               placeholder="Event"
                               autoComplete="off"
                               className="auth-input"
+                              onFocus={() => handleEventSelection()}
                            />
                            <AnimatePresence>
                               {open && (
@@ -196,15 +191,29 @@ const AuthPage = () => {
                                  >
                                     <div id="auth-dropdown-header">Events</div>
                                     <div id="auth-dropdown-line" />
-                                    {queriedEvents?.map((event) => (
-                                       <ComboboxOption
-                                          key={event.id}
-                                          value={event}
-                                          id="auth-dropdown-option"
-                                       >
-                                          {event.event}
-                                       </ComboboxOption>
-                                    ))}
+                                    {events
+                                       ? queriedEvents?.map((event) => (
+                                          <ComboboxOption
+                                             key={event.id}
+                                             value={event}
+                                             id="auth-dropdown-option"
+                                          >
+                                             {event.event}
+                                          </ComboboxOption>
+                                       ))
+                                       : (
+                                          <div id="auth-dropdown-option">
+                                             <div
+                                                className="placeholder"
+                                                style={{
+                                                   width: "8rem",
+                                                   height: "1.2rem",
+                                                }}
+                                             >
+                                                &nbsp;
+                                             </div>
+                                          </div>
+                                       )}
                                  </ComboboxOptions>
                               )}
                            </AnimatePresence>
@@ -224,7 +233,10 @@ const AuthPage = () => {
                      >
                         {({ open }) => (
                            <>
-                              <ComboboxButton disabled={selectedEvent == null}>
+                              <ComboboxButton
+                                 disabled={selectedEvent == null}
+                                 onClick={handleScouterSelection}
+                              >
                                  <i className="fa-solid fa-chevron-down" />
                               </ComboboxButton>
                               <ComboboxInput
@@ -239,6 +251,7 @@ const AuthPage = () => {
                                  className={(selectedEvent == null
                                     ? "inactive"
                                     : "active") + " auth-input"}
+                                 onFocus={handleScouterSelection}
                               />
                               <AnimatePresence>
                                  {open && (
@@ -267,7 +280,15 @@ const AuthPage = () => {
                                              : null)
                                           : (
                                              <div id="auth-dropdown-option">
-                                                No data
+                                                <div
+                                                   className="placeholder"
+                                                   style={{
+                                                      width: "8rem",
+                                                      height: "1.2rem",
+                                                   }}
+                                                >
+                                                   &nbsp;
+                                                </div>
                                              </div>
                                           )}
                                        {queriedScouters?.map((scouter) => (

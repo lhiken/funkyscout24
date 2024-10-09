@@ -1,6 +1,6 @@
 class Button {
 
-    static coor: Array<Array<number>> = [[30, 10], [90, 10], [150, 10], [210, 10], [270, 10], [30, 200], [90, 200], [150, 200]];
+    static coor: Array<Array<number>> = [[30, 20], [90, 20], [150, 20], [210, 20], [270, 20], [30, 200], [90, 200], [150, 200]];
 
     num!: number;
     x!: number;
@@ -27,7 +27,7 @@ class Button {
     }
 
     isClicked(x:number, y:number) {
-        return x > this.x -2 && x < this.x + this.width+2 && y > this.y-2 && y < this.y + this.width+2;
+        return x > this.x -3 && x < this.x + this.width+3 && y > this.y-3 && y < this.y + this.width+3;
     }
 
 

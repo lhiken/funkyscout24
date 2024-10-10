@@ -191,7 +191,7 @@ const AuthPage = () => {
                                  >
                                     <div id="auth-dropdown-header">Events</div>
                                     <div id="auth-dropdown-line" />
-                                    {events
+                                    {queriedEvents
                                        ? queriedEvents?.map((event) => (
                                           <ComboboxOption
                                              key={event.id}

@@ -7,7 +7,7 @@ import { AnimatePresence } from "framer-motion";
 
 const NavbarDisplay = () => {
    const currentPage = useLocation();
-   const paths = ["/dashboard"];
+   const paths = ["/dashboard", "/scouting", "/data"];
    const check = paths.includes(currentPage.pathname);
    if (check) {
       return <Navbar />;
@@ -17,7 +17,7 @@ const NavbarDisplay = () => {
 
 const TopbarDisplay = () => {
    const currentPage = useLocation();
-   const paths = ["/auth"];
+   const paths = ["/auth", "/scouting", "/data"];
    const check = paths.includes(currentPage.pathname);
    if (check) {
       return <Topbar />;

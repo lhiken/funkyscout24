@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import Button from "./auto/button";
 import "./auto.css";
+import React from "react";
+const autoPath : Button[] = [];
 const Auto: React.FC = () => {
 
    const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -15,7 +17,7 @@ const Auto: React.FC = () => {
       new Button(6),
       new Button(7),
    ];
-   const autoPath : Button[] = [];
+   
 
 
    const handleCanvasClick = (event: React.MouseEvent) => {
@@ -35,8 +37,8 @@ const Auto: React.FC = () => {
           // Button was clicked
           setIsClicked(!isClicked);
           
-          autoPath.push(button);
           console.log(autoPath);
+          autoPath.push(button);
         }
       }}
     };

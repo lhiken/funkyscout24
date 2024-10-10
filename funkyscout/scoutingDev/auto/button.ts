@@ -1,12 +1,23 @@
-class Button {
+import { button } from "framer-motion/client";
 
-    static coor: Array<Array<number>> = [[30, 20], [90, 20], [150, 20], [210, 20], [270, 20], [30, 200], [90, 200], [150, 200]];
+class Button {
+    static coor: Array<Array<number>> = [
+        [30, 20],
+        [90, 20],
+        [150, 20],
+        [210, 20],
+        [270, 20],
+        [30, 200],
+        [90, 200],
+        [150, 200],
+    ];
 
     num!: number;
     x!: number;
     y!: number;
     width: number = 15;
-    color: string = '#CDA745';
+    color: string = "#CDA745";
+    buttonSize: number = 100;
 
     constructor(num: number) {
         this.num = num;
@@ -17,20 +28,16 @@ class Button {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-
-        
         ctx.strokeStyle = this.color;
-        ctx.lineWidth =5;
+        ctx.lineWidth = 5;
         ctx.beginPath();
-        ctx.arc(this.x , this.y + this.width / 2, this.width, 0, Math.PI * 2);
+        ctx.arc(this.x, this.y + this.width / 2, this.width, 0, Math.PI * 2);
         ctx.stroke();
     }
 
-    isClicked(x:number, y:number) {
-        return x > this.x -3 && x < this.x + this.width+3 && y > this.y-3 && y < this.y + this.width+3;
+    isClicked(x: number, y: number) {
+        return x > this.x - this.buttonSize && x < this.x + this.width + this.buttonSize &&
+            y > this.y - this.buttonSize && y < this.y + this.width + this.buttonSize;
     }
-
-
-
 }
 export default Button;

@@ -1,5 +1,3 @@
-import { button } from "framer-motion/client";
-
 class Button {
     static coor: Array<Array<number>> = [
         [30, 20],

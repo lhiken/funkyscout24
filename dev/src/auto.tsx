@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Button from "./auto/button";
-import "./auto.css";
 import React from "react";
+import './auto.css'
 const autoPath : Button[] = [];
 const Auto: React.FC = () => {
 

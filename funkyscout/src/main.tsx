@@ -11,7 +11,6 @@ import App from './app/app';
 import Error from './components/errors/error';
 import AuthPage from './app/auth/auth';
 import Dashboard from './app/routes/dashboard';
-import Auto from '../scoutingDev/auto';
 import './utils/styles/reload.css'
 import './utils/styles/index.css'
 import './utils/styles/vars.css'
@@ -54,10 +53,6 @@ const router = createBrowserRouter(
       <Route 
         element={<ScoutingPage/>}
         path="/scouting"
-      />
-      <Route 
-        element={<Auto/>}
-        path="/auto"
       />
       <Route
         element={<DataPage/>}

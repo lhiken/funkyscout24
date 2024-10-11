@@ -6,7 +6,6 @@ const autoPath : Button[] = [];
 const Auto: React.FC = () => {
 
    const canvasRef = useRef<HTMLCanvasElement>(null);
-   const [isClicked, setIsClicked] = useState(false);
    const testButtons: Button[] = [
       new Button(0),
       new Button(1),
@@ -29,16 +28,15 @@ const Auto: React.FC = () => {
         const y = event.clientY - rect.top;
         for (const button of testButtons){
         if (
-          x >= button.x &&
-          x <= button.x + button.width &&
-          y >= button.y &&
-          y <= button.y + button.width
+          x >= button.x -10 &&
+          x <= button.x + button.width +10 &&
+          y >= button.y -10 &&
+          y <= button.y + button.width + 10
         ) {
           // Button was clicked
-          setIsClicked(!isClicked);
-          
-          console.log(autoPath);
+          button.isClicked=true;
           autoPath.push(button);
+          console.log(autoPath);
         }
       }}
     };
@@ -51,9 +49,9 @@ const Auto: React.FC = () => {
          const scale = 50;
          canvas.width = 300 * scale;
          canvas.height = 300 * scale;
+         canvas.clearRect(0, 0, canvas.width, canvas.height);
          if (ctx) {
             ctx.scale(scale, scale);
-
             for (const button of testButtons) {
                button.draw(ctx);
             }
@@ -61,7 +59,7 @@ const Auto: React.FC = () => {
          
       }
 
-   }, [isClicked]);
+   });
 
 
    return (

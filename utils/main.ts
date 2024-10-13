@@ -1,7 +1,8 @@
+import assignScouter from "./scripts/scoutingGenerate";
 import SetupEvent from "./scripts/setup";
 
 function main() {
-   SetupEvent('2024casj');
+   assignScouter("2024casf",6);
 }
 
 main();

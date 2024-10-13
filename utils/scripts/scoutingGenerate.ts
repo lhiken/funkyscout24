@@ -11,7 +11,7 @@ const getScouter = async (event: string) => {
    const scouters: [string, number, number][] = [];
    if (s) {
       for (let i = 0; i < s.length; i++) {
-         scouters.push([s[i][0], i - s.length + 6, 0])
+         scouters.push([s[i][0], Math.max(Math.min(i - s.length + 6),-6), 0])
       }
    }
    else { return };

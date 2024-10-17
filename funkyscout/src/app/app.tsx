@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { updateTheme } from "../utils/theme";
 import Navbar from "../components/navigation/navbar/navbar";
 import Topbar from "../components/navigation/topbar/topbar";
-import { AnimatePresence } from "framer-motion";
 
 const NavbarDisplay = () => {
    const currentPage = useLocation();
@@ -53,9 +52,7 @@ const App = () => {
    return (
       <>
          <div id="app">
-            <AnimatePresence mode="wait">
-               <AppOutlet key={currentPage.pathname} />
-            </AnimatePresence>
+            <AppOutlet key={currentPage.pathname} />
             <NavbarDisplay />
             <TopbarDisplay />
          </div>

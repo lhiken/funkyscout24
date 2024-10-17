@@ -50,7 +50,7 @@ const InstallPrompt = () => {
                The app isn't installed...
                <div>On Android: Click <i className="fa-solid fa-ellipsis-vertical" /> at the top right &gt; <i className="fa-solid fa-mobile-screen-button" /> Add to Home Screen &gt; <i className="fa-solid fa-circle-arrow-down" /> Install.</div>
                <div>On iOS/Safari: Click <i className="fa-solid fa-arrow-up-from-bracket" /> at the bottom &gt; <i className="fa-regular fa-square-plus" /> Add to Home Screen &gt; <i className="fa-solid fa-circle-arrow-down" /> Add.</div>
-               <div>This app wasn't meant to be used without installing so please install! </div>
+               <div>The app does not work properly without installing.</div>
             </motion.div>
          </motion.div>
       </>
@@ -102,7 +102,6 @@ const WelcomePrompt = () => {
             >
                <div />
                <div>App was installed!</div>
-               <div>Please enable permissions in your device's settings for notifications.</div>
             </motion.div>
          </motion.div>
       </>

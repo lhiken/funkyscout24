@@ -1,0 +1,175 @@
+#scouting-page {
+    align-content: center;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1.0625rem;
+    display: flex;
+}
+
+#scouting-select-header {
+    color: var(--accent);
+    display: flex;
+    width: 19rem;
+    height: 1.2rem;
+    flex-direction: column;
+    justify-content: center;
+    flex-shrink: 0;
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+#scouting-select-box {
+    display: flex;
+    width: 19rem;
+    padding: 1.4375rem 1.25rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1.125rem;
+
+    font-weight: 500;
+    color: var(--accent);
+    font-size: 0.9375rem;
+
+    border-radius: var(--soft-corner);
+    background: var(--light-bg);
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.05);
+}
+
+#scouting-submit-box {
+    display: flex;
+    width: 18.625rem;
+    height: 5rem;
+    padding: 0rem 1.5rem;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+
+    font-weight: 500;
+    color: var(--accent);
+    font-size: 0.9375rem;
+
+    border-radius: var(--soft-corner);
+    background: var(--light-bg);
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.05);
+}
+
+#scouting-top {
+    display: flex;
+    height: 3.375rem;
+    padding: 0.625rem 0.625rem 0.625rem 1.375rem;
+    align-items: center;
+    gap: 0.625rem;
+    align-self: stretch;
+
+    border-radius: var(--round-corner, 6.25rem);
+    background: var(--dark-bg, #0D0D0D);
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset;
+}
+
+#scouting-bottom {
+    color: var(--dark-text);
+    font-size: 0.9375rem;
+
+    display: flex;
+    height: 3.375rem;
+    align-items: center;
+    gap: 0.625rem;
+    align-self: stretch;
+}
+
+#scouting-team {
+    display: flex;
+    height: 100%;
+    padding: 0.625rem 0.625rem 0.625rem 1.375rem;
+    align-items: center;
+    gap: 0.625rem;
+    align-self: stretch;
+    flex-grow: 1;
+
+    border-radius: var(--round-corner, 6.25rem);
+    background: var(--dark-bg, #0D0D0D);
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset;
+}
+
+#scouting-submit {
+    display: flex;
+    height: 100%;
+    padding: 0.25rem 0.1875rem;
+    width: 2.375rem;
+    height: 2.375rem;
+    flex-shrink: 0;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+
+    border-radius: var(--round-corner, 6.25rem);
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+
+    font-size: 1.65rem;
+    background: var(--accent);
+    color: var(--dark-bg);
+}
+
+#scouting-dropdown-container {
+    background-color: var(--dark-bg);
+    width: 14rem;
+    padding-bottom: 0.25rem;
+
+    display: flex;
+    flex-direction: column;
+    color: var(--light-text);
+
+    border-radius: 0.6rem;
+    border: solid 2px var(--light-bg);
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.05);
+}
+
+#scouting-dropdown-option {
+    font-size: 1rem;
+    padding-top: 0.25em;
+    padding-bottom: 0.25rem;
+    padding-left: 1rem;
+    transition: 0.3s;
+}
+
+#scouting-dropdown-option:hover {
+    background-color: var(--light-bg);
+}
+
+#scouting-dropdown-header {
+    font-size: 1rem;
+    margin-bottom: 0.3rem;
+    margin-top: 0.5rem;
+    margin-left: 1rem;
+    font-weight: 400;
+    color: var(--accent);
+}
+
+#scouting-dropdown-line {
+    width: 85%;
+    height: 0.15rem;
+    background-color: var(--dark-text);
+    align-self: center;
+    margin-bottom: 0.4rem;
+    border-radius: 20rem;
+}
+
+.scouting-input {
+    color: var(--light-text);
+    width: 9rem;
+}
+
+#scouting-name::placeholder {
+    transition: color 0.3s;
+}
+
+#scouting-name.active {
+    color: var(--accent);
+}
+
+#scouting-name.inactive {
+    color: var(--accent-dim);
+}

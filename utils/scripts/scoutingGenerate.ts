@@ -49,10 +49,6 @@ const findScouter = (scouters: [string, number, number][], scout: number) => {
          availableScouters.push(scouters[i]);
       }
    }
-   while (availableScouters.length < 6) {
-      scouters[0][1] = 0;
-      availableScouters.push(scouters[0]);
-   }
    while (availableScouters.length > 6) {
       availableScouters.pop();
    }

@@ -173,3 +173,9 @@
 #scouting-name.inactive {
     color: var(--accent-dim);
 }
+#scouting-svg{
+    width:"54";
+    height:"54";
+    fill:"none";
+
+}

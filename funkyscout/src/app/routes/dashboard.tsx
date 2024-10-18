@@ -203,6 +203,8 @@ const Dashboard = () => {
       personalSchedule[]
    >();
 
+   const personalScheduleRef = useRef<personalSchedule[]>([]);
+
    useEffect(() => {
       const fetchSchedule = async () => {
          const db = await openDB(event!);
@@ -212,7 +214,7 @@ const Dashboard = () => {
             user,
          );
 
-         let personalSchedule: personalSchedule[] = [];
+         const personalSchedule: personalSchedule[] = [];
 
          await getEventData()
             .then((res) => {
@@ -222,7 +224,7 @@ const Dashboard = () => {
                   );
 
                   if (matchData) {
-                     personalSchedule = personalSchedule.concat({
+                     personalSchedule.push({
                         match: selectedMatch.match,
                         team: selectedMatch.team,
                         alliance: selectedMatch.alliance,
@@ -235,7 +237,7 @@ const Dashboard = () => {
                console.log(error);
 
                for (const selectedMatch of schedule) {
-                  personalSchedule = personalSchedule.concat({
+                  personalSchedule.push({
                      match: selectedMatch.match,
                      team: selectedMatch.team,
                      alliance: selectedMatch.alliance,
@@ -244,7 +246,22 @@ const Dashboard = () => {
                }
             });
 
-         setPersonalSchedule(personalSchedule);
+         personalScheduleRef.current = personalSchedule; // Update the ref
+         setPersonalSchedule(personalSchedule); // Update the state
+      };
+
+      const scrollSchedule = (match: number) => {
+         if (personalScheduleRef.current.length > 0) {
+            const matchIndex = personalScheduleRef.current.findIndex((m) =>
+               m.match == match
+            );
+
+            if (matchIndex !== -1 && matchRefs.current[matchIndex]) {
+               matchRefs.current[matchIndex]?.scrollIntoView({
+                  behavior: "smooth",
+               });
+            }
+         }
       };
 
       fetchSchedule().then(() => {
@@ -268,12 +285,6 @@ const Dashboard = () => {
    }
 
    const matchRefs = useRef<(HTMLDivElement | null)[]>([]);
-
-   const scrollSchedule = (match: number) => {
-      if (matchRefs.current[match]) {
-         matchRefs.current[match]?.scrollIntoView({ behavior: "smooth" });
-      }
-   };
 
    const getTimeDifference = (startTime: Date, endTime: Date) => {
       const diff = startTime.getTime() - endTime.getTime();
@@ -326,7 +337,9 @@ const Dashboard = () => {
                                  {personalSchedule &&
                                        personalSchedule.length > 0
                                     ? (
-                                       personalSchedule[nextMatch - 1].team
+                                       personalSchedule.find((o) =>
+                                          o.match == nextMatch
+                                       )?.team
                                     )
                                     : null}
                               </TextTransition>
@@ -351,8 +364,9 @@ const Dashboard = () => {
                                        personalSchedule.length > 0
                                     ? getTimeDifference(
                                        new Date(
-                                          personalSchedule[nextMatch - 1].time *
-                                             1000,
+                                          (personalSchedule.find((match) =>
+                                             match.match == nextMatch
+                                          )?.time ?? 0) * 1000,
                                        ),
                                        new Date(Date.now()),
                                     )

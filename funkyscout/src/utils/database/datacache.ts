@@ -148,6 +148,7 @@ const getNextMatch = async (database: string, user: string) => {
    );
 
    if (nextMatch) {
+      console.log(nextMatch);
       return nextMatch;
    } else {
       return null;

@@ -22,9 +22,11 @@ const ScoutingPage = () => {
       redTeams: number[];
    }
 
+   const [isNextMatch, setIsNextMatch] = useState(true);
    const [matches, setMatches] = useState<Match[]>([]);
    const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
    const [selectedTeam, setSelectedTeam] = useState<number | null>(null);
+   const [currentAlliance, setCurrentAlliance] = useState<boolean | null>(null); // Boolean for alliance (true = blue, false = red)
 
    const fetchMatches = async (): Promise<Match[]> => {
       const db = await openDB(event!);
@@ -86,9 +88,13 @@ const ScoutingPage = () => {
             user!,
          );
 
-         setSelectedTeam(matches.find((o) => o.match == matchNumber).team);
+         const team = matches.find((o) => o.match == matchNumber)?.team;
+         setSelectedTeam(team);
+         updateAlliance(team, teamsMap.blueTeams, teamsMap.redTeams);
+         setIsNextMatch(true);
       } catch (error) {
          console.error("Error autofilling match data:", error);
+         setIsNextMatch(false);
       }
    };
 
@@ -103,10 +109,39 @@ const ScoutingPage = () => {
          .catch((err) => console.error(err));
    };
 
+   const updateAlliance = (
+      team: number | null,
+      blueTeams: number[],
+      redTeams: number[],
+   ) => {
+      if (team) {
+         if (blueTeams.includes(team)) {
+            setCurrentAlliance(true);
+         } else if (redTeams.includes(team)) {
+            setCurrentAlliance(false);
+         }
+      } else {
+         setCurrentAlliance(null);
+      }
+   };
+
    useEffect(() => {
       handleShiftSelection();
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, []);
+
+   const handleMatchChange = (match: Match) => {
+      setSelectedMatch(match);
+      setIsNextMatch(false);
+   };
+
+   const handleTeamChange = (team: number) => {
+      setSelectedTeam(team);
+      if (selectedMatch) {
+         updateAlliance(team, selectedMatch.blueTeams, selectedMatch.redTeams);
+      }
+      setIsNextMatch(false);
+   };
 
    return (
       <motion.div
@@ -119,7 +154,7 @@ const ScoutingPage = () => {
          <div id="scouting-select-header">Scouting</div>
          <div id="scouting-select-box">
             <Field id="scouting-top">
-               <Combobox value={selectedMatch} onChange={setSelectedMatch}>
+               <Combobox value={selectedMatch} onChange={handleMatchChange}>
                   {({ open }) => (
                      <>
                         <ComboboxButton>
@@ -127,7 +162,7 @@ const ScoutingPage = () => {
                         </ComboboxButton>
                         <ComboboxInput
                            aria-label="Match"
-                           placeholder="Select Match"
+                           placeholder="Match"
                            autoComplete="off"
                            className="scouting-input"
                            onFocus={() => handleShiftSelection()}
@@ -142,6 +177,7 @@ const ScoutingPage = () => {
                                  initial={{ opacity: 0, y: -20 }}
                                  animate={{ opacity: 1, y: 0 }}
                                  exit={{ opacity: 0, y: -20 }}
+                                 style={{ height: "12rem" }}
                                  anchor={{ to: "top", gap: "0.8rem" }}
                                  id="scouting-dropdown-container"
                               >
@@ -165,78 +201,103 @@ const ScoutingPage = () => {
                   )}
                </Combobox>
             </Field>
-            <Field id="scouting-bottom">
-               <div
-                  id="scouting-team"
-                  className={selectedMatch == null ? "inactive" : "active"}
+            <div id="scouting-bottom">
+               <Field>
+                  <div
+                     id="scouting-team"
+                     className={selectedMatch == null ? "inactive" : "active"}
+                  >
+                     <Combobox value={selectedTeam} onChange={handleTeamChange}>
+                        {({ open }) => (
+                           <>
+                              <ComboboxButton disabled={!selectedMatch}>
+                                 <i className="fa-solid fa-chevron-down" />
+                              </ComboboxButton>
+                              <ComboboxInput
+                                 aria-label="Team"
+                                 placeholder="Team"
+                                 autoComplete="off"
+                                 className="scouting-input"
+                                 style={{ width: "70%" }}
+                                 displayValue={(team: number | null) =>
+                                    team ? `Team ${team}` : ""}
+                              />
+                              <AnimatePresence>
+                                 {open && selectedMatch && (
+                                    <ComboboxOptions
+                                       static
+                                       as={motion.div}
+                                       initial={{ opacity: 0, y: -20 }}
+                                       animate={{ opacity: 1, y: 0 }}
+                                       exit={{ opacity: 0, y: -20 }}
+                                       anchor={{ to: "top", gap: "0.8rem" }}
+                                       id="scouting-dropdown-container"
+                                    >
+                                       <div id="scouting-dropdown-header">
+                                          Teams
+                                       </div>
+                                       <div id="scouting-dropdown-line" />
+                                       {[
+                                          ...selectedMatch.blueTeams,
+                                          ...selectedMatch.redTeams,
+                                       ].map((team) => (
+                                          <ComboboxOption
+                                             key={team}
+                                             value={team}
+                                             id="scouting-dropdown-option"
+                                          >
+                                             {team}
+                                          </ComboboxOption>
+                                       ))}
+                                    </ComboboxOptions>
+                                 )}
+                              </AnimatePresence>
+                           </>
+                        )}
+                     </Combobox>
+                  </div>
+               </Field>
+               <button
+                  id="autofill-button"
+                  className={isNextMatch ? "inactive" : "active"}
+                  onClick={() => autofillData()}
                >
-                  <Combobox value={selectedTeam} onChange={setSelectedTeam}>
-                     {({ open }) => (
-                        <>
-                           <ComboboxButton disabled={!selectedMatch}>
-                              <i className="fa-solid fa-chevron-down" />
-                           </ComboboxButton>
-                           <ComboboxInput
-                              aria-label="Team"
-                              placeholder="Select Team"
-                              autoComplete="off"
-                              className="scouting-input"
-                              displayValue={(team: number | null) =>
-                                 team ? `Team ${team}` : ""}
-                           />
-                           <AnimatePresence>
-                              {open && selectedMatch && (
-                                 <ComboboxOptions
-                                    static
-                                    as={motion.div}
-                                    initial={{ opacity: 0, y: -20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -20 }}
-                                    anchor={{ to: "top", gap: "0.8rem" }}
-                                    id="scouting-dropdown-container"
-                                 >
-                                    <div id="scouting-dropdown-header">
-                                       Teams
-                                    </div>
-                                    <div id="scouting-dropdown-line" />
-                                    {[
-                                       ...selectedMatch.blueTeams,
-                                       ...selectedMatch.redTeams,
-                                    ].map((team) => (
-                                       <ComboboxOption
-                                          key={team}
-                                          value={team}
-                                          id="scouting-dropdown-option"
-                                       >
-                                          {team}
-                                       </ComboboxOption>
-                                    ))}
-                                 </ComboboxOptions>
-                              )}
-                           </AnimatePresence>
-                        </>
-                     )}
-                  </Combobox>
-               </div>
-               <svg
-                  id="scouting-svg"
-                  viewBox="0 0 54 54"
-               >
-                  <circle
-                     cx="27"
-                     cy="27"
-                     r="27"
-                     fill="#CDA745"
-                     fillOpacity="0.15"
-                  />
-               </svg>
-            </Field>
+                  <i className="fa-solid fa-rotate-left" />
+               </button>
+            </div>
          </div>
          <div id="scouting-submit-box">
-            Start Shift
-            <button id="scouting-submit">
-               <i className="fa-solid fa-arrow-right" />
-            </button>
+            <div id="match-details-box">
+               <div id="match-details-top">
+                  <div>
+                     Match {selectedMatch?.match}
+                  </div>
+                  <div style={{ fontSize: "1.2rem" }}>
+                     {isNextMatch
+                        ? <i className="fa-regular fa-face-smile"></i>
+                        : <i className="fa-regular fa-face-meh"></i>}
+                  </div>
+               </div>
+               <div id="match-details-bottom">
+                  FRC {selectedTeam}{" "}
+                  <div
+                     style={{ fontSize: "1.5rem" }}
+                     className={currentAlliance === null
+                        ? ""
+                        : currentAlliance
+                        ? "red"
+                        : "blue"}
+                  >
+                     •
+                  </div>
+               </div>
+            </div>
+            <div
+               id="submit-button"
+               className={selectedMatch && selectedTeam ? "active" : "inactive"}
+            >
+               <i className="fa-solid fa-location-arrow" />
+            </div>
          </div>
       </motion.div>
    );

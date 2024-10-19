@@ -10,9 +10,11 @@ import {
    ComboboxOptions,
    Field,
 } from "@headlessui/react";
+import { useNavigate } from "react-router-dom";
 import "./scouting.css";
 
 const ScoutingPage = () => {
+   const navigate = useNavigate();
    const event = localStorage.getItem("event");
    const user = localStorage.getItem("user");
 
@@ -26,7 +28,11 @@ const ScoutingPage = () => {
    const [matches, setMatches] = useState<Match[]>([]);
    const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
    const [selectedTeam, setSelectedTeam] = useState<number | null>(null);
-   const [currentAlliance, setCurrentAlliance] = useState<boolean | null>(null); // Boolean for alliance (true = blue, false = red)
+   const [currentAlliance, setCurrentAlliance] = useState<boolean | null>(null);
+   
+   // New states for input queries
+   const [matchQuery, setMatchQuery] = useState("");
+   const [teamQuery, setTeamQuery] = useState("");
 
    const fetchMatches = async (): Promise<Match[]> => {
       const db = await openDB(event!);
@@ -143,6 +149,20 @@ const ScoutingPage = () => {
       setIsNextMatch(false);
    };
 
+   // Filter matches based on the match query input
+   const filteredMatches = matchQuery === ""
+      ? matches
+      : matches.filter((match) =>
+           match.match.toString().includes(matchQuery.toLowerCase())
+         );
+
+   // Filter teams based on the team query input
+   const filteredTeams =
+      selectedMatch &&
+      [...selectedMatch.blueTeams, ...selectedMatch.redTeams].filter((team) =>
+         team.toString().includes(teamQuery.toLowerCase())
+      );
+
    return (
       <motion.div
          initial={{ y: 20, opacity: 0 }}
@@ -165,9 +185,11 @@ const ScoutingPage = () => {
                            placeholder="Match"
                            autoComplete="off"
                            className="scouting-input"
-                           onFocus={() => handleShiftSelection()}
+                           onChange={(event) => setMatchQuery(event.target.value)}
                            displayValue={(match: Match | null) =>
-                              match ? `Match ${match.match}` : ""}
+                              match ? `Match ${match.match}` : ""
+                           }
+                           onFocus={() => handleShiftSelection()}
                         />
                         <AnimatePresence>
                            {open && (
@@ -177,7 +199,7 @@ const ScoutingPage = () => {
                                  initial={{ opacity: 0, y: -20 }}
                                  animate={{ opacity: 1, y: 0 }}
                                  exit={{ opacity: 0, y: -20 }}
-                                 style={{ height: "12rem" }}
+                                 style={{ maxHeight: "12rem" }}
                                  anchor={{ to: "top", gap: "0.8rem" }}
                                  id="scouting-dropdown-container"
                               >
@@ -185,7 +207,7 @@ const ScoutingPage = () => {
                                     Matches
                                  </div>
                                  <div id="scouting-dropdown-line" />
-                                 {matches.map((match) => (
+                                 {filteredMatches.map((match) => (
                                     <ComboboxOption
                                        key={match.match}
                                        value={match}
@@ -219,8 +241,12 @@ const ScoutingPage = () => {
                                  autoComplete="off"
                                  className="scouting-input"
                                  style={{ width: "70%" }}
+                                 onChange={(event) =>
+                                    setTeamQuery(event.target.value)
+                                 }
                                  displayValue={(team: number | null) =>
-                                    team ? `Team ${team}` : ""}
+                                    team ? `Team ${team}` : ""
+                                 }
                               />
                               <AnimatePresence>
                                  {open && selectedMatch && (
@@ -237,10 +263,7 @@ const ScoutingPage = () => {
                                           Teams
                                        </div>
                                        <div id="scouting-dropdown-line" />
-                                       {[
-                                          ...selectedMatch.blueTeams,
-                                          ...selectedMatch.redTeams,
-                                       ].map((team) => (
+                                       {filteredTeams?.map((team) => (
                                           <ComboboxOption
                                              key={team}
                                              value={team}
@@ -269,35 +292,38 @@ const ScoutingPage = () => {
          <div id="scouting-submit-box">
             <div id="match-details-box">
                <div id="match-details-top">
-                  <div>
-                     Match {selectedMatch?.match}
-                  </div>
+                  <div>Match {selectedMatch?.match}</div>
                   <div style={{ fontSize: "1.2rem" }}>
-                     {isNextMatch
-                        ? <i className="fa-regular fa-face-smile"></i>
-                        : <i className="fa-regular fa-face-meh"></i>}
+                     {isNextMatch ? (
+                        <i className="fa-regular fa-face-smile"></i>
+                     ) : (
+                        <i className="fa-regular fa-face-meh"></i>
+                     )}
                   </div>
                </div>
                <div id="match-details-bottom">
                   FRC {selectedTeam}{" "}
                   <div
                      style={{ fontSize: "1.5rem" }}
-                     className={currentAlliance === null
-                        ? ""
-                        : currentAlliance
-                        ? "red"
-                        : "blue"}
+                     className={
+                        currentAlliance === null
+                           ? ""
+                           : currentAlliance
+                           ? "red"
+                           : "blue"
+                     }
                   >
                      •
                   </div>
                </div>
             </div>
-            <div
+            <button
                id="submit-button"
+               onClick={() => navigate('/scout/matches')}
                className={selectedMatch && selectedTeam ? "active" : "inactive"}
             >
                <i className="fa-solid fa-location-arrow" />
-            </div>
+            </button>
          </div>
       </motion.div>
    );

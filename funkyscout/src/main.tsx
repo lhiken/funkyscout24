@@ -1,21 +1,22 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
 import {
   createBrowserRouter,
   createRoutesFromElements,
+  Route,
   RouterProvider,
-  Route
-} from 'react-router-dom';
+} from "react-router-dom";
 
-import App from './app/app';
-import Error from './components/errors/error';
-import AuthPage from './app/auth/auth';
-import Dashboard from './app/routes/dashboard';
-import './utils/styles/reload.css'
-import './utils/styles/index.css'
-import './utils/styles/vars.css'
-import ScoutingPage from './app/routes/scouting/scouting';
-import DataPage from './app/routes/data/datapage';
+import App from "./app/app";
+import Error from "./components/errors/error";
+import AuthPage from "./app/auth/auth";
+import Dashboard from "./app/routes/dashboard";
+import "./utils/styles/reload.css";
+import "./utils/styles/index.css";
+import "./utils/styles/vars.css";
+import ScoutingPage from "./app/routes/scouting/scouting";
+import DataPage from "./app/routes/data/datapage";
+import MatchScouting from "./app/routes/scouting/matches/matchScouting";
 
 /* const router = createBrowserRouter([
   {
@@ -32,7 +33,7 @@ import DataPage from './app/routes/data/datapage';
         element:<DashBoard/>,
       }
     ]
-  } 
+  }
 ]); */
 
 const router = createBrowserRouter(
@@ -47,25 +48,29 @@ const router = createBrowserRouter(
         path="/auth"
       />
       <Route
-        element={<Dashboard/>}
+        element={<Dashboard />}
         path="/dashboard"
       />
-      <Route 
-        element={<ScoutingPage/>}
+      <Route
+        element={<ScoutingPage />}
         path="/scouting"
       />
       <Route
-        element={<DataPage/>}
+        element={<DataPage />}
         path="/data"
       />
-    </Route>
-  )
-)
+      <Route 
+        element={<MatchScouting />} 
+        path="/scout/matches/:id" 
+      />
+    </Route>,
+  ),
+);
 
-const root = createRoot(document.getElementById('root')!);
+const root = createRoot(document.getElementById("root")!);
 
 root.render(
   <StrictMode>
     <RouterProvider router={router} />
   </StrictMode>,
-)
+);

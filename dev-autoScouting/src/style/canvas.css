@@ -1,0 +1,36 @@
+#canvas {
+   display: flex;
+   position: absolute;
+   top: 0rem;
+   left: 0rem;
+   height: 24.25rem;
+   width: 20.5rem;
+}
+
+#svg {
+   display: flex;
+   position: relative;
+   top: 5rem;
+   right: 0rem;
+   height: 24.25rem;
+   width: 20.5rem;
+
+}
+
+#svg-border {
+   position: absolute;
+
+   align-items: end;
+   border-radius: var(--soft-corner, 0.9375rem);
+   border: 6px solid var(--accent-dimmed, rgba(205, 167, 69, 0.15));
+   background: var(--light-bg, #121212);
+   overflow: hidden;
+
+
+}
+#svg.flipped{
+   transform: scaleX(-1);
+}
+#canvas.flipped{
+   transform: scaleX(-1);
+}

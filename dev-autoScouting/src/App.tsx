@@ -1,9 +1,9 @@
-import Auto from './auto/auto'
+import Canvas from "./canvas"
 
 function App() {
   return (
     <>
-      <Auto/>
+      <Canvas/>
     </>
   )
 }

@@ -74,23 +74,103 @@ const Canvas = () => {
          ctx!.clearRect(0, 0, canvas.width, canvas.height);
          if (ctx) {
             ctx.scale(scale, scale);
+
+            // Draw the Notes
             for (const note of Notes) {
                note.draw(ctx);
             }
-            for (let i =0;i<AutoPath.length-2;i++){
-               const xStart = AutoPath[i].x+7.5;
-               const yStart = AutoPath[i].y+7.5;
-               const xEnd = AutoPath[i+1].x+7.5;
-               const yEnd = AutoPath[i+1].y+7.5;
-               ctx.moveTo(xStart,yStart)
-               ctx.bezierCurveTo((xStart+xEnd)/2,(xStart+xEnd)/2,(yStart+yEnd)/2,(yStart+yEnd)/2,xEnd,yEnd);
+
+            // Catmull-Rom spline interpolation function
+            const catmullRom = (p0: any, p1: any, p2: any, p3: any, t: number) => {
+               const t2 = t * t;
+               const t3 = t2 * t;
+               return {
+                  x: 0.5 * ((2 * p1.x) +
+                     (-p0.x + p2.x) * t +
+                     (2 * p0.x - 5 * p1.x + 4 * p2.x - p3.x) * t2 +
+                     (-p0.x + 3 * p1.x - 3 * p2.x + p3.x) * t3),
+                  y: 0.5 * ((2 * p1.y) +
+                     (-p0.y + p2.y) * t +
+                     (2 * p0.y - 5 * p1.y + 4 * p2.y - p3.y) * t2 +
+                     (-p0.y + 3 * p1.y - 3 * p2.y + p3.y) * t3)
+               };
+            };
+
+            // Ensure there are enough points to form a spline
+            ctx.beginPath();
+            
+            if(AutoPath.length>2){
+
+               const p0 = AutoPath[1]; // First point
+               const p1 = AutoPath[2]; // Second point
+               const p2 = AutoPath[AutoPath.length-2]; // First point
+               const p3 = AutoPath[AutoPath.length-1]; // Second point
+               
+               ctx.moveTo(p0.x + 7.5, p0.y + 7.5);
+
+               const ghostBefore = { x: 2 * p0.x - p1.x, y: 2 * p0.y - p1.y }; // Ghost point before the first one
+               const ghostAfter = { x: 2 * p2.x - p3.x, y: 2 * p2.y - p3.y };
+               
+               if (AutoPath.length == 3) {
+
+
+                  for (let t = 0; t <= 1; t += 0.01) {
+                     const p = catmullRom(ghostBefore, p0, p1, ghostAfter, t);
+                     ctx.lineTo(p.x + 7.5, p.y + 7.5);
+                  }
+   
+               }
+               else if (AutoPath.length == 4) {
+   
+   
+                  // Calculate the interpolation between pA, pB, and pC using Catmull-Rom
+                  for (let t = 0; t <= 1; t += 0.01) {
+                     const p = catmullRom(ghostBefore, p0, p1,p3, t);
+                     ctx.lineTo(p.x + 7.5, p.y + 7.5);
+                  }
+   
+                  for (let t = 0; t <= 1; t += 0.01) {
+                     const p = catmullRom(p0, p1, p3, ghostAfter, t);
+                     ctx.lineTo(p.x + 7.5, p.y + 7.5);
+                  }
+   
+               }
+               else{
+   
+
+   
+                  // Draw the first segment using the ghost point
+                  for (let t = 0; t <= 1; t += 0.01) {
+                     const p = catmullRom(ghostBefore, AutoPath[1], AutoPath[2], AutoPath[3], t);
+                     ctx.lineTo(p.x + 7.5, p.y + 7.5);
+                  }
+   
+                  for (let i = 2; i < AutoPath.length - 2; i++) {
+                     // Interpolate between the points
+   
+                     for (let t = 0; t <= 1; t += 0.01) {
+                        const p = catmullRom(
+                           AutoPath[i - 1],
+                           AutoPath[i],
+                           AutoPath[i + 1],
+                           AutoPath[i + 2], t);
+                        ctx.lineTo(p.x + 7.5, p.y + 7.5);
+                     }
+                  }
+                  for (let t = 0; t <= 1; t += 0.01) {
+                     const p = catmullRom(AutoPath[AutoPath.length - 3], AutoPath[AutoPath.length - 2], AutoPath[AutoPath.length - 1], ghostAfter, t);
+                     ctx.lineTo(p.x + 7.5, p.y + 7.5);
+                  }
+   
+   
+               }
                ctx.stroke();
             }
+            
          }
-
       }
-
    });
+
 
    const handleScore = () => {
       if (active) {

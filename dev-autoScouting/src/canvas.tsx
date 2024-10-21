@@ -14,7 +14,7 @@ const Notes: Note[] = [
    new Note(6),
    new Note(7),
 ];
-let AutoPath: Note[] = [Notes[0]];
+const AutoPath: Note[] = [Notes[0]];
 const Canvas = () => {
    const alliance = false;
    const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -77,13 +77,18 @@ const Canvas = () => {
             for (const note of Notes) {
                note.draw(ctx);
             }
-            for (let i =0;i<AutoPath.length-2;i++){
+            for (let i =1;i<AutoPath.length-1;i++){
                const xStart = AutoPath[i].x+7.5;
                const yStart = AutoPath[i].y+7.5;
                const xEnd = AutoPath[i+1].x+7.5;
                const yEnd = AutoPath[i+1].y+7.5;
+
+               const midPointX = (AutoPath[i].x + AutoPath[i + 1].x) / 2;
+               const midPointY = (AutoPath[i].y + AutoPath[i + 1].y) / 2;
+
                ctx.moveTo(xStart,yStart)
-               ctx.bezierCurveTo((xStart+xEnd)/2,(xStart+xEnd)/2,(yStart+yEnd)/2,(yStart+yEnd)/2,xEnd,yEnd);
+               ctx.quadraticCurveTo(AutoPath[i].x, AutoPath[i].y, midPointX, midPointY);
+               ctx.lineTo(AutoPath[AutoPath.length - 1].x, AutoPath[AutoPath.length - 1].y);
                ctx.stroke();
             }
          }

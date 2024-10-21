@@ -1,0 +1,13 @@
+#scouting-container {
+   display: flex;
+   flex-direction: column;
+   width: 100%;  
+   padding: 3rem;
+}
+
+#scouting-tab-header {
+   width: 100%;
+   color: var(--accent);
+   font-weight: 500;
+}
+

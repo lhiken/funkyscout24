@@ -1,10 +1,19 @@
+#auto {
+
+   display: flex;
+   width: 20.5625rem;
+   flex-direction: column;
+   align-items: flex-start;
+   gap: 0.875rem;
+}
+
 #canvas {
    display: flex;
    position: absolute;
    top: 0rem;
    left: 0rem;
    height: 24.25rem;
-   width: 20.5rem;
+   width: 20.5625rem;
 }
 
 #svg {
@@ -13,24 +22,85 @@
    top: 5rem;
    right: 0rem;
    height: 24.25rem;
-   width: 20.5rem;
-
+   width: 20.5625rem;
 }
 
 #svg-border {
-   position: absolute;
-
-   align-items: end;
+   position: relative;
+   width: 20.5625rem;
+   height: 24.25rem;
    border-radius: var(--soft-corner, 0.9375rem);
    border: 6px solid var(--accent-dimmed, rgba(205, 167, 69, 0.15));
    background: var(--light-bg, #121212);
    overflow: hidden;
 
-
 }
-#svg.flipped{
+
+#auto-button-bar {
+   position: relative;
+   display: flex;
+   padding: 0.75rem 1.25rem;
+   justify-content: space-between;
+   align-items: flex-start;
+   align-self: stretch;
+   border-radius: var(--soft-corner, 0.9375rem);
+   background: var(--dark-nav, #0F0F0F);
+}
+
+#auto-button {
+   border: none;
+   position: relative;
+   display: flex;
+   width: 6.875rem;
+   padding: var(--soft-corner, 0.9375rem) 1.375rem;
+   justify-content: center;
+   align-items: center;
+   gap: 0.625rem;
+   border-radius: var(--soft-corner, 0.9375rem);
+
+   text-align: center;
+   font-family: Poppins;
+   font-size: 1rem;
+   font-style: normal;
+   font-weight: 500;
+   line-height: normal;
+}
+
+#auto-button.active {
+   background: var(--light-nav, #141414);
+   color: var(--accent, #CDA745);
+}
+
+#auto-button.inactive {
+   background: var(--light-bg, #121212);
+   color: var(--accent-dimmed, rgba(205, 167, 69, 0.15));
+}
+
+#auto-undo-button {
+   border: none;
+   display: flex;
+   width: 3.1875rem;
+   height: 3.1875rem;
+   justify-content: center;
+   align-items: center;
+   gap: 0.625rem;
+   border-radius: 62.5rem;
+}
+
+#auto-undo-button.active {
+   background: var(--light-nav, #141414);
+   color: var(--accent, #CDA745);
+}
+
+#auto-undo-button.inactive {
+   background: var(--light-bg, #121212);
+   color: var(--accent-dimmed, rgba(205, 167, 69, 0.15));
+}
+
+#svg.flipped {
    transform: scaleX(-1);
 }
-#canvas.flipped{
+
+#canvas.flipped {
    transform: scaleX(-1);
 }

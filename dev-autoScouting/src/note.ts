@@ -12,13 +12,12 @@ class Note {
     static color: string = "#CDA745";
     static colorDim: string = "#302A1B";
     static width: number = 17.5;
+    static buttonSize: number = 100;
 
     num!: number;
     x!: number;
     y!: number;
     
-
-    buttonSize: number = 100;
     isClicked : boolean = false;
     success:boolean|undefined;
 

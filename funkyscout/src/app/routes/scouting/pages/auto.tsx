@@ -217,7 +217,7 @@ const Auto = (
    const [undoActive, setUndoActive] = useState(false);
 
    const handleUndo = () => {
-      if (undoActive && AutoPath[0].isClicked) {
+      if (AutoPath.length>1 && undoActive ) {
          if (active) {
             const n = AutoPath[AutoPath.length - 1];
             setAutoData((prev) => {
@@ -232,6 +232,7 @@ const Auto = (
                return updatedPath;
             });
             setActive(false);
+            throwNotification("success", "Undid path selection!");
          } else {
             setAutoData((prev) => {
                const updatedPath = [...prev];
@@ -240,9 +241,21 @@ const Auto = (
                return updatedPath;
             });
             setActive(true);
+            throwNotification("success", "Undid note scoring!");
          }
-         throwNotification("success", "Undid action!");
-      } else {
+         
+      } 
+      else if (AutoPath.length==1 && AutoPath[0].isClicked){
+         setAutoData((prev) => {
+            const updatedPath = [...prev];
+            updatedPath[updatedPath.length - 1].isClicked = true;
+            updatedPath[updatedPath.length - 1].success = undefined;
+            return updatedPath;
+         });
+         setActive(true);
+         setUndoActive(false);
+      }
+      else {
          throwNotification("error", "Nothing to undo.");
       }
    };

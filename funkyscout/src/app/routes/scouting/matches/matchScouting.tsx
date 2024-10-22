@@ -57,7 +57,7 @@ const MatchScouting = () => {
    if (gameState !== -1 && !timerStarted) {
       const interval = setInterval(() => {
          updateTime(interval);
-      }, 100);
+      }, 50);
       setTimerStarted(true);
       console.log(match + ' ' + team);
    }

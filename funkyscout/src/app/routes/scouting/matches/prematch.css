@@ -16,7 +16,7 @@
 }
 
 #confirm-content {
-   width: 100%;
+   width: 20.5625rem;
    gap: 1rem;
    display: flex;
    flex-direction: column;
@@ -26,7 +26,14 @@
 
 #confirm-text {
    color: var(--accent);
-   font-weight: 400;
+   font-weight: 500;
+   height: 2.5rem;
+   background-color: var(--dark-nav);
+   width: 100%;
+   border-radius: 1rem;
+   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+   text-align: center;
+   line-height: 2.5rem;
 }
 
 #confirm-box {
@@ -37,7 +44,7 @@
    justify-content: space-between;
    align-items: center;
    flex-shrink: 0;
-
+   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
    border-radius: var(--soft-corner, 0.9375rem);
    background: var(--dark-nav, #0F0F0F);
 }
@@ -53,6 +60,7 @@
    border-radius: 62.5rem;
    background: var(--light-bg, #121212);
    font-size: 1.5rem;
+   transition: 0.1s;
 }
 
 #confirm-box-button.active {
@@ -71,4 +79,69 @@
 
 #confirm-details-top {
    color: var(--accent);
+}
+
+#confirm-details-bottom {
+   color: var(--light-text);
+}
+
+#confirm-tip {
+   color: var(--dark-text);
+   font-size: 0.85rem;
+   text-align: center;
+}
+
+#position-selector {
+   position: relative;
+   display: flex;
+   align-items: flex-end;
+   height: 8rem;
+   width: 20.5625rem;
+   overflow: hidden;
+   border-radius: var(--soft-corner, 0.9375rem);
+   border: 6px solid var(--accent-dim, rgba(205, 167, 69, 0.15));
+   background: var(--dark-bg, #121212);
+   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+#position-buttons-container {
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   display: flex;
+   gap: 0.5rem;
+   padding: 0.5rem;
+
+}
+
+#position-button {
+   height: 100%;
+   width: 100%;
+   border-radius: 1rem;
+   cursor: pointer;
+   z-index: 1;
+   font-size: 0.9rem;
+   transition: 0.1s;
+}
+
+#position-button.inactive {
+   color: var(--light-text);
+   background: #5757571f;
+}
+
+#position-button.active {
+   color: var(--accent);
+   background: var(--accent-dim);
+}
+
+svg {
+   height: auto;
+   z-index: 0;
+}
+
+svg path {
+   fill: none;
+   stroke-width: 0.6rem;
 }

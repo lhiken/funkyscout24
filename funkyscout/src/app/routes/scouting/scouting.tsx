@@ -191,6 +191,7 @@ const ScoutingPage = () => {
 
    return (
       <>
+         <AnimatePresence>
          {confirmMatch
             ? (
                <Prematch
@@ -201,6 +202,8 @@ const ScoutingPage = () => {
                />
             )
             : null}
+         </AnimatePresence>
+
          <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}

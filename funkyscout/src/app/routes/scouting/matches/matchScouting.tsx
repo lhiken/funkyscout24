@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./matchScouting.css";
 import Auto from "../pages/auto";
@@ -7,40 +7,54 @@ import Endgame from "../pages/endgame";
 import { motion } from "framer-motion";
 import Note from "../../../../components/routes/auto/note";
 
-// interface MatchData {
-//    event: string;
-//    match: number;
-//    team: number;
-//    alliance: boolean;
-//    auto: Note[];
-//    miss: number;
-//    amp: number;
-//    speaker: number;
-//    climb: boolean;
-//    defense: number;
-//    disabled: number;
-//    comment: string;
-//    author: string;
-// }
+interface MatchData {
+   event: string;
+   match: number;
+   team: number;
+   alliance: boolean;
+   auto: Note[];
+   miss: number;
+   amp: number;
+   speaker: number;
+   climb: boolean;
+   defense: number;
+   disabled: number;
+   comment: string;
+   author: string;
+}
 
 const MatchScouting = () => {
    const { id } = useParams();
 
-   // const [matchData, setMatchData] = useState<MatchData>();
+   const [AutoPath, setAutoPath] = useState<Note[]>([new Note(0)]);
 
-   const match = Number(
-      id?.substring(
-         id.indexOf("q") + 1,
-         id.indexOf("t"),
+   const [matchData, setMatchData] = useState<MatchData>({
+      event: localStorage.getItem("event")!,
+      match: Number(
+         id?.substring(
+            id.indexOf("q") + 1,
+            id.indexOf("t"),
+         ),
       ),
-   );
-   const team = Number(
-      id?.substring(
-         id.indexOf("t") + 1,
+      team: Number(
+         id?.substring(
+            id.indexOf("t") + 1,
+            id.indexOf("A"),
+         ),
       ),
-   );
+      alliance: id?.indexOf("r") != -1 ? true : false,
+      auto: AutoPath,
+      miss: 0,
+      amp: 0,
+      speaker: 0,
+      climb: false,
+      defense: 0,
+      disabled: 0,
+      comment: "",
+      author: localStorage.getItem("user")!,
+   });
 
-   const alliance = id?.indexOf('r') != -1 ? true : false;
+   const alliance = id?.indexOf("r") != -1 ? true : false;
 
    const time = Date.now();
    const teleTime = time + 1000 * 150;
@@ -83,13 +97,22 @@ const MatchScouting = () => {
          }, 50);
       });
       setTimerStarted(true);
-      console.log(match + " " + team);
+      console.log(matchData.match + " " + matchData.team);
    }
 
-   const [AutoPath, setAutoPath] = useState<Note[]>([new Note(0)]);
+   const autoNotes = useRef(0);
 
    useEffect(() => {
-      console.log(AutoPath);
+      setMatchData({ ...matchData, auto: AutoPath });
+      console.log(matchData);
+      let notes = 0;
+      AutoPath.forEach(note => {
+         if (note.success) {
+            notes++;
+         }
+      })
+      autoNotes.current = notes;
+      // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [AutoPath]);
 
    return (
@@ -112,13 +135,52 @@ const MatchScouting = () => {
             </div>
             <div id="scouting-tab-container">
                {gameState == 0
-                  ? <Auto alliance={alliance} AutoPath={AutoPath} setAutoData={setAutoPath}/>
+                  ? (
+                     <Auto
+                        alliance={alliance}
+                        AutoPath={AutoPath}
+                        setAutoData={setAutoPath}
+                     />
+                  )
                   : gameState == 1
                   ? <Teleop />
                   : <Endgame />}
             </div>
-            <div id="scouting-info-bar">
-
+            <div id="scouting-info-bar-wrapper">
+               <div id="scouting-info-bar">
+                  <div id="scouting-match-info">
+                     <div id="info-top">
+                        Match {matchData.match}
+                     </div>
+                     <div id="info-bottom">
+                        FRC {matchData.team}
+                     </div>
+                  </div>
+                  <div id="scouting-match-data">
+                     <div id="data-header">
+                        <div>
+                           Shots
+                        </div>
+                        <div>
+                           {matchData?.amp} A | {matchData?.speaker + autoNotes.current} S
+                        </div>
+                     </div>
+                     <div id="data-header">
+                        <div>
+                           Cycle
+                        </div>
+                        <div>
+                           {matchData
+                              ? matchData.amp != 0 || matchData.speaker != 0
+                                 ? (135 /
+                                    (matchData?.amp + matchData?.speaker))
+                                    .toFixed(1)
+                                 : "0"
+                              : "0"}s
+                        </div>
+                     </div>
+                  </div>
+               </div>
             </div>
          </motion.div>
       </>

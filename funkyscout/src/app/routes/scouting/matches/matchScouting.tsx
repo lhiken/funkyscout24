@@ -1,13 +1,32 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./matchScouting.css";
 import Auto from "../pages/auto";
 import Teleop from "../pages/teleop";
 import Endgame from "../pages/endgame";
 import { motion } from "framer-motion";
+import Note from "../../../../components/routes/auto/note";
+
+// interface MatchData {
+//    event: string;
+//    match: number;
+//    team: number;
+//    alliance: boolean;
+//    auto: Note[];
+//    miss: number;
+//    amp: number;
+//    speaker: number;
+//    climb: boolean;
+//    defense: number;
+//    disabled: number;
+//    comment: string;
+//    author: string;
+// }
 
 const MatchScouting = () => {
    const { id } = useParams();
+
+   // const [matchData, setMatchData] = useState<MatchData>();
 
    const match = Number(
       id?.substring(
@@ -20,6 +39,8 @@ const MatchScouting = () => {
          id.indexOf("t") + 1,
       ),
    );
+
+   const alliance = id?.indexOf('r') != -1 ? true : false;
 
    const time = Date.now();
    const teleTime = time + 1000 * 150;
@@ -45,23 +66,31 @@ const MatchScouting = () => {
       const seconds = Math.floor(diff / 100);
 
       if (seconds <= 0) {
-         setGameState(-1);
+         setGameState(0);
          setCurrentTime(0);
          clearInterval(interval);
       } else if (seconds < 1350) {
-         setGameState(1);
+         setGameState(0);
       }
 
       return seconds;
    };
 
-   if (gameState !== -1 && !timerStarted) {
-      const interval = setInterval(() => {
-         updateTime(interval);
-      }, 50);
+   if (gameState != -1 && !timerStarted) {
+      setTimeout(() => {
+         const interval = setInterval(() => {
+            updateTime(interval);
+         }, 50);
+      });
       setTimerStarted(true);
       console.log(match + " " + team);
    }
+
+   const [AutoPath, setAutoPath] = useState<Note[]>([new Note(0)]);
+
+   useEffect(() => {
+      console.log(AutoPath);
+   }, [AutoPath]);
 
    return (
       <>
@@ -78,11 +107,12 @@ const MatchScouting = () => {
                   ? "Auto"
                   : gameState == 1
                   ? "Teleop"
-                  : "Match Notes"} {currentTime > 0 ? `| ${currentTime.toFixed(1)}s` : null}
+                  : "Match Notes"}{" "}
+               {currentTime > 0 ? `| ${currentTime.toFixed(1)}s` : null}
             </div>
-            <div>
+            <div id="scouting-tab-container">
                {gameState == 0
-                  ? <Auto />
+                  ? <Auto alliance={alliance} AutoPath={AutoPath} setAutoData={setAutoPath}/>
                   : gameState == 1
                   ? <Teleop />
                   : <Endgame />}

@@ -2,7 +2,7 @@
    display: flex;
    flex-direction: column;
    width: 100%;  
-   padding: 3rem;
+   padding: 2rem;
    gap: 0.875rem;
 }
 
@@ -10,5 +10,15 @@
    width: 100%;
    color: var(--accent);
    font-weight: 500;
+   @media (min-width: 400px) {
+      max-width: 22rem;
+   }
+   margin-inline: auto;
 }
 
+#scouting-tab-container {
+   width: 100%;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}

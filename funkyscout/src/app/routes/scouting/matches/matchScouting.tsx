@@ -66,7 +66,7 @@ const MatchScouting = () => {
       const seconds = Math.floor(diff / 100);
 
       if (seconds <= 0) {
-         setGameState(0);
+         setGameState(-1);
          setCurrentTime(0);
          clearInterval(interval);
       } else if (seconds < 1350) {
@@ -116,6 +116,9 @@ const MatchScouting = () => {
                   : gameState == 1
                   ? <Teleop />
                   : <Endgame />}
+            </div>
+            <div id="scouting-info-bar">
+
             </div>
          </motion.div>
       </>

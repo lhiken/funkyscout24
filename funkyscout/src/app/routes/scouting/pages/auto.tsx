@@ -25,6 +25,12 @@ const Auto = (
    const canvasRef = useRef<HTMLCanvasElement>(null);
    const [active, setActive] = useState(true);
 
+   useEffect(() => {
+      for (const note of Notes) {
+         note.isClicked = false;
+      }
+   }, [])
+
    const handleCanvasClick = (event: React.MouseEvent) => {
       const canvas = canvasRef.current;
       if (canvas && !active) {
@@ -229,13 +235,12 @@ const Auto = (
          } else {
             setAutoData((prev) => {
                const updatedPath = [...prev];
-               updatedPath[updatedPath.length - 1].isClicked = false;
-               updatedPath[updatedPath.length - 1].success = false;
+               updatedPath[updatedPath.length - 1].isClicked = true;
+               updatedPath[updatedPath.length - 1].success = undefined;
                return updatedPath;
             });
             setActive(true);
          }
-         setUndoActive(false);
          throwNotification("success", "Undid action!");
       } else {
          throwNotification("error", "Nothing to undo.");

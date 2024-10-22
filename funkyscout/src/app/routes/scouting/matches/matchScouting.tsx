@@ -4,6 +4,7 @@ import "./matchScouting.css";
 import Auto from "../pages/auto";
 import Teleop from "../pages/teleop";
 import Endgame from "../pages/endgame";
+import { motion } from "framer-motion";
 
 const MatchScouting = () => {
    const { id } = useParams();
@@ -59,18 +60,25 @@ const MatchScouting = () => {
          updateTime(interval);
       }, 50);
       setTimerStarted(true);
-      console.log(match + ' ' + team);
+      console.log(match + " " + team);
    }
 
    return (
       <>
-         <div id="scouting-container">
+         <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -20, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            key="scouting"
+            id="scouting-container"
+         >
             <div id="scouting-tab-header">
                {gameState == 0
                   ? "Auto"
                   : gameState == 1
                   ? "Teleop"
-                  : "Match End"} | {currentTime}s
+                  : "Match Notes"} {currentTime > 0 ? `| ${currentTime.toFixed(1)}s` : null}
             </div>
             <div>
                {gameState == 0
@@ -79,7 +87,7 @@ const MatchScouting = () => {
                   ? <Teleop />
                   : <Endgame />}
             </div>
-         </div>
+         </motion.div>
       </>
    );
 };

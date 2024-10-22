@@ -12,6 +12,7 @@ import {
 } from "@headlessui/react";
 import Prematch from "./matches/prematch";
 import "./scouting.css";
+import throwNotification from "../../../components/notification/notifiication";
 
 const ScoutingPage = () => {
    const event = localStorage.getItem("event");
@@ -103,9 +104,11 @@ const ScoutingPage = () => {
             blueTeams: teamsMap.blueTeams,
             redTeams: teamsMap.redTeams,
          }, team);
+         throwNotification("success", "Autofilled next match");
       } catch (error) {
          console.error("Error autofilling match data:", error);
          setIsNextMatch(false);
+         throwNotification("error", "Autofill failed");
       }
    };
 
@@ -192,16 +195,15 @@ const ScoutingPage = () => {
    return (
       <>
          <AnimatePresence>
-         {confirmMatch
-            ? (
-               <Prematch
-                  match={selectedMatch!.match}
-                  team={selectedTeam!}
-                  alliance={currentAlliance!}
-                  setActive={setConfirmMatch}
-               />
-            )
-            : null}
+            {confirmMatch &&
+               (
+                  <Prematch
+                     match={selectedMatch!.match}
+                     team={selectedTeam!}
+                     alliance={currentAlliance!}
+                     setActive={setConfirmMatch}
+                  />
+               )}
          </AnimatePresence>
 
          <motion.div

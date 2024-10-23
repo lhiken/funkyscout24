@@ -1,0 +1,62 @@
+#teleop-page {
+   display: flex;
+   flex-direction: row;
+   width: 100%;
+   height: 24rem;
+   color: var(--light-text);
+   gap: 0.5rem;
+
+   @media (min-width: 400px) {
+      max-width: 22rem;
+   }
+
+   justify-content: center;
+}
+
+#teleop-left {
+   display: flex;
+   flex-direction: column;
+   flex-grow: 1;
+   gap: 0.5rem;
+}
+
+#teleop-right {
+   display: flex;
+   flex-direction: column;
+   flex-grow: 1;
+   gap: 0.5rem;
+}
+
+.teleop-button {
+   border-radius: 1rem;
+   flex-grow: 1;
+   background-color: var(--light-bg);
+   transition: 0.1s;
+}
+
+.teleop-button.miss {
+   flex-grow: 0.5;
+}
+
+.teleop-button.disabled {
+   flex-grow: 0.2;
+}
+
+.teleop-button.inactive {
+   border: 4px solid var(--accent-dim);
+   color: var(--dark-text);
+}
+
+.teleop-button.active {
+   border: 4px solid var(--accent);
+}
+
+.teleop-button.disabled.active {
+   border: 4px solid var(--warning-red);
+   color: var(--warning-red)
+}
+
+.teleop-button.disabled.inactive {
+   border: 4px solid var(--warning-red);
+   color: var(--light-text);
+}

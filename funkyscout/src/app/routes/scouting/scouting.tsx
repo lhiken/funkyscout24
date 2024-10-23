@@ -361,7 +361,7 @@ const ScoutingPage = () => {
                   </div>
                </div>
                <button
-                  id="submit-button"
+                  id="submit-button-start"
                   onClick={() => handleStartShift()}
                   className={selectedMatch && selectedTeam && validMatch
                      ? "active"

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { motion } from "framer-motion";
 import "../styles/teleop.css";
 import throwNotification from "../../../../components/notification/notifiication";
 
@@ -23,7 +24,7 @@ const Teleop = (
       if (permitIntake) {
          setPermitScore(true);
          setPermitIntake(false);
-         throwNotification('success', 'Marked note intake')
+         throwNotification("success", "Marked note intake");
       } else {
          throwNotification("error", "Confirm note status first!");
       }
@@ -33,16 +34,16 @@ const Teleop = (
       if (permitScore) {
          if (location == "miss") {
             setTeleopData({ ...teleopData, drop: teleopData.drop + 1 });
-            throwNotification('success', 'Marked miss/drop')
+            throwNotification("success", "Marked miss/drop");
          }
          if (location == "speaker") {
             setTeleopData({ ...teleopData, speaker: teleopData.speaker + 1 });
-            throwNotification('success', 'Marked speaker score')
+            throwNotification("success", "Marked speaker score");
          }
          if (location == "amp") {
             setTeleopData({ ...teleopData, amp: teleopData.amp + 1 });
             console.log(teleopData);
-            throwNotification('success', 'Marked amp score')
+            throwNotification("success", "Marked amp score");
          }
          setPermitIntake(true);
          setPermitScore(false);
@@ -67,7 +68,13 @@ const Teleop = (
 
    return (
       <>
-         <div id="teleop-page">
+         <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -20, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            id="teleop-page"
+         >
             <div id="teleop-left">
                <button
                   className={`teleop-button intake ${
@@ -112,7 +119,7 @@ const Teleop = (
                   amp
                </button>
             </div>
-         </div>
+         </motion.div>
       </>
    );
 };

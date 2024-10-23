@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "./matchScouting.css";
 import Auto from "../pages/auto";
 import Teleop from "../pages/teleop";
 import Endgame from "../pages/endgame";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import Note from "../../../../components/routes/auto/note";
 import TextTransition from "react-text-transition";
+import throwNotification from "../../../../components/notification/notifiication";
 
 interface MatchData {
    event: string;
@@ -25,6 +26,7 @@ interface MatchData {
 }
 
 const MatchScouting = () => {
+   const navigate = useNavigate();
    const { id } = useParams();
 
    const [AutoPath, setAutoPath] = useState<Note[]>([new Note(0)]);
@@ -119,6 +121,26 @@ const MatchScouting = () => {
       speaker: 0,
    });
 
+   const cycleTime = useMemo(() => {
+      if (matchData?.amp != 0 || matchData?.speaker != 0) {
+         return (135 / (matchData?.amp + matchData?.speaker)).toFixed(1);
+      } else {
+         return "0";
+      }
+   }, [matchData?.amp, matchData?.speaker]);
+
+   interface EndgameData {
+      climb: boolean;
+      defense: boolean;
+      comment: string;
+   }
+
+   const [endgameData, setEndgameData] = useState<EndgameData>({
+      climb: false,
+      defense: false,
+      comment: "",
+   });
+
    useEffect(() => {
       console.log(matchData);
       let notes = 0;
@@ -136,19 +158,22 @@ const MatchScouting = () => {
          miss: teleopData.drop,
          speaker: teleopData.speaker,
          disabled: teleopData.disabled,
+         climb: endgameData.climb,
+         defense: endgameData.defense ? 1 : 0,
+         comment: endgameData.comment,
       }));
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [AutoPath, teleopData]);
+   }, [AutoPath, teleopData, endgameData]);
 
-   const cycleTime = useMemo(() => {
-      if (matchData?.amp != 0 || matchData?.speaker != 0) {
-         return (135 / (matchData?.amp + matchData?.speaker)).toFixed(1);
+   const handleSubmit = () => {
+      if (matchData.comment != "") {
+         navigate("/scouting");
+         //TODO: Actually make it store data!
       } else {
-         return "0";
+         throwNotification("error", "Leave a comment!");
       }
-      
-   }, [matchData?.amp, matchData?.speaker]);
+   };
 
    return (
       <>
@@ -169,23 +194,32 @@ const MatchScouting = () => {
                {currentTime > 0 ? `| ${currentTime.toFixed(1)}s` : null}
             </div>
             <div id="scouting-tab-container">
-               {gameState == 0
-                  ? (
-                     <Auto
-                        alliance={alliance}
-                        startPosition={Number(id?.charAt(id.length - 1))}
-                        AutoPath={AutoPath}
-                        setAutoData={setAutoPath}
-                     />
-                  )
-                  : gameState == 1
-                  ? (
-                     <Teleop
-                        teleopData={teleopData}
-                        setTeleopData={setTeleopData}
-                     />
-                  )
-                  : <Endgame />}
+               <AnimatePresence>
+                  {gameState == 0
+                     ? (
+                        <Auto
+                           alliance={alliance}
+                           startPosition={Number(
+                              id?.substring(id.indexOf("P") + 1),
+                           )}
+                           AutoPath={AutoPath}
+                           setAutoData={setAutoPath}
+                        />
+                     )
+                     : gameState == 1
+                     ? (
+                        <Teleop
+                           teleopData={teleopData}
+                           setTeleopData={setTeleopData}
+                        />
+                     )
+                     : (
+                        <Endgame
+                           handleSubmit={handleSubmit}
+                           setEndgameData={setEndgameData}
+                        />
+                     )}
+               </AnimatePresence>
             </div>
             <div id="scouting-info-bar-wrapper">
                <div id="scouting-info-bar">
@@ -218,9 +252,9 @@ const MatchScouting = () => {
                            Cycle
                         </div>
                         <div>
-                        <TextTransition inline={true}>
-                           {cycleTime}
-                        </TextTransition>s
+                           <TextTransition inline={true}>
+                              {cycleTime}
+                           </TextTransition>s
                         </div>
                      </div>
                   </div>

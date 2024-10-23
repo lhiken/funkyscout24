@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 import "../styles/canvas.css";
 import Note from "../../../../components/routes/auto/note";
 import throwNotification from "../../../../components/notification/notifiication";
@@ -23,8 +24,8 @@ const Auto = (
       setAutoData: React.Dispatch<React.SetStateAction<Note[]>>;
    },
 ) => {
-   if (alliance == true){
-      startPosition=-startPosition;
+   if (alliance == true) {
+      startPosition = -startPosition;
    }
 
    const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -34,7 +35,7 @@ const Auto = (
       for (const note of Notes) {
          note.isClicked = false;
       }
-   }, [])
+   }, []);
 
    const handleCanvasClick = (event: React.MouseEvent) => {
       const canvas = canvasRef.current;
@@ -59,7 +60,7 @@ const Auto = (
             }
          }
       } else {
-         throwNotification('error', 'Score piece first!')
+         throwNotification("error", "Score piece first!");
       }
    };
 
@@ -98,7 +99,7 @@ const Auto = (
          }
 
          const catmullRom = (
-            p0: Note | { x: number; y: number } ,
+            p0: Note | { x: number; y: number },
             p1: Note | { x: number; y: number },
             p2: Note,
             p3: Note | { x: number; y: number },
@@ -117,17 +118,17 @@ const Auto = (
                      (-p0.y + 3 * p1.y - 3 * p2.y + p3.y) * t3),
             };
          };
-         const start = Note.Position[startPosition+1];
+         const start = Note.Position[startPosition + 1];
          ctx!.lineCap = "round";
          ctx!.strokeStyle = Note.stroke;
          ctx!.beginPath();
-         ctx!.arc(start.x+7.5,start.y+7.5,3,0,Math.PI*2);
-         ctx!.moveTo(start.x+7.5,start.y+7.5);
+         ctx!.arc(start.x + 7.5, start.y + 7.5, 3, 0, Math.PI * 2);
+         ctx!.moveTo(start.x + 7.5, start.y + 7.5);
          if (AutoPath.length > 2) {
             const p0 = AutoPath[1];
             const p1 = AutoPath[2];
             const p3 = AutoPath[AutoPath.length - 1];
-            
+
             for (let t = 0; t <= 1; t += 0.03) {
                const p = catmullRom(start, start, p0, p1, t);
                ctx!.lineTo(p.x + 7.5, p.y + 7.5);
@@ -181,21 +182,19 @@ const Auto = (
                   ctx!.lineTo(p.x + 7.5, p.y + 7.5);
                }
             }
-            ctx!.moveTo(p3.x+8.5,p3.y+8.5);
-            ctx!.arc(p3.x+8.5,p3.y+8.5,3,0,Math.PI*2);
-         }
-         else if (AutoPath.length==2){
+            ctx!.moveTo(p3.x + 8.5, p3.y + 8.5);
+            ctx!.arc(p3.x + 8.5, p3.y + 8.5, 3, 0, Math.PI * 2);
+         } else if (AutoPath.length == 2) {
             const p0 = AutoPath[1];
-            
+
             for (let t = 0; t <= 1; t += 0.03) {
                const p = catmullRom(start, start, p0, p0, t);
                ctx!.lineTo(p.x + 7.5, p.y + 7.5);
             }
-            ctx!.moveTo(p0.x+8.5,p0.y+8.5);
-            ctx!.arc(p0.x+8.5,p0.y+8.5,3,0,Math.PI*2);
+            ctx!.moveTo(p0.x + 8.5, p0.y + 8.5);
+            ctx!.arc(p0.x + 8.5, p0.y + 8.5, 3, 0, Math.PI * 2);
          }
-         
-         
+
          ctx!.stroke();
       }
 
@@ -212,9 +211,9 @@ const Auto = (
             return updatedPath;
          });
          setUndoActive(true);
-         throwNotification('success', 'Logged scored note!')
+         throwNotification("success", "Logged scored note!");
       } else {
-         throwNotification('error', 'Select path first!')
+         throwNotification("error", "Select path first!");
       }
    };
 
@@ -228,15 +227,15 @@ const Auto = (
             return updatedPath;
          });
          setUndoActive(true);
-         throwNotification('success', 'Logged missed note!')
+         throwNotification("success", "Logged missed note!");
       } else {
-         throwNotification('error', 'Select path first!')
+         throwNotification("error", "Select path first!");
       }
    };
    const [undoActive, setUndoActive] = useState(false);
 
    const handleUndo = () => {
-      if (AutoPath.length>1 && undoActive ) {
+      if (AutoPath.length > 1 && undoActive) {
          if (active) {
             const n = AutoPath[AutoPath.length - 1];
             setAutoData((prev) => {
@@ -262,9 +261,7 @@ const Auto = (
             setActive(true);
             throwNotification("success", "Undid note scoring!");
          }
-         
-      } 
-      else if (AutoPath.length==1 && AutoPath[0].isClicked){
+      } else if (AutoPath.length == 1 && AutoPath[0].isClicked) {
          setAutoData((prev) => {
             const updatedPath = [...prev];
             updatedPath[updatedPath.length - 1].isClicked = true;
@@ -273,15 +270,20 @@ const Auto = (
          });
          setActive(true);
          setUndoActive(false);
-      }
-      else {
+      } else {
          throwNotification("error", "Nothing to undo.");
       }
    };
 
    return (
       <>
-         <div id="auto">
+         <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -20, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            id="auto"
+         >
             <div id="svg-border">
                {alliance
                   ? (
@@ -358,7 +360,7 @@ const Auto = (
                   <i className="fa-solid fa-rotate-left"></i>
                </button>
             </div>
-         </div>
+         </motion.div>
       </>
    );
 };

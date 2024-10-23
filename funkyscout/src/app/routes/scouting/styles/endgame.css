@@ -95,6 +95,7 @@
     box-sizing: border-box;
     align-items: flex-start;
     border: none;
+    outline: var(--accent);
     font-family: poppins;
     color: var(--light-text);
     padding: 1rem;

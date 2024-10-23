@@ -329,13 +329,11 @@
    margin: 1rem 0;
 }
 
-#buttons {
+#sync-button {
    display: flex;
    flex-direction: row;
    justify-content: space-between;
-}
 
-#buttons {
    @media (max-height: 790px) {
       display: none;
    }
@@ -356,4 +354,28 @@
    @media (max-height: 700px) {
       display: none;
    }
+}
+
+.dashboard-stats.sync-text {
+   color: var(--light-text);
+   min-height: unset;
+   justify-content: center;
+   align-items: center;
+}
+
+.dashboard-stats.sync-icon {
+   color: var(--accent);
+   min-height: unset;
+}
+
+#sync-button {
+   display: flex;
+   flex-direction: row;
+   height: 4rem;
+   align-items: center;
+   justify-content: center;
+   gap: 0.75rem;
+   height: 4rem;
+   background-color: var(--light-bg);
+   border-radius: 1rem;
 }

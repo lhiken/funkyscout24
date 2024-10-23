@@ -367,7 +367,7 @@ const ScoutingPage = () => {
                      ? "active"
                      : "inactive"}
                >
-                  <i className="fa-solid fa-location-arrow" />
+                  <i className="fa-solid fa-play" />
                </button>
             </div>
          </motion.div>

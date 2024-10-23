@@ -181,7 +181,7 @@ const upsertMatchData = async (MatchData: MatchData) => {
          console.error(error.message);
          return false;
       } else {
-         throwNotification("success", `Uploaded qm${MatchData.match}`);
+         throwNotification("success", `Upload success`);
          console.log(MatchData.match);
          return true;
       }

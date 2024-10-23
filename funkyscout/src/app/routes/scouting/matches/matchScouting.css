@@ -103,3 +103,6 @@
    border-radius: 1rem;
 }
 
+.data-content {
+   color: var(--light-text);
+}

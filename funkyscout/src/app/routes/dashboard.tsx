@@ -2,13 +2,14 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import ProgressRing from "../../components/routes/dash/progress-ring";
 import "./styles/dashboard.css";
-import { getCount, getNextMatch } from "../../utils/database/datacache";
+import { getCount, getNextMatch, syncData } from "../../utils/database/datacache";
 import { forwardRef, useEffect, useRef, useState } from "react";
 import TextTransition from "react-text-transition";
 import { getEventData, getMatchData } from "../../utils/helpers/fetch";
 import supabase from "../../utils/database/supabase";
 import Dashbar from "../../components/navigation/topbar/dashbar";
 import { openDB } from "idb";
+import throwNotification from "../../components/notification/notifiication";
 
 const MatchCard = forwardRef(
    (
@@ -306,6 +307,14 @@ const Dashboard = () => {
       }
    };
 
+   const handleSyncRequest = () => {
+      if (window.navigator.onLine) {
+         syncData(event!);
+      } else {
+         throwNotification('error', 'You\'re offline')
+      }
+   }
+
    return (
       <>
          <motion.div
@@ -375,13 +384,13 @@ const Dashboard = () => {
                            </div>
                         </div>
                      </div>
-                     <div id="buttons">
+                     <button id="sync-button" onClick={handleSyncRequest}>
                         <div
-                           className="dashboard-stats button"
+                           className="dashboard-stats sync-icon"
                            id="team-button"
                         >
                            <i
-                              className="fa-solid fa-robot"
+                              className="fa-solid fa-file-arrow-up"
                               style={{
                                  fontSize: "1.4rem",
                                  alignContent: "center",
@@ -390,19 +399,12 @@ const Dashboard = () => {
                            />
                         </div>
                         <div
-                           className="dashboard-stats button"
+                           className="dashboard-stats sync-text"
                            id="driver-button"
                         >
-                           <i
-                              className="fa-solid fa-screwdriver-wrench"
-                              style={{
-                                 fontSize: "1.4rem",
-                                 alignContent: "center",
-                                 justifyContent: "center",
-                              }}
-                           />
+                           Sync Data
                         </div>
-                     </div>
+                     </button>
                   </div>
 
                   <div className="dashboard-stats right">

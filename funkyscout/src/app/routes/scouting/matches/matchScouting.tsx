@@ -234,7 +234,7 @@ const MatchScouting = () => {
                         <div>
                            Shots
                         </div>
-                        <div>
+                        <div className="data-content">
                            <TextTransition inline={true}>
                               {matchData?.amp}
                            </TextTransition>{" "}
@@ -249,7 +249,7 @@ const MatchScouting = () => {
                         <div>
                            Cycle
                         </div>
-                        <div>
+                        <div className="data-content">
                            {cycleTime} s
                         </div>
                      </div>

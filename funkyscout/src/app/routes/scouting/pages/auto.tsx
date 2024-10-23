@@ -28,6 +28,7 @@ const Auto = (
       startPosition = -startPosition;
    }
 
+
    const canvasRef = useRef<HTMLCanvasElement>(null);
    const [active, setActive] = useState(true);
 

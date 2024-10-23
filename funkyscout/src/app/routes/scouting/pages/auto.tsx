@@ -23,6 +23,10 @@ const Auto = (
       setAutoData: React.Dispatch<React.SetStateAction<Note[]>>;
    },
 ) => {
+   if (alliance == true){
+      startPosition=-startPosition;
+   }
+
    const canvasRef = useRef<HTMLCanvasElement>(null);
    const [active, setActive] = useState(true);
 
@@ -94,8 +98,8 @@ const Auto = (
          }
 
          const catmullRom = (
-            p0: Note | { x: number; y: number },
-            p1: Note,
+            p0: Note | { x: number; y: number } ,
+            p1: Note | { x: number; y: number },
             p2: Note,
             p3: Note | { x: number; y: number },
             t: number,
@@ -113,38 +117,40 @@ const Auto = (
                      (-p0.y + 3 * p1.y - 3 * p2.y + p3.y) * t3),
             };
          };
-
+         const start = Note.Position[startPosition+1];
+         ctx!.lineCap = "round";
          if (AutoPath.length > 2) {
             ctx!.beginPath();
-
             const p0 = AutoPath[1];
             const p1 = AutoPath[2];
-            const p2 = AutoPath[AutoPath.length - 2];
             const p3 = AutoPath[AutoPath.length - 1];
 
-            ctx!.moveTo(p0.x + 7.5, p0.y + 7.5);
+            ctx!.moveTo(start.x+7.5,start.y+7.5);
 
-            const ghostBefore = { x: 2 * p0.x - p1.x, y: 2 * p0.y - p1.y };
-            const ghostAfter = { x: 2 * p2.x - p3.x, y: 2 * p2.y - p3.y };
+            
+            for (let t = 0; t <= 1; t += 0.05) {
+               const p = catmullRom(start, start, p0, p1, t);
+               ctx!.lineTo(p.x + 7.5, p.y + 7.5);
+            }
 
             if (AutoPath.length === 3) {
-               for (let t = 0; t <= 1; t += 0.01) {
-                  const p = catmullRom(ghostBefore, p0, p1, ghostAfter, t);
+               for (let t = 0; t <= 1; t += 0.05) {
+                  const p = catmullRom(start, p0, p1, p1, t);
                   ctx!.lineTo(p.x + 7.5, p.y + 7.5);
                }
             } else if (AutoPath.length === 4) {
-               for (let t = 0; t <= 1; t += 0.01) {
-                  const p = catmullRom(ghostBefore, p0, p1, p3, t);
+               for (let t = 0; t <= 1; t += 0.05) {
+                  const p = catmullRom(start, p0, p1, p3, t);
                   ctx!.lineTo(p.x + 7.5, p.y + 7.5);
                }
-               for (let t = 0; t <= 1; t += 0.01) {
-                  const p = catmullRom(p0, p1, p3, ghostAfter, t);
+               for (let t = 0; t <= 1; t += 0.05) {
+                  const p = catmullRom(p0, p1, p3, p3, t);
                   ctx!.lineTo(p.x + 7.5, p.y + 7.5);
                }
             } else {
-               for (let t = 0; t <= 1; t += 0.01) {
+               for (let t = 0; t <= 1; t += 0.05) {
                   const p = catmullRom(
-                     ghostBefore,
+                     start,
                      AutoPath[1],
                      AutoPath[2],
                      AutoPath[3],
@@ -164,18 +170,31 @@ const Auto = (
                      ctx!.lineTo(p.x + 7.5, p.y + 7.5);
                   }
                }
-               for (let t = 0; t <= 1; t += 0.01) {
+               for (let t = 0; t <= 1; t += 0.05) {
                   const p = catmullRom(
                      AutoPath[AutoPath.length - 3],
                      AutoPath[AutoPath.length - 2],
                      AutoPath[AutoPath.length - 1],
-                     ghostAfter,
+                     AutoPath[AutoPath.length - 1],
                      t,
                   );
                   ctx!.lineTo(p.x + 7.5, p.y + 7.5);
                }
             }
 
+            ctx!.strokeStyle = Note.stroke;
+            ctx!.stroke();
+         }
+         else if (AutoPath.length==2){
+            ctx!.beginPath();
+
+            const p0 = AutoPath[1];
+            
+            for (let t = 0; t <= 1; t += 0.05) {
+               const p = catmullRom(start, start, p0, p0, t);
+               ctx!.lineTo(p.x + 7.5, p.y + 7.5);
+            }
+            
             ctx!.strokeStyle = Note.stroke;
             ctx!.stroke();
          }

@@ -11,6 +11,11 @@ class Note {
         [101, 295],
         [157.5, 295],
     ].map((point) => point.map((coord) => coord * this.offset));
+    static Position = [
+        {x:44,y:400},
+        {x:101,y:350},
+        {x:157.5,y:400},
+    ];
     static color: string = "#CDA745";
     static colorDim: string = "#302A1B";
     static stroke: string = "#CDA74577"

@@ -16,8 +16,9 @@ const Notes: Note[] = [
 ];
 
 const Auto = (
-   { alliance, AutoPath, setAutoData }: {
+   { alliance, startPosition, AutoPath, setAutoData }: {
       alliance: boolean;
+      startPosition: number; //-1, 0, 1 for left, center, right
       AutoPath: Note[];
       setAutoData: React.Dispatch<React.SetStateAction<Note[]>>;
    },

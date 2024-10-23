@@ -138,6 +138,7 @@ const MatchScouting = () => {
                   ? (
                      <Auto
                         alliance={alliance}
+                        startPosition={Number(id?.charAt(id.length - 1))}
                         AutoPath={AutoPath}
                         setAutoData={setAutoPath}
                      />

@@ -1,8 +1,9 @@
 import Canvas from "./canvas"
+import DataAnalysisAuto from "./dataAnalysisAuto"
 function App() {
   return (
     <>
-      <Canvas/>
+      <DataAnalysisAuto alliance={true} startPosition={0} AutoPath={[]}/>
     </>
   )
 }

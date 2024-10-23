@@ -30,7 +30,7 @@ const MatchScouting = () => {
    const navigate = useNavigate();
    const { id } = useParams();
 
-   const [AutoPath, setAutoPath] = useState<Note[]>([new Note(0)]);
+   const [AutoPath, setAutoPath] = useState<Note[]>([new Note(-1)]);
 
    const [matchData, setMatchData] = useState<MatchData>({
       event: localStorage.getItem("event")!,

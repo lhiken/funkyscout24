@@ -1,25 +1,35 @@
 class Note {
+    static offset = 1
+
     static coor: Array<Array<number>> = [
         [27.5, 60],
         [92.5, 60],
         [157.5, 60],
         [222.5, 60],
         [287.5, 60],
-        [44, 275],
-        [101, 275],
-        [157.5, 275]
+        [44, 295],
+        [101, 295],
+        [157.5, 295],
+    ].map((point) => point.map((coord) => coord * this.offset));
+    static Position = [
+        { x: 44, y: 380 },
+        { x: 101, y: 350 },
+        { x: 157.5, y: 380 },
     ];
     static color: string = "#CDA745";
-    static colorDim: string = "#302A1B";
+    static colorDim: string = "#CDA74533"
+    static colorSuccess: string = "#387E39"
+    static colorMiss: string = "#B54545"
+    static stroke: string = "#CDA74577"
     static width: number = 17.5;
     static buttonSize: number = 100;
 
     num!: number;
     x!: number;
     y!: number;
-    
-    isClicked : boolean = false;
-    success:boolean|undefined;
+
+    isClicked: boolean = false;
+    success: boolean | undefined;
 
     constructor(num: number) {
         this.num = num;
@@ -29,19 +39,39 @@ class Note {
         }
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
-        if(!this.isClicked){
-        ctx.strokeStyle = Note.color;
+    draw(ctx: CanvasRenderingContext2D, scouting: boolean): void {
+        if (scouting == true) {
+            if (!this.isClicked) {
+                ctx.strokeStyle = Note.color;
+            } else {
+                ctx.strokeStyle = Note.colorDim;
+            }
         }
-        else{
-            ctx.strokeStyle = Note.colorDim;
+        else {
+            if (this.success == true) {
+                ctx!.strokeStyle = Note.colorSuccess;
+            }
+            else if (this.success == false) {
+                ctx!.strokeStyle = Note.colorMiss;
+            }
+            else if (this.isClicked == true){
+                ctx!.strokeStyle = Note.color;
+            }
+            else{
+                ctx!.strokeStyle = Note.colorDim;
+            }
         }
-        ctx.lineWidth = Note.width*0.35;
+        ctx.lineWidth = Note.width * 0.35;
         ctx.beginPath();
-        ctx.arc(this.x + Note.width / 2, this.y + Note.width / 2, Note.width, 0, Math.PI * 2);
+        ctx.arc(
+            this.x + Note.width / 2,
+            this.y + Note.width / 2,
+            Note.width,
+            0,
+            Math.PI * 2,
+        );
         ctx.stroke();
     }
-
 }
 
 export default Note;

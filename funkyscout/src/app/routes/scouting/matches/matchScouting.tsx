@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./matchScouting.css";
 import Auto from "../pages/auto";
@@ -6,6 +6,7 @@ import Teleop from "../pages/teleop";
 import Endgame from "../pages/endgame";
 import { motion } from "framer-motion";
 import Note from "../../../../components/routes/auto/note";
+import TextTransition from "react-text-transition";
 
 interface MatchData {
    event: string;
@@ -51,7 +52,9 @@ const MatchScouting = () => {
       defense: 0,
       disabled: 0,
       comment: "",
-      author: localStorage.getItem("user") ? localStorage.getItem("user")! : 'Guest',
+      author: localStorage.getItem("user")
+         ? localStorage.getItem("user")!
+         : "Guest",
    });
 
    const alliance = id?.indexOf("r") != -1 ? true : false;
@@ -103,10 +106,10 @@ const MatchScouting = () => {
    const autoNotes = useRef(0);
 
    interface teleopData {
-      disabled: number,
-      drop: number,
-      amp: number,
-      speaker: number,
+      disabled: number;
+      drop: number;
+      amp: number;
+      speaker: number;
    }
 
    const [teleopData, setTeleopData] = useState<teleopData>({
@@ -119,24 +122,33 @@ const MatchScouting = () => {
    useEffect(() => {
       console.log(matchData);
       let notes = 0;
-      AutoPath.forEach(note => {
+      AutoPath.forEach((note) => {
          if (note.success) {
             notes++;
          }
-      })
+      });
       autoNotes.current = notes;
-      
-      setMatchData(oldData => ({
+
+      setMatchData((oldData) => ({
          ...oldData,
          auto: AutoPath,
          amp: teleopData.amp,
          miss: teleopData.drop,
          speaker: teleopData.speaker,
-         disabled: teleopData.disabled
+         disabled: teleopData.disabled,
       }));
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [AutoPath, teleopData]);
+
+   const cycleTime = useMemo(() => {
+      if (matchData?.amp != 0 || matchData?.speaker != 0) {
+         return (135 / (matchData?.amp + matchData?.speaker)).toFixed(1);
+      } else {
+         return "0";
+      }
+      
+   }, [matchData?.amp, matchData?.speaker]);
 
    return (
       <>
@@ -167,10 +179,12 @@ const MatchScouting = () => {
                      />
                   )
                   : gameState == 1
-                  ? <Teleop 
+                  ? (
+                     <Teleop
                         teleopData={teleopData}
                         setTeleopData={setTeleopData}
                      />
+                  )
                   : <Endgame />}
             </div>
             <div id="scouting-info-bar-wrapper">
@@ -189,7 +203,14 @@ const MatchScouting = () => {
                            Shots
                         </div>
                         <div>
-                           {matchData?.amp} A | {matchData?.speaker + autoNotes.current} S
+                           <TextTransition inline={true}>
+                              {matchData?.amp}
+                           </TextTransition>{" "}
+                           A |{" "}
+                           <TextTransition inline={true}>
+                              {matchData?.speaker + autoNotes.current}
+                           </TextTransition>{" "}
+                           S
                         </div>
                      </div>
                      <div id="data-header">
@@ -197,13 +218,9 @@ const MatchScouting = () => {
                            Cycle
                         </div>
                         <div>
-                           {matchData
-                              ? matchData.amp != 0 || matchData.speaker != 0
-                                 ? (135 /
-                                    (matchData?.amp + matchData?.speaker))
-                                    .toFixed(1)
-                                 : "0"
-                              : "0"}s
+                        <TextTransition inline={true}>
+                           {cycleTime}
+                        </TextTransition>s
                         </div>
                      </div>
                   </div>

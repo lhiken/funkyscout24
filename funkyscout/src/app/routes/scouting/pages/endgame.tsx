@@ -46,8 +46,8 @@ const Endgame = () => {
                </button>
             </div>
             <div id="match-summary-bottom">
-               <input
-                  type="text"
+               <textarea
+                  id="comment-input"
                   placeholder="Write comments about this team"
                />
             </div>

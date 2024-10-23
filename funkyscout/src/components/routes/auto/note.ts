@@ -17,7 +17,7 @@ class Note {
         {x:157.5,y:380},
     ];
     static color: string = "#CDA745";
-    static colorDim: string = "#302A1B";
+    static colorDim: string = "#CDA74533"
     static stroke: string = "#CDA74577"
     static width: number = 17.5;
     static buttonSize: number = 100;

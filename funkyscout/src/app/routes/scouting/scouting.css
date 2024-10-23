@@ -202,7 +202,7 @@
     background-color: var(--accent-dim);
 }
 
-#submit-button {
+#submit-button-start {
     display: flex;
     height: 100%;
     flex-direction: column;
@@ -219,11 +219,11 @@
     transition: 0.2s;
 }
 
-#submit-button.active {
+#submit-button-start.active {
     background-color: var(--accent);
 }
 
-#submit-button.inactive {
+#submit-button-start.inactive {
     background-color: var(--accent-dim);
 }
 

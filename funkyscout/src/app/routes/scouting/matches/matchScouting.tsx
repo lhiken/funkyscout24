@@ -51,7 +51,7 @@ const MatchScouting = () => {
       defense: 0,
       disabled: 0,
       comment: "",
-      author: localStorage.getItem("user")!,
+      author: localStorage.getItem("user") ? localStorage.getItem("user")! : 'Guest',
    });
 
    const alliance = id?.indexOf("r") != -1 ? true : false;
@@ -84,7 +84,7 @@ const MatchScouting = () => {
          setCurrentTime(0);
          clearInterval(interval);
       } else if (seconds < 1350) {
-         setGameState(0);
+         setGameState(1);
       }
 
       return seconds;
@@ -115,6 +115,20 @@ const MatchScouting = () => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [AutoPath]);
 
+   interface teleopData {
+      disabled: number,
+      drop: number,
+      amp: number,
+      speaker: number,
+   }
+
+   const [teleopData, setTeleopData] = useState<teleopData>({
+      disabled: 0,
+      drop: 0,
+      amp: 0,
+      speaker: 0,
+   });
+
    return (
       <>
          <motion.div
@@ -144,7 +158,10 @@ const MatchScouting = () => {
                      />
                   )
                   : gameState == 1
-                  ? <Teleop />
+                  ? <Teleop 
+                        teleopData={teleopData}
+                        setTeleopData={setTeleopData}
+                     />
                   : <Endgame />}
             </div>
             <div id="scouting-info-bar-wrapper">

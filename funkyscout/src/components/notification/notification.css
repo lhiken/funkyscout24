@@ -49,3 +49,11 @@
 #notification-icon.error {
    color: var(--warning-red)
 }
+
+#notification-icon.info {
+   color: var(--dark-text)
+}
+
+#notification-container.info {
+   color: var(--dark-text)
+}

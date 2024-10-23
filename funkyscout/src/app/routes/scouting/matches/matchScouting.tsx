@@ -8,7 +8,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import Note from "../../../../components/routes/auto/note";
 import TextTransition from "react-text-transition";
 import throwNotification from "../../../../components/notification/notifiication";
-import { upsertMatchData } from "../../../../utils/database/datacache";
+import { updateMatch } from "../../../../utils/database/datacache";
 
 interface MatchData {
    event: string;
@@ -20,7 +20,7 @@ interface MatchData {
    amp: number;
    speaker: number;
    climb: boolean;
-   defense: number;
+   defense: boolean;
    disabled: number;
    comment: string;
    author: string;
@@ -52,7 +52,7 @@ const MatchScouting = () => {
       amp: 0,
       speaker: 0,
       climb: false,
-      defense: 0,
+      defense: false,
       disabled: 0,
       comment: "",
       author: localStorage.getItem("user")
@@ -63,7 +63,7 @@ const MatchScouting = () => {
    const alliance = id?.indexOf("r") != -1 ? true : false;
 
    const time = Date.now();
-   const teleTime = time + 1000 * 15;
+   const teleTime = time + 1000 * 150;
 
    const [currentTime, setCurrentTime] = useState(0);
    const [gameState, setGameState] = useState(0);
@@ -89,7 +89,7 @@ const MatchScouting = () => {
          setGameState(-1);
          setCurrentTime(0);
          clearInterval(interval);
-      } else if (seconds < 135) {
+      } else if (seconds < 1350) {
          setGameState(1);
       }
 
@@ -159,15 +159,15 @@ const MatchScouting = () => {
          speaker: teleopData.speaker,
          disabled: teleopData.disabled,
          climb: endgameData.climb,
-         defense: endgameData.defense ? 1 : 0,
+         defense: endgameData.defense,
          comment: endgameData.comment,
       }));
    }, [AutoPath, teleopData, endgameData]);
 
    const handleSubmit = () => {
       if (matchData.comment != "") {
-         upsertMatchData(matchData);
-         navigate("/scouting");
+         updateMatch(matchData);
+         navigate("/dashboard");
       } else {
          throwNotification("error", "Leave a comment!");
       }

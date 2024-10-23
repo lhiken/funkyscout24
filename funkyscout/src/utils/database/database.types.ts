@@ -56,9 +56,31 @@ export type Database = {
           match?: number
           team?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "event_2024casf_author_fkey"
+            columns: ["author"]
+            isOneToOne: false
+            referencedRelation: "users_2024casf"
+            referencedColumns: ["name"]
+          },
+          {
+            foreignKeyName: "event_2024casf_event_fkey"
+            columns: ["event"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["event"]
+          },
+          {
+            foreignKeyName: "event_2024casf_team_fkey"
+            columns: ["team"]
+            isOneToOne: false
+            referencedRelation: "teams_2024casf"
+            referencedColumns: ["team"]
+          },
+        ]
       }
-      event_2024test: {
+      event_2024casj: {
         Row: {
           alliance: boolean
           author: string | null
@@ -80,7 +102,75 @@ export type Database = {
           match?: number
           team?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "fk_author"
+            columns: ["author"]
+            isOneToOne: false
+            referencedRelation: "users_2024casj"
+            referencedColumns: ["name"]
+          },
+          {
+            foreignKeyName: "fk_event"
+            columns: ["event"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["event"]
+          },
+          {
+            foreignKeyName: "fk_teams"
+            columns: ["team"]
+            isOneToOne: false
+            referencedRelation: "teams_2024casj"
+            referencedColumns: ["team"]
+          },
+        ]
+      }
+      event_2024idbo: {
+        Row: {
+          alliance: boolean
+          author: string | null
+          event: string
+          match: number
+          team: number
+        }
+        Insert: {
+          alliance: boolean
+          author?: string | null
+          event: string
+          match: number
+          team: number
+        }
+        Update: {
+          alliance?: boolean
+          author?: string | null
+          event?: string
+          match?: number
+          team?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_author"
+            columns: ["author"]
+            isOneToOne: false
+            referencedRelation: "users_2024idbo"
+            referencedColumns: ["name"]
+          },
+          {
+            foreignKeyName: "fk_event"
+            columns: ["event"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["event"]
+          },
+          {
+            foreignKeyName: "fk_teams"
+            columns: ["team"]
+            isOneToOne: false
+            referencedRelation: "teams_2024idbo"
+            referencedColumns: ["team"]
+          },
+        ]
       }
       event_data: {
         Row: {
@@ -132,7 +222,7 @@ export type Database = {
           auto: Json
           climb: boolean
           comment: string
-          defense: number
+          defense: boolean
           disabled: number
           event: string
           match: number
@@ -147,7 +237,7 @@ export type Database = {
           auto: Json
           climb: boolean
           comment: string
-          defense: number
+          defense: boolean
           disabled: number
           event: string
           match: number
@@ -162,7 +252,7 @@ export type Database = {
           auto?: Json
           climb?: boolean
           comment?: string
-          defense?: number
+          defense?: boolean
           disabled?: number
           event?: string
           match?: number
@@ -180,7 +270,7 @@ export type Database = {
           auto: Json
           climb: boolean
           comment: string
-          defense: number
+          defense: boolean
           disabled: number
           event: string
           match: number
@@ -195,7 +285,7 @@ export type Database = {
           auto: Json
           climb: boolean
           comment: string
-          defense: number
+          defense: boolean
           disabled: number
           event: string
           match: number
@@ -210,7 +300,7 @@ export type Database = {
           auto?: Json
           climb?: boolean
           comment?: string
-          defense?: number
+          defense?: boolean
           disabled?: number
           event?: string
           match?: number
@@ -218,9 +308,24 @@ export type Database = {
           speaker?: number
           team?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "matches_2024casf_event_fkey"
+            columns: ["event"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["event"]
+          },
+          {
+            foreignKeyName: "matches_2024casf_match_event_team_fkey"
+            columns: ["match", "event", "team"]
+            isOneToOne: false
+            referencedRelation: "event_2024casf"
+            referencedColumns: ["match", "event", "team"]
+          },
+        ]
       }
-      matches_2024test: {
+      matches_2024casj: {
         Row: {
           alliance: boolean
           amp: number
@@ -228,7 +333,7 @@ export type Database = {
           auto: Json
           climb: boolean
           comment: string
-          defense: number
+          defense: boolean
           disabled: number
           event: string
           match: number
@@ -243,7 +348,7 @@ export type Database = {
           auto: Json
           climb: boolean
           comment: string
-          defense: number
+          defense: boolean
           disabled: number
           event: string
           match: number
@@ -258,7 +363,7 @@ export type Database = {
           auto?: Json
           climb?: boolean
           comment?: string
-          defense?: number
+          defense?: boolean
           disabled?: number
           event?: string
           match?: number
@@ -266,7 +371,71 @@ export type Database = {
           speaker?: number
           team?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "fk_match"
+            columns: ["event", "match", "team"]
+            isOneToOne: true
+            referencedRelation: "event_2024casj"
+            referencedColumns: ["event", "match", "team"]
+          },
+        ]
+      }
+      matches_2024idbo: {
+        Row: {
+          alliance: boolean
+          amp: number
+          author: string
+          auto: Json
+          climb: boolean
+          comment: string
+          defense: boolean
+          disabled: number
+          event: string
+          match: number
+          miss: number
+          speaker: number
+          team: number
+        }
+        Insert: {
+          alliance: boolean
+          amp: number
+          author: string
+          auto: Json
+          climb: boolean
+          comment: string
+          defense: boolean
+          disabled: number
+          event: string
+          match: number
+          miss: number
+          speaker: number
+          team: number
+        }
+        Update: {
+          alliance?: boolean
+          amp?: number
+          author?: string
+          auto?: Json
+          climb?: boolean
+          comment?: string
+          defense?: boolean
+          disabled?: number
+          event?: string
+          match?: number
+          miss?: number
+          speaker?: number
+          team?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_match"
+            columns: ["event", "match", "team"]
+            isOneToOne: true
+            referencedRelation: "event_2024idbo"
+            referencedColumns: ["event", "match", "team"]
+          },
+        ]
       }
       team_data: {
         Row: {
@@ -326,9 +495,17 @@ export type Database = {
           failures?: number
           team?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "teams_2024casf_event_fkey"
+            columns: ["event"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["event"]
+          },
+        ]
       }
-      teams_2024test: {
+      teams_2024casj: {
         Row: {
           avg_amp: number
           avg_score: number
@@ -356,7 +533,53 @@ export type Database = {
           failures?: number
           team?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "fk_event"
+            columns: ["event"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["event"]
+          },
+        ]
+      }
+      teams_2024idbo: {
+        Row: {
+          avg_amp: number
+          avg_score: number
+          avg_speaker: number
+          defense: number
+          event: string
+          failures: number
+          team: number
+        }
+        Insert: {
+          avg_amp: number
+          avg_score: number
+          avg_speaker: number
+          defense: number
+          event: string
+          failures: number
+          team: number
+        }
+        Update: {
+          avg_amp?: number
+          avg_score?: number
+          avg_speaker?: number
+          defense?: number
+          event?: string
+          failures?: number
+          team?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_event"
+            columns: ["event"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["event"]
+          },
+        ]
       }
       users: {
         Row: {
@@ -398,9 +621,17 @@ export type Database = {
           matches?: number
           name?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "users_2024casf_event_fkey"
+            columns: ["event"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["event"]
+          },
+        ]
       }
-      users_2024test: {
+      users_2024casj: {
         Row: {
           event: string
           id: number
@@ -419,7 +650,44 @@ export type Database = {
           matches?: number
           name?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "fk_event"
+            columns: ["event"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["event"]
+          },
+        ]
+      }
+      users_2024idbo: {
+        Row: {
+          event: string
+          id: number
+          matches: number
+          name: string
+        }
+        Insert: {
+          event: string
+          id: number
+          matches: number
+          name: string
+        }
+        Update: {
+          event?: string
+          id?: number
+          matches?: number
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_event"
+            columns: ["event"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["event"]
+          },
+        ]
       }
     }
     Views: {
@@ -517,4 +785,19 @@ export type Enums<
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
     ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof PublicSchema["CompositeTypes"]
+    | { schema: keyof Database },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
+    ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never

@@ -123,14 +123,14 @@ const Dashboard = () => {
          .then(async (res) => {
             localStorage.setItem("matches_done", String(res));
 
+            setCompleteMatches(res);
+
             await supabase
                .from("users")
                .update({ matches: res })
                .eq("name", user!)
                .eq("event", event!)
                .select();
-
-            setCompleteMatches(res);
          });
    }, [event, user]);
 

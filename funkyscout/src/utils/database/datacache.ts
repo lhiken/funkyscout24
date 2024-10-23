@@ -178,9 +178,11 @@ const upsertMatchData = async (MatchData: MatchData) => {
 
       if (error) {
          throwNotification("error", `Error: ${error.message}`);
+         console.error(error.message);
          return false;
       } else {
-         throwNotification("success", `Uploaded ${MatchData.match}`);
+         throwNotification("success", `Uploaded qm${MatchData.match}`);
+         console.log(MatchData.match);
          return true;
       }
    } catch (error) {
@@ -199,7 +201,7 @@ const updateMatch = async (MatchData: MatchData) => {
 
    const db = await openDB(event!);
 
-   await db.put("match_data", dbMatchData, [dbMatchData.match, dbMatchData.team]);
+   await db.add("match_data", dbMatchData);
 
    await syncData(event!);
 };

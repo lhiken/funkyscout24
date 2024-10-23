@@ -1,5 +1,4 @@
 import Canvas from "./canvas"
-
 function App() {
   return (
     <>

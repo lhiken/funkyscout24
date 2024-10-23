@@ -42,7 +42,6 @@ const Teleop = (
          }
          if (location == "amp") {
             setTeleopData({ ...teleopData, amp: teleopData.amp + 1 });
-            console.log(teleopData);
             throwNotification("success", "Marked amp score");
          }
          setPermitIntake(true);

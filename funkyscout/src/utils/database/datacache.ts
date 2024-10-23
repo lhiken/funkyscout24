@@ -1,6 +1,8 @@
 import { openDB } from "idb";
 import supabase from "./supabase";
 import { Tables } from "./database.types";
+import { MatchData } from "../../app/routes/scouting/matches/matchScouting";
+import throwNotification from "../../components/notification/notifiication";
 
 
 /* To store match data we use indexeddb, a built in
@@ -154,4 +156,36 @@ const getNextMatch = async (database: string, user: string) => {
    }
 };
 
-export { getCount, getNextMatch, initializeDB };
+const upsertMatchData = async (MatchData: MatchData) => {
+   try {
+      const { error } = await supabase
+      .from('match_data')
+      .upsert({
+         event: MatchData.event, 
+         match: MatchData.match, 
+         team: MatchData.team, 
+         alliance: MatchData.alliance, 
+         auto: JSON.stringify(MatchData.auto),
+         miss: MatchData.miss,
+         amp: MatchData.amp,
+         speaker: MatchData.speaker,
+         climb: MatchData.climb,
+         defense: MatchData.defense,
+         disabled: MatchData.disabled,
+         comment: MatchData.comment,
+         author: MatchData.author
+      })
+      .select();
+
+      if (error) {
+         throwNotification("error", `Error: ${error.message}`)
+      } else {
+         throwNotification("success", "Upload success!")
+      }
+   } catch (error) {
+      throwNotification("error", `Error: ${error}`);
+   }
+
+}
+
+export { getCount, getNextMatch, initializeDB, upsertMatchData };

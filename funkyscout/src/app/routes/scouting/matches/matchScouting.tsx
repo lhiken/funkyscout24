@@ -8,6 +8,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import Note from "../../../../components/routes/auto/note";
 import TextTransition from "react-text-transition";
 import throwNotification from "../../../../components/notification/notifiication";
+import { upsertMatchData } from "../../../../utils/database/datacache";
 
 interface MatchData {
    event: string;
@@ -62,7 +63,7 @@ const MatchScouting = () => {
    const alliance = id?.indexOf("r") != -1 ? true : false;
 
    const time = Date.now();
-   const teleTime = time + 1000 * 150;
+   const teleTime = time + 1000 * 15;
 
    const [currentTime, setCurrentTime] = useState(0);
    const [gameState, setGameState] = useState(0);
@@ -88,7 +89,7 @@ const MatchScouting = () => {
          setGameState(-1);
          setCurrentTime(0);
          clearInterval(interval);
-      } else if (seconds < 1350) {
+      } else if (seconds < 135) {
          setGameState(1);
       }
 
@@ -102,7 +103,6 @@ const MatchScouting = () => {
          }, 50);
       });
       setTimerStarted(true);
-      console.log(matchData.match + " " + matchData.team);
    }
 
    const autoNotes = useRef(0);
@@ -123,11 +123,12 @@ const MatchScouting = () => {
 
    const cycleTime = useMemo(() => {
       if (matchData?.amp != 0 || matchData?.speaker != 0) {
-         return (135 / (matchData?.amp + matchData?.speaker)).toFixed(1);
+         return ((135 - currentTime) / (matchData?.amp + matchData?.speaker))
+            .toFixed(2);
       } else {
          return "0";
       }
-   }, [matchData?.amp, matchData?.speaker]);
+   }, [matchData?.amp, matchData?.speaker, currentTime]);
 
    interface EndgameData {
       climb: boolean;
@@ -142,7 +143,6 @@ const MatchScouting = () => {
    });
 
    useEffect(() => {
-      console.log(matchData);
       let notes = 0;
       AutoPath.forEach((note) => {
          if (note.success) {
@@ -162,14 +162,12 @@ const MatchScouting = () => {
          defense: endgameData.defense ? 1 : 0,
          comment: endgameData.comment,
       }));
-
-      // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [AutoPath, teleopData, endgameData]);
 
    const handleSubmit = () => {
       if (matchData.comment != "") {
+         upsertMatchData(matchData);
          navigate("/scouting");
-         //TODO: Actually make it store data!
       } else {
          throwNotification("error", "Leave a comment!");
       }
@@ -252,9 +250,7 @@ const MatchScouting = () => {
                            Cycle
                         </div>
                         <div>
-                           <TextTransition inline={true}>
-                              {cycleTime}
-                           </TextTransition>s
+                           {cycleTime} s
                         </div>
                      </div>
                   </div>
@@ -266,3 +262,4 @@ const MatchScouting = () => {
 };
 
 export default MatchScouting;
+export type { MatchData };

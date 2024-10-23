@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import "../styles/teleop.css";
 import throwNotification from "../../../../components/notification/notifiication";
 
@@ -23,6 +23,7 @@ const Teleop = (
       if (permitIntake) {
          setPermitScore(true);
          setPermitIntake(false);
+         throwNotification('success', 'Marked note intake')
       } else {
          throwNotification("error", "Confirm note status first!");
       }
@@ -30,14 +31,18 @@ const Teleop = (
 
    const handleScore = (location: string) => {
       if (permitScore) {
-         if (location == "drop") {
+         if (location == "miss") {
             setTeleopData({ ...teleopData, drop: teleopData.drop + 1 });
+            throwNotification('success', 'Marked miss/drop')
          }
          if (location == "speaker") {
             setTeleopData({ ...teleopData, speaker: teleopData.speaker + 1 });
+            throwNotification('success', 'Marked speaker score')
          }
          if (location == "amp") {
             setTeleopData({ ...teleopData, amp: teleopData.amp + 1 });
+            console.log(teleopData);
+            throwNotification('success', 'Marked amp score')
          }
          setPermitIntake(true);
          setPermitScore(false);
@@ -46,34 +51,14 @@ const Teleop = (
       }
    };
 
-   const [isPressed, setIsPressed] = useState(false);
-   const [isEnabled, setIsEnabled] = useState(false);
-   const timerRef = useRef<NodeJS.Timeout>();
-
-   const handleMouseDown = () => {
-      timerRef.current = setTimeout(() => {
-         setIsEnabled(true);
-      }, 500);
-      setIsPressed(true);
-   };
-
-   const handleMouseUp = () => {
-      clearTimeout(timerRef.current);
-      setIsPressed(false);
-      if (!isEnabled) {
-         throwNotification("error", "Hold longer to disable");
-      }
-   };
-
-   const handleDropNote = () => {
-      if (isEnabled && !disabled) {
+   const handleDisable = () => {
+      if (!disabled) {
          setTeleopData({ ...teleopData, drop: teleopData.drop + 1 });
          setDisabled(true);
          setPermitIntake(false);
          setPermitScore(false);
-         setIsEnabled(false);
          throwNotification("success", "Marked as disabled");
-      } else if (isEnabled) {
+      } else {
          setDisabled(false);
          setPermitIntake(true);
          throwNotification("success", "Marked as enabled");
@@ -95,11 +80,8 @@ const Teleop = (
                <button
                   className={`teleop-button disabled ${
                      disabled ? "active" : "inactive"
-                  } ${isPressed ? "pressed" : null}
-                  `}
-                  onMouseDown={handleMouseDown}
-                  onMouseUp={handleMouseUp}
-                  onClick={handleDropNote}
+                  }`}
+                  onClick={handleDisable}
                >
                   disable
                </button>

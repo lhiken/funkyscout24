@@ -102,19 +102,6 @@ const MatchScouting = () => {
 
    const autoNotes = useRef(0);
 
-   useEffect(() => {
-      setMatchData({ ...matchData, auto: AutoPath });
-      console.log(matchData);
-      let notes = 0;
-      AutoPath.forEach(note => {
-         if (note.success) {
-            notes++;
-         }
-      })
-      autoNotes.current = notes;
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [AutoPath]);
-
    interface teleopData {
       disabled: number,
       drop: number,
@@ -128,6 +115,28 @@ const MatchScouting = () => {
       amp: 0,
       speaker: 0,
    });
+
+   useEffect(() => {
+      console.log(matchData);
+      let notes = 0;
+      AutoPath.forEach(note => {
+         if (note.success) {
+            notes++;
+         }
+      })
+      autoNotes.current = notes;
+      
+      setMatchData(oldData => ({
+         ...oldData,
+         auto: AutoPath,
+         amp: teleopData.amp,
+         miss: teleopData.drop,
+         speaker: teleopData.speaker,
+         disabled: teleopData.disabled
+      }));
+
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [AutoPath, teleopData]);
 
    return (
       <>

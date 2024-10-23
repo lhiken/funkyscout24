@@ -48,7 +48,7 @@ const Endgame = () => {
             <div id="match-summary-bottom">
                <textarea
                   id="comment-input"
-                  placeholder="Write comments about this team"
+                  placeholder="Write some comments about this team..."
                />
             </div>
 

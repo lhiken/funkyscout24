@@ -119,36 +119,36 @@ const Auto = (
          };
          const start = Note.Position[startPosition+1];
          ctx!.lineCap = "round";
+         ctx!.strokeStyle = Note.stroke;
+         ctx!.beginPath();
+         ctx!.arc(start.x+7.5,start.y+7.5,3,0,Math.PI*2);
+         ctx!.moveTo(start.x+7.5,start.y+7.5);
          if (AutoPath.length > 2) {
-            ctx!.beginPath();
             const p0 = AutoPath[1];
             const p1 = AutoPath[2];
             const p3 = AutoPath[AutoPath.length - 1];
-
-            ctx!.moveTo(start.x+7.5,start.y+7.5);
-
             
-            for (let t = 0; t <= 1; t += 0.05) {
+            for (let t = 0; t <= 1; t += 0.03) {
                const p = catmullRom(start, start, p0, p1, t);
                ctx!.lineTo(p.x + 7.5, p.y + 7.5);
             }
 
             if (AutoPath.length === 3) {
-               for (let t = 0; t <= 1; t += 0.05) {
+               for (let t = 0; t <= 1; t += 0.03) {
                   const p = catmullRom(start, p0, p1, p1, t);
                   ctx!.lineTo(p.x + 7.5, p.y + 7.5);
                }
             } else if (AutoPath.length === 4) {
-               for (let t = 0; t <= 1; t += 0.05) {
+               for (let t = 0; t <= 1; t += 0.03) {
                   const p = catmullRom(start, p0, p1, p3, t);
                   ctx!.lineTo(p.x + 7.5, p.y + 7.5);
                }
-               for (let t = 0; t <= 1; t += 0.05) {
+               for (let t = 0; t <= 1; t += 0.03) {
                   const p = catmullRom(p0, p1, p3, p3, t);
                   ctx!.lineTo(p.x + 7.5, p.y + 7.5);
                }
             } else {
-               for (let t = 0; t <= 1; t += 0.05) {
+               for (let t = 0; t <= 1; t += 0.03) {
                   const p = catmullRom(
                      start,
                      AutoPath[1],
@@ -170,7 +170,7 @@ const Auto = (
                      ctx!.lineTo(p.x + 7.5, p.y + 7.5);
                   }
                }
-               for (let t = 0; t <= 1; t += 0.05) {
+               for (let t = 0; t <= 1; t += 0.03) {
                   const p = catmullRom(
                      AutoPath[AutoPath.length - 3],
                      AutoPath[AutoPath.length - 2],
@@ -181,23 +181,22 @@ const Auto = (
                   ctx!.lineTo(p.x + 7.5, p.y + 7.5);
                }
             }
-
-            ctx!.strokeStyle = Note.stroke;
-            ctx!.stroke();
+            ctx!.moveTo(p3.x+8.5,p3.y+8.5);
+            ctx!.arc(p3.x+8.5,p3.y+8.5,3,0,Math.PI*2);
          }
          else if (AutoPath.length==2){
-            ctx!.beginPath();
-
             const p0 = AutoPath[1];
             
-            for (let t = 0; t <= 1; t += 0.05) {
+            for (let t = 0; t <= 1; t += 0.03) {
                const p = catmullRom(start, start, p0, p0, t);
                ctx!.lineTo(p.x + 7.5, p.y + 7.5);
             }
-            
-            ctx!.strokeStyle = Note.stroke;
-            ctx!.stroke();
+            ctx!.moveTo(p0.x+8.5,p0.y+8.5);
+            ctx!.arc(p0.x+8.5,p0.y+8.5,3,0,Math.PI*2);
          }
+         
+         
+         ctx!.stroke();
       }
 
       // eslint-disable-next-line react-hooks/exhaustive-deps

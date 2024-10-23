@@ -4,7 +4,6 @@ import { Tables } from "./database.types";
 import { MatchData } from "../../app/routes/scouting/matches/matchScouting";
 import throwNotification from "../../components/notification/notifiication";
 
-
 /* To store match data we use indexeddb, a built in
  * browser feature that's essentially localStorage
  * but better!
@@ -159,33 +158,83 @@ const getNextMatch = async (database: string, user: string) => {
 const upsertMatchData = async (MatchData: MatchData) => {
    try {
       const { error } = await supabase
-      .from('match_data')
-      .upsert({
-         event: MatchData.event, 
-         match: MatchData.match, 
-         team: MatchData.team, 
-         alliance: MatchData.alliance, 
-         auto: JSON.stringify(MatchData.auto),
-         miss: MatchData.miss,
-         amp: MatchData.amp,
-         speaker: MatchData.speaker,
-         climb: MatchData.climb,
-         defense: MatchData.defense,
-         disabled: MatchData.disabled,
-         comment: MatchData.comment,
-         author: MatchData.author
-      })
-      .select();
+         .from("match_data")
+         .upsert({
+            event: MatchData.event,
+            match: MatchData.match,
+            team: MatchData.team,
+            alliance: MatchData.alliance,
+            auto: JSON.stringify(MatchData.auto),
+            miss: MatchData.miss,
+            amp: MatchData.amp,
+            speaker: MatchData.speaker,
+            climb: MatchData.climb,
+            defense: MatchData.defense,
+            disabled: MatchData.disabled,
+            comment: MatchData.comment,
+            author: MatchData.author,
+         })
+         .select();
 
       if (error) {
-         throwNotification("error", `Error: ${error.message}`)
+         throwNotification("error", `Error: ${error.message}`);
+         return false;
       } else {
-         throwNotification("success", "Upload success!")
+         throwNotification("success", `Uploaded ${MatchData.match}`);
+         return true;
       }
    } catch (error) {
       throwNotification("error", `Error: ${error}`);
+      return false;
+   }
+};
+
+const updateMatch = async (MatchData: MatchData) => {
+   const event = localStorage.getItem("event");
+
+   const dbMatchData = {
+      ...MatchData,
+      auto: JSON.stringify(MatchData.auto),
+   };
+
+   const db = await openDB(event!);
+
+   await db.put("match_data", dbMatchData, [dbMatchData.match, dbMatchData.team]);
+
+   await syncData(event!);
+};
+
+const syncData = async (event: string) => {
+   const db = await openDB(event);
+
+   throwNotification("info", "Syncing data...");
+
+   const tx = db.transaction("match_data", "readonly");
+   const store = tx.objectStore("match_data");
+
+   const cursor = await store.openCursor();
+
+   let failures = 0;
+
+   while (cursor) {
+      const matchData = cursor.value;
+
+      upsertMatchData(matchData).then((res) => {
+         if (!res) {
+            failures++;
+         }
+      }).catch((err) => {
+         if (err) {
+            failures++;
+         }
+      });
+
+      cursor.continue();
    }
 
-}
+   throwNotification("info", `${failures} failed uploads`);
 
-export { getCount, getNextMatch, initializeDB, upsertMatchData };
+   await tx.done;
+};
+
+export { getCount, getNextMatch, initializeDB, upsertMatchData, updateMatch, syncData };

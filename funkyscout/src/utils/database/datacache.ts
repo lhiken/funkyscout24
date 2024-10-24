@@ -132,6 +132,10 @@ const getCount = async (
    return count;
 };
 
+const isOnline = () => {
+   return navigator.onLine;
+}
+
 const getNextMatch = async (database: string, user: string) => {
    const db = await openDB(database);
 
@@ -155,11 +159,11 @@ const getNextMatch = async (database: string, user: string) => {
    }
 };
 
-const upsertMatchData = async (MatchData: MatchData) => {
+const insertMatchData = async (MatchData: MatchData) => {
    try {
-      const { error } = await supabase
+      const { data, error } = await supabase
          .from("match_data")
-         .upsert({
+         .insert({
             event: MatchData.event,
             match: MatchData.match,
             team: MatchData.team,
@@ -177,13 +181,15 @@ const upsertMatchData = async (MatchData: MatchData) => {
          .select();
 
       if (error) {
-         throwNotification("error", `Error: ${error.message}`);
+         if (error.code != '23505') {
+            throwNotification("error", `Upload failed: ${error.code}`);
+            return 1;
+         }
          console.error(error.message);
-         return false;
+         return 2;
       } else {
-         throwNotification("success", `Upload success`);
-         console.log(MatchData.match);
-         return true;
+         console.log(data);
+         return 0;
       }
    } catch (error) {
       throwNotification("error", `Error: ${error}`);
@@ -196,7 +202,7 @@ const updateMatch = async (MatchData: MatchData) => {
 
    const dbMatchData = {
       ...MatchData,
-      auto: JSON.stringify(MatchData.auto),
+      auto: MatchData.auto,
    };
 
    const db = await openDB(event!);
@@ -207,36 +213,52 @@ const updateMatch = async (MatchData: MatchData) => {
 };
 
 const syncData = async (event: string) => {
-   const db = await openDB(event);
 
+   const db = await openDB(event);
    throwNotification("info", "Syncing data...");
 
    const tx = db.transaction("match_data", "readonly");
    const store = tx.objectStore("match_data");
+   let cursor = await store.openCursor();
+   let matches = 0;
+   let attempts = 0;
 
-   const cursor = await store.openCursor();
-
-   let failures = 0;
+   const matchesToUpsert = [];
 
    while (cursor) {
       const matchData = cursor.value;
 
-      upsertMatchData(matchData).then((res) => {
-         if (!res) {
-            failures++;
-         }
-      }).catch((err) => {
-         if (err) {
-            failures++;
-         }
-      });
+      if (matchData.author === localStorage.getItem('user') || matchData.author === 'GUEST') {
+         matchesToUpsert.push(matchData);
+      }
 
-      cursor.continue();
+      try {
+         cursor = await cursor.continue();
+      } catch {
+         break; 
+      }
    }
 
-   throwNotification("info", `${failures} failed uploads`);
+   await tx.done; 
 
-   await tx.done;
+   for (const match of matchesToUpsert) {
+      const res = await insertMatchData(match);
+      if (res == 0) {
+         matches++;
+         attempts++;
+      } else if (res == 1) {
+         attempts++;
+      }
+   }
+
+   throwNotification("info", `${matches}/${attempts} matches synced`);
+   if (!isOnline()) {
+      throwNotification('error', 'Check connection')
+   }
 };
 
-export { getCount, getNextMatch, initializeDB, upsertMatchData, updateMatch, syncData };
+
+
+
+
+export { getCount, getNextMatch, initializeDB, insertMatchData, updateMatch, syncData };

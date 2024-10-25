@@ -266,29 +266,32 @@ const fetchProbability = async (redTeams: number[], blueTeams: number[]) => {
    try {
       for (const team of redTeams) {
          const { data } = await supabase
-         .rpc("fetch_average", {
-            event_code: localStorage.getItem('event')!,
-            team_id: team,
-         });
-   
-         redSum += data;
+            .rpc("fetch_average", {
+               event_code: localStorage.getItem("event")!,
+               team_id: team,
+            });
+
+         if (data) {
+            redSum += data;
+         }
       }
-   
+
       for (const team of blueTeams) {
          const { data } = await supabase
-         .rpc("fetch_average", {
-            event_code: localStorage.getItem('event')!,
-            team_id: team,
-         });
-   
-         blueSum += data;
+            .rpc("fetch_average", {
+               event_code: localStorage.getItem("event")!,
+               team_id: team,
+            });
+
+         if (data) {
+            blueSum += data;
+         }
       }
-   
+
       return { blue: blueSum, red: redSum };
    } catch {
-      throwNotification('error', 'Error fetching data');
+      throwNotification("error", "Error fetching data");
    }
-
 };
 
 export {

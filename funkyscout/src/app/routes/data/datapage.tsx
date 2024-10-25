@@ -30,8 +30,6 @@ const DataPage = () => {
    const fetched = useRef(false);
 
    const fetchScoutedCount = async () => {
-      console.log("fetching scouted matches");
-
       try {
          const { count, error } = await supabase
             .from("match_data")
@@ -50,8 +48,6 @@ const DataPage = () => {
    };
 
    const fetchMatchCount = async () => {
-      console.log("fetching matches");
-
       try {
          const { count, error } = await supabase
             .from("event_data")
@@ -80,7 +76,6 @@ const DataPage = () => {
             if (error) {
                return false;
             } else if (count) {
-               console.log(count);
                setTotalTeams(count);
                return true;
             }
@@ -91,7 +86,6 @@ const DataPage = () => {
             if (error) {
                return false;
             } else {
-               console.log(data);
                setScoutedTeams(data!);
                return true;
             }
@@ -153,7 +147,11 @@ const DataPage = () => {
 
       fetchNextMatch().then((res) => {
          fetchProbability(res.redTeams, res.blueTeams).then((res) => {
-            setNextMatchProbabilities(res);
+            if (res) {
+               setNextMatchProbabilities(res);
+            } else {
+               throwNotification("error", "Failed to get probability");
+            }
          });
       });
 

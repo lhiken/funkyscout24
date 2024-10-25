@@ -141,19 +141,33 @@ const DataPage = () => {
       const totalTeams = fetchTeamCount(false);
       const scoutedTeams = fetchTeamCount(true);
 
-      if (!totalMatches || !scoutedMatches || !totalTeams || !scoutedTeams) {
-         throwNotification("error", "Error fetching data");
-      }
+      throwNotification("info", "Loading data...");
 
-      fetchNextMatch().then((res) => {
-         fetchProbability(res.redTeams, res.blueTeams).then((res) => {
-            if (res) {
-               setNextMatchProbabilities(res);
-            } else {
-               throwNotification("error", "Failed to get probability");
-            }
+      if (window.navigator.onLine) {
+         if (!totalMatches || !scoutedMatches || !totalTeams || !scoutedTeams) {
+            throwNotification("error", "Error fetching data");
+         }
+
+         fetchNextMatch().then((res) => {
+            fetchProbability(res.redTeams, res.blueTeams).then((res) => {
+               if (res) {
+                  setNextMatchProbabilities({
+                     blue: res.blue + res.red != 0
+                        ? res.blue / (res.blue + res.red)
+                        : 0,
+                     red: res.blue + res.red != 0
+                        ? res.red / (res.blue + res.red)
+                        : 0,
+                  });
+               } else {
+                  throwNotification("error", "Failed to get probability");
+               }
+               throwNotification("info", "Loading complete");
+            });
          });
-      });
+      } else {
+         throwNotification("error", "Can't view data offline");
+      }
 
       fetched.current = true;
    }
@@ -178,6 +192,12 @@ const DataPage = () => {
       navigate(`/data/team/${team}`);
    };
 
+   const [query, setQuery] = useState("");
+
+   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setQuery(event.target.value);
+   };
+
    return (
       <>
          <motion.div
@@ -185,7 +205,7 @@ const DataPage = () => {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -20, opacity: 0 }}
             transition={{ duration: 0.1 }}
-            key="dashboard"
+            key="data"
             id="dashboard"
          >
             <div id="dashboard-main">
@@ -220,8 +240,8 @@ const DataPage = () => {
                         <TextTransition inline={true}>
                            {totalTeams != 0
                               ? ((scoutedTeams / totalTeams) * 100).toFixed(0)
-                              : 0}%
-                        </TextTransition>&nbsp;of teams
+                              : 0}
+                        </TextTransition>% of teams
                      </div>
                   </div>
                   <div id="dashboard-overview-progress">
@@ -306,6 +326,26 @@ const DataPage = () => {
                   </div>
                </div>
                <div id="data-team-display">
+                  <div style={{ position: 'relative', width: "100%" }}>
+                     <i
+                        className="fa-solid fa-magnifying-glass"
+                        style={{
+                           position: "absolute",
+                           top: "50%",
+                           right: "1.5rem",
+                           transform: "translateY(-50%)",
+                           color: "var(--dark-text)",
+                           pointerEvents: "none",
+                        }}
+                     />
+                     <input
+                        type="text"
+                        placeholder="Search for a team"
+                        value={query}
+                        onChange={handleChange}
+                        id="data-team-searchbox"
+                     />
+                  </div>
                </div>
             </div>
          </motion.div>

@@ -20,6 +20,12 @@ const DataPage = () => {
    const [blueTeams, setBlueTeams] = useState<number[]>([0, 0, 0]);
    const [redTeams, setRedTeams] = useState<number[]>([0, 0, 0]);
 
+   const [teams, setTeams] = useState<{
+      key: number;
+      name: string;
+      rank: number;
+   }[]>([]);
+
    const navigate = useNavigate();
 
    const [nextMatchProbabilities, setNextMatchProbabilities] = useState({
@@ -81,7 +87,9 @@ const DataPage = () => {
             }
          } else {
             const { data, error } = await supabase
-               .rpc("count_teams", { event_name: "2024casf" });
+               .rpc("count_teams", {
+                  event_name: localStorage.getItem("event")!,
+               });
 
             if (error) {
                return false;
@@ -135,6 +143,101 @@ const DataPage = () => {
       return { redTeams: [0, 0, 0], blueTeams: [0, 0, 0] };
    };
 
+   const getTimeDifference = (startTime: number) => {
+      const diff = startTime - Date.now();
+
+      const seconds = Math.floor(diff / 1000);
+      const minutes = Math.floor(seconds / 60);
+      const hours = Math.floor(minutes / 60);
+
+      if (hours > 0) {
+         return `${hours % 24}h`;
+      } else if (minutes > 0) {
+         return `${minutes % 60}m`;
+      } else {
+         return `now`;
+      }
+   };
+
+   const handleTeamClick = (team: number) => {
+      if (team > 0) {
+         navigate(`/data/team/${team}`);
+      } else {
+         throwNotification("error", "Can't view data offline");
+      }
+   };
+
+   interface Team {
+      key: number;
+      name: string;
+      rank: number;
+   }
+
+   interface RankData {
+      [key: string]: {
+         qual: {
+            ranking: {
+               rank: number;
+            };
+         };
+      };
+   }
+
+   const fetchEventTeams = async (): Promise<Team[]> => {
+      const response = await fetch(
+         `https://www.thebluealliance.com/api/v3/event/${localStorage.getItem(
+            "event",
+         )!}/teams/simple`,
+         {
+            method: "GET",
+            headers: {
+               "X-TBA-Auth-Key": import.meta.env.VITE_TBA_AUTH_KEY as string,
+            },
+         },
+      );
+
+      if (!response.ok) {
+         throwNotification("error", "Error fetching data");
+         throw new Error(`Error fetching data: ${response.statusText}`);
+      }
+
+      const data: { team_number: number; nickname: string }[] = await response
+         .json();
+
+      const newTeams: Team[] = data.map((team) => ({
+         key: team.team_number,
+         name: team.nickname,
+         rank: 0,
+      }));
+
+      const rankResponse = await fetch(
+         `https://www.thebluealliance.com/api/v3/event/${localStorage.getItem(
+            "event",
+         )!}/teams/statuses`,
+         {
+            method: "GET",
+            headers: {
+               "X-TBA-Auth-Key": import.meta.env.VITE_TBA_AUTH_KEY as string,
+            },
+         },
+      );
+
+      if (!rankResponse.ok) {
+         throwNotification("error", "Error fetching data");
+         throw new Error(`Error fetching data: ${response.statusText}`);
+      }
+
+      const rankData: RankData = await rankResponse.json();
+
+      const rankedTeams: Team[] = newTeams.map((team) => ({
+         key: team.key,
+         name: team.name,
+         rank: rankData[`frc${team.key}`]?.qual.ranking.rank || 0,
+      }));
+
+      return rankedTeams;
+   };
+
    if (!fetched.current) {
       const totalMatches = fetchMatchCount();
       const scoutedMatches = fetchScoutedCount();
@@ -162,8 +265,13 @@ const DataPage = () => {
                } else {
                   throwNotification("error", "Failed to get probability");
                }
-               throwNotification("info", "Loading complete");
             });
+         });
+
+         fetchEventTeams().then((res) => {
+            setTeams(res);
+            console.log(res);
+            throwNotification("info", "Loading complete");
          });
       } else {
          throwNotification("error", "Can't view data offline");
@@ -172,31 +280,16 @@ const DataPage = () => {
       fetched.current = true;
    }
 
-   const getTimeDifference = (startTime: number) => {
-      const diff = startTime - Date.now();
-
-      const seconds = Math.floor(diff / 1000);
-      const minutes = Math.floor(seconds / 60);
-      const hours = Math.floor(minutes / 60);
-
-      if (hours > 0) {
-         return `${hours % 24}h`;
-      } else if (minutes > 0) {
-         return `${minutes % 60}m`;
-      } else {
-         return `now`;
-      }
-   };
-
-   const handleTeamClick = (team: number) => {
-      navigate(`/data/team/${team}`);
-   };
-
    const [query, setQuery] = useState("");
 
    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       setQuery(event.target.value);
    };
+
+   const queriedTeams = query == "" ? teams : teams?.filter((team) => {
+      return team.name.toLowerCase().includes(query.toLowerCase()) ||
+         String(team.key).includes(query.toLowerCase());
+   });
 
    return (
       <>
@@ -205,7 +298,7 @@ const DataPage = () => {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -20, opacity: 0 }}
             transition={{ duration: 0.1 }}
-            key="data"
+            key="dataview"
             id="dashboard"
          >
             <div id="dashboard-main">
@@ -267,7 +360,13 @@ const DataPage = () => {
                      </div>
                      <div id="dashboard-section-seperator" />
                      <div className="progress-container">
-                        <progress id="progress-bar" value={0.53} max="1" />
+                        <progress
+                           id="progress-bar"
+                           value={nextMatchProbabilities.red != 0
+                              ? 1 / nextMatchProbabilities.red
+                              : 0.5}
+                           max="1"
+                        />
                         <span className="progress-bar-text left">
                            {nextMatchProbabilities.blue * 100}%
                         </span>
@@ -283,21 +382,21 @@ const DataPage = () => {
                               id="team-select-button"
                               onClick={() => handleTeamClick(redTeams[0])}
                            >
-                              {redTeams[0]}
+                              {redTeams[0] ? redTeams[0] : "..."}
                            </button>
                            <div className="team-select-seperator red">|</div>
                            <button
                               id="team-select-button"
                               onClick={() => handleTeamClick(redTeams[1])}
                            >
-                              {redTeams[1]}
+                              {redTeams[1] ? redTeams[1] : "..."}
                            </button>
                            <div className="team-select-seperator red">|</div>
                            <button
                               id="team-select-button"
                               onClick={() => handleTeamClick(redTeams[2])}
                            >
-                              {redTeams[2]}
+                              {redTeams[2] ? redTeams[2] : "..."}
                            </button>
                         </div>
                         <div id="data-team-table-section">
@@ -305,28 +404,28 @@ const DataPage = () => {
                               id="team-select-button"
                               onClick={() => handleTeamClick(blueTeams[0])}
                            >
-                              {blueTeams[0]}
+                              {blueTeams[0] ? blueTeams[0] : "..."}
                            </button>
                            <div className="team-select-seperator blue">|</div>
                            <button
                               id="team-select-button"
                               onClick={() => handleTeamClick(blueTeams[1])}
                            >
-                              {blueTeams[1]}
+                              {blueTeams[1] ? blueTeams[1] : "..."}
                            </button>
                            <div className="team-select-seperator blue">|</div>
                            <button
                               id="team-select-button"
                               onClick={() => handleTeamClick(blueTeams[2])}
                            >
-                              {blueTeams[2]}
+                              {blueTeams[2] ? blueTeams[2] : "..."}
                            </button>
                         </div>
                      </div>
                   </div>
                </div>
                <div id="data-team-display">
-                  <div style={{ position: 'relative', width: "100%" }}>
+                  <div style={{ position: "relative", width: "100%" }}>
                      <i
                         className="fa-solid fa-magnifying-glass"
                         style={{
@@ -345,6 +444,36 @@ const DataPage = () => {
                         onChange={handleChange}
                         id="data-team-searchbox"
                      />
+                  </div>
+                  <div id="teams-container">
+                     {queriedTeams.length != 0
+                        ? queriedTeams?.sort((a, b) => {
+                           if (a.rank > b.rank) return 1;
+                           if (a.rank < b.rank) return -1;
+                           return 0;
+                        }).map((team, index) => (
+                           <motion.div
+                              initial={{ y: 10, opacity: 0 }}
+                              animate={{ y: 0, opacity: 1 }}
+                              exit={{ y: -10, opacity: 0 }}
+                              transition={{ duration: 0.3 }}
+                              key={index}
+                              className="team-card"
+                              onClick={() => handleTeamClick(team.key)}
+                           >
+                              <div className="team-code">{team.key}</div>
+                              <div className="team-name">{team.name}</div>
+                              <div className="team-rank">#{team.rank}</div>
+                           </motion.div>
+                        ))
+                        : (
+                           <>
+                              <div
+                                 className="placeholder"
+                                 style={{ height: "2rem" }}
+                              />
+                           </>
+                        )}
                   </div>
                </div>
             </div>

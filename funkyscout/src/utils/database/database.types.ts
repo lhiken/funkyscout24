@@ -694,7 +694,19 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      count_teams: {
+        Args: {
+          event_name: string
+        }
+        Returns: number
+      }
+      fetch_average: {
+        Args: {
+          event_code: string
+          team_id: number
+        }
+        Returns: number
+      }
     }
     Enums: {
       [_ in never]: never

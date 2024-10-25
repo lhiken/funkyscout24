@@ -1,0 +1,121 @@
+#data-next-match-container {
+   display: flex;
+   padding: 0 0 0 1.5rem;
+   flex-direction: row;
+   justify-content: space-between;
+   align-items: center;
+   gap: 1rem;
+   align-self: stretch;
+
+   border-radius: var(--soft-corner, 0.9375rem);
+   background: var(--light-bg, #121212);
+   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.05);
+}
+
+.progress-container {
+   position: relative;
+   width: 100%;
+}
+
+#data-match-left {
+   flex-grow: 1;
+   padding: 1.125rem 0rem;
+}
+
+progress {
+   width: 100%;
+   height: 1.6rem;
+   appearance: none;
+}
+
+progress::-webkit-progress-bar {
+   background-color: var(--warning-blue);
+   border-radius: 100rem;
+   box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+progress::-webkit-progress-value {
+   background-color: var(--warning-red);
+   border-radius: 100rem 0 0 100rem;
+   box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+progress::-moz-progress-bar {
+   background-color: var(--warning-red);
+   border-radius: 5px;
+}
+
+.progress-bar-text {
+   position: absolute;
+   top: 50%;
+   transform: translateY(-50%);
+   color: var(--light-text);
+   font-size: 0.9rem;
+   padding-inline: 0.5rem;
+}
+
+.progress-bar-text.left {
+   left: 5px;
+}
+
+.progress-bar-text.right {
+   right: 5px;
+}
+
+#data-team-table {
+   display: flex;
+   width: 10rem;
+   flex-direction: column;
+   gap: 0.6rem;
+}
+
+#data-team-table-section {
+   width: 100%;
+   display: flex;
+   justify-content: space-between;
+   background-color: var(--dark-bg);
+   padding: 0.6rem 0.8rem;
+   border-radius: 100rem;
+   box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+   color: var(--light-text);
+   align-items: center;
+   gap: 0.2rem;
+   font-weight: 400;
+   font-size: 0.85rem;
+}
+
+#team-select-button {
+   width: 2.5rem;
+}
+
+#data-alliance-tables {
+   background-color: var(--light-nav);
+   height: 100%;
+   justify-content: center;
+   align-items: center;
+   display: flex;
+   width: 11rem;
+   border-radius: 1rem;
+}
+
+.team-select-seperator {
+   height: 1.4rem;
+   width: 0.2rem;
+   margin-inline: 0.2rem;
+   border-radius: 100rem;
+}
+
+.team-select-seperator.red {
+   background-color: var(--warning-red);
+}
+
+.team-select-seperator.blue {
+   background-color: var(--warning-blue);
+}
+
+#data-team-display {
+   flex-grow: 1;
+   background-color: var(--light-bg);
+   border-radius: 1rem;
+   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.05);
+}

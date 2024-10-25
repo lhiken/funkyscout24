@@ -134,7 +134,7 @@ const getCount = async (
 
 const isOnline = () => {
    return navigator.onLine;
-}
+};
 
 const getNextMatch = async (database: string, user: string) => {
    const db = await openDB(database);
@@ -181,7 +181,7 @@ const insertMatchData = async (MatchData: MatchData) => {
          .select();
 
       if (error) {
-         if (error.code != '23505') {
+         if (error.code != "23505") {
             throwNotification("error", `Upload failed: ${error.code}`);
             return 1;
          }
@@ -213,7 +213,6 @@ const updateMatch = async (MatchData: MatchData) => {
 };
 
 const syncData = async (event: string) => {
-
    const db = await openDB(event);
    throwNotification("info", "Syncing data...");
 
@@ -228,18 +227,21 @@ const syncData = async (event: string) => {
    while (cursor) {
       const matchData = cursor.value;
 
-      if (matchData.author === localStorage.getItem('user') || matchData.author === 'GUEST') {
+      if (
+         matchData.author === localStorage.getItem("user") ||
+         matchData.author === "GUEST"
+      ) {
          matchesToUpsert.push(matchData);
       }
 
       try {
          cursor = await cursor.continue();
       } catch {
-         break; 
+         break;
       }
    }
 
-   await tx.done; 
+   await tx.done;
 
    for (const match of matchesToUpsert) {
       const res = await insertMatchData(match);
@@ -253,12 +255,48 @@ const syncData = async (event: string) => {
 
    throwNotification("info", `${matches}/${attempts} matches synced`);
    if (!isOnline()) {
-      throwNotification('error', 'Check connection')
+      throwNotification("error", "Check connection");
    }
 };
 
+const fetchProbability = async (redTeams: number[], blueTeams: number[]) => {
+   let blueSum = 0;
+   let redSum = 0;
 
+   try {
+      for (const team of redTeams) {
+         const { data } = await supabase
+         .rpc("fetch_average", {
+            event_code: localStorage.getItem('event')!,
+            team_id: team,
+         });
+   
+         redSum += data;
+      }
+   
+      for (const team of blueTeams) {
+         const { data } = await supabase
+         .rpc("fetch_average", {
+            event_code: localStorage.getItem('event')!,
+            team_id: team,
+         });
+   
+         blueSum += data;
+      }
+   
+      return { blue: blueSum, red: redSum };
+   } catch {
+      throwNotification('error', 'Error fetching data');
+   }
 
+};
 
-
-export { getCount, getNextMatch, initializeDB, insertMatchData, updateMatch, syncData };
+export {
+   fetchProbability,
+   getCount,
+   getNextMatch,
+   initializeDB,
+   insertMatchData,
+   syncData,
+   updateMatch,
+};

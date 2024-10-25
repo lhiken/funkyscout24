@@ -13,8 +13,18 @@ const getMatchData = async (match: string) => {
     * shapes, we will put the data we want into an object
     * and return that.
     */
-
    const event = localStorage.getItem("event");
+   let nexusCode = "";
+   let tbaCode = "";
+
+   if (match.length > 3) {
+      nexusCode = "2 days until comp i dont have time for this";
+      tbaCode = match;
+   } else {
+      nexusCode = `Qualification ${match}`;
+      tbaCode = `${event}_qm${match}`;
+   }
+
    try {
       const response = await fetch(`https://frc.nexus/api/v1/event/${event}`, {
          method: "GET",
@@ -26,7 +36,7 @@ const getMatchData = async (match: string) => {
       if (response.ok) {
          const data = await response.json();
 
-         const requestedMatch = "Qualification " + match;
+         const requestedMatch = nexusCode;
 
          for (const match of data.matches) {
             if (match.label == requestedMatch) {
@@ -64,7 +74,7 @@ const getMatchData = async (match: string) => {
 
       const data = await response.json();
 
-      const requestedMatch = `${event}_qm${match}`;
+      const requestedMatch = tbaCode;
 
       for (const match of data) {
          const red = match.alliances.red.team_keys;
@@ -82,6 +92,7 @@ const getMatchData = async (match: string) => {
                Number(blue[2].slice(3)),
             ];
             const startTime = match.predicted_time;
+
             return {
                redTeams,
                blueTeams,
@@ -200,5 +211,6 @@ const getEventData = async () => {
    }
 };
 
-export { getEventData, getMatchData};
-export type {compiledData};
+
+export { getEventData, getMatchData };
+export type { compiledData };

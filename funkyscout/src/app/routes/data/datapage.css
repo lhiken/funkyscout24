@@ -18,7 +18,7 @@
 }
 
 #data-match-left {
-   flex-grow: 1;
+   width: 8.75rem;
    padding: 1.125rem 0rem;
 }
 
@@ -124,6 +124,7 @@ progress::-moz-progress-bar {
    display: flex;
    flex-direction: column;
    gap: 0.5rem;
+   max-height: 24rem;
 }
 
 #data-team-searchbox {
@@ -134,4 +135,42 @@ progress::-moz-progress-bar {
    font-size: 0.9rem;
    font-weight: 400;
    color: var(--light-text);
+}
+
+#teams-container {
+   display: flex;
+   flex-direction: column;
+   gap: 0.5rem;
+   overflow: scroll;
+}
+
+.team-card {
+   display: flex;
+   width: 100%;
+   padding: 0.5rem 1rem;
+   border-radius: 100rem;
+   justify-content: space-between;
+   background-color: var(--light-nav);
+}
+
+.team-code {
+   width: 3rem;
+   text-align: center;
+   color: var(--accent);
+}
+
+.team-name {
+   color: var(--light-text);
+   font-weight: 400;
+   font-size: 0.85rem;
+   width: 100%;
+   text-align: center;
+   overflow: hidden;
+}
+
+
+.team-rank {
+   width: 3rem;
+   text-align: center;
+   color: var(--accent);
 }

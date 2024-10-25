@@ -13,12 +13,13 @@ import throwNotification from "../../components/notification/notifiication";
 
 const MatchCard = forwardRef(
    (
-      { match, alliance, time, team, placeholder }: {
+      { match, alliance, time, team, placeholder, finished }: {
          match?: number;
          alliance?: boolean;
          time?: number;
          team?: number;
          placeholder: boolean;
+         finished?: boolean;
       },
       ref: React.Ref<HTMLDivElement>,
    ) => {
@@ -39,26 +40,37 @@ const MatchCard = forwardRef(
                ref={ref}
                id="match-card"
             >
-               <div id="match-card-top">
-                  <div id="match-card-match">Q{match}</div>
-                  <div id="match-card-detail">
+               <div
+                  id="match-card-top"
+                  className={finished ? ("finished") : ("upcoming")}
+               >
+                  <div
+                     id="match-card-match">Q{match}</div>
+                  <div 
+                  id="match-card-detail" 
+                  className={finished ? ("finished") : ("upcoming")} >
                      <div
                         style={alliance
                            ? {
-                              color: "var(--warning-red)",
+                              color:finished ? ("#B5454544"):("var(--warning-red)"),
                               fontSize: "1.5rem",
                            }
                            : {
-                              color: "var(--warning-blue)",
                               fontSize: "1.5rem",
-                           }}
+                              color:finished ? ("#3F82C644"):("var(--warning-blue)"),
+                           }
+                           
+                        }
                      >
                         •
                      </div>
                      {localTime}
                   </div>
                </div>
-               <div id="match-card-bottom">FRC {team}</div>
+               <div
+                  id="match-card-bottom"
+                  className={finished ? ("finished") : ("upcoming")}
+               >FRC {team}</div>
             </motion.div>
          );
       } else if (placeholder) {
@@ -344,7 +356,7 @@ const Dashboard = () => {
                                  : null}&nbsp;
                               <TextTransition>
                                  {personalSchedule &&
-                                       personalSchedule.length > 0
+                                    personalSchedule.length > 0
                                     ? (
                                        personalSchedule.find((o) =>
                                           o.match == nextMatch
@@ -370,7 +382,7 @@ const Dashboard = () => {
                            >
                               |&nbsp;<TextTransition className="details-timediff">
                                  {personalSchedule &&
-                                       personalSchedule.length > 0
+                                    personalSchedule.length > 0
                                     ? getTimeDifference(
                                        new Date(
                                           (personalSchedule.find((match) =>
@@ -424,6 +436,7 @@ const Dashboard = () => {
                                  alliance={match.alliance}
                                  time={match.time}
                                  placeholder={false}
+                                 finished={match.match < nextMatch}
                               />
                            ))
                            : (

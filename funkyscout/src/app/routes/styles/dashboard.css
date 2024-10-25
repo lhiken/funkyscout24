@@ -267,13 +267,27 @@
    justify-content: space-between;
    line-height: 100%;
    width: 100%;
+}
+
+#match-card-top.finished {
+   color: var(--accent-dim);
+}
+
+#match-card-top.upcoming {
    color: var(--accent);
 }
 
 #match-card-bottom {
    width: 100%;
-   color: var(--light-text);
    font-weight: 400;
+}
+
+#match-card-bottom.finished {
+   color: var(--dark-text);
+}
+
+#match-card-bottom.upcoming {
+   color: var(--light-text);
 }
 
 #match-card-detail {

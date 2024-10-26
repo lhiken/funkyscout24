@@ -16,7 +16,9 @@ const AutosTab = (
    const [matchIndex, setMatchIndex] = useState(0);
    const [match, setMatch] = useState(teamData[matchIndex].match);
    const [alliance, setAlliance] = useState(teamData[matchIndex].alliance);
-   const [auto, setAuto] = useState(JSON.parse(teamData[matchIndex].auto as string));
+   const [auto, setAuto] = useState(
+      JSON.parse(teamData[matchIndex].auto as string),
+   );
    console.log(auto);
    const [startPosition, setPos] = useState(teamData[matchIndex].auto_position);
    console.log(auto);
@@ -51,6 +53,10 @@ const AutosTab = (
       }
    };
 
+   if (!teamData || teamData.length == 0) {
+      return <div className="data-tab">No data</div>;
+   }
+
    return (
       <>
          <div className="data-tab">
@@ -60,7 +66,11 @@ const AutosTab = (
                   className={matchIndex > 0 ? "active" : "inactive"}
                   onClick={handleLeftButton}
                >
-                  <i className="fa-solid fa-arrow-left" style={{fontSize: '1.25rem'}}></i>
+                  <i
+                     className="fa-solid fa-arrow-left"
+                     style={{ fontSize: "1.25rem" }}
+                  >
+                  </i>
                </button>
                Match {match}
                <button
@@ -70,7 +80,11 @@ const AutosTab = (
                      : "inactive"}
                   onClick={handleRightButton}
                >
-                  <i className="fa-solid fa-arrow-right" style={{fontSize: '1.25rem'}}></i>
+                  <i
+                     className="fa-solid fa-arrow-right"
+                     style={{ fontSize: "1.25rem" }}
+                  >
+                  </i>
                </button>
             </div>
             {auto.length > 0 && (

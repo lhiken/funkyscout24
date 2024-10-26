@@ -16,11 +16,14 @@ const NavbarDisplay = () => {
 
 const TopbarDisplay = () => {
    const currentPage = useLocation();
-   const paths = ["/auth", "/scouting", "/data", "/scout/matches"];
-   
-   const check = paths.some(path => 
-      currentPage.pathname === path || 
-      (path === "/scout/matches" && currentPage.pathname.startsWith(path + "/"))
+   const paths = ["/auth", "/scouting", "/data", "/scout/matches", "/data/team"];
+
+   const check = paths.some((path) =>
+      currentPage.pathname === path ||
+      (path === "/scout/matches" &&
+         currentPage.pathname.startsWith(path + "/")) ||
+      (path === "/data/team" &&
+         currentPage.pathname.startsWith(path + "/"))
    );
 
    if (check) {
@@ -28,7 +31,6 @@ const TopbarDisplay = () => {
    }
    return null;
 };
-
 
 const App = () => {
    const currentPage = useLocation();

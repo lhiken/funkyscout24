@@ -245,6 +245,18 @@ const Topbar = () => {
                   <button id="topbar-button" onClick={handleMenuToggle}>
                      <i className="fa-solid fa-compass" id="topbar-icon" />
                   </button>
+                  {location.pathname.includes("/data/team") &&
+                     (
+                        <div id="teamdata-back-button">
+                           <button
+                              id="teamdata-back-button-button"
+                              onClick={() => navigate("/data")}
+                           >
+                              <i className="fa-solid fa-chevron-left" />Return
+                              to Data
+                           </button>
+                        </div>
+                     )}
                   <div id="topbar-settings">
                      <button id="topbar-button" onClick={handleSettingsClick}>
                         <i className="fa-solid fa-gear" id="topbar-icon" />

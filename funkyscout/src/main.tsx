@@ -17,6 +17,7 @@ import "./utils/styles/vars.css";
 import ScoutingPage from "./app/routes/scouting/scouting";
 import DataPage from "./app/routes/data/datapage";
 import MatchScouting from "./app/routes/scouting/matches/matchScouting";
+import TeamPage from "./app/routes/data/teampage";
 
 /* const router = createBrowserRouter([
   {
@@ -62,6 +63,10 @@ const router = createBrowserRouter(
       <Route 
         element={<MatchScouting />} 
         path="/scout/matches/:id" 
+      />
+      <Route 
+        element={<TeamPage />} 
+        path="/data/team/:id" 
       />
     </Route>,
   ),

@@ -20,6 +20,10 @@ const DataAnalysisAuto = (
    },
 ) => {
 
+   console.log("Alliance:", alliance);
+   console.log("AutoPath:", AutoPath);
+   console.log("Start Position:", startPosition);   
+
    const canvasRef = useRef<HTMLCanvasElement>(null);
 
    useEffect(() => {

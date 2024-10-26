@@ -44,7 +44,9 @@ const Endgame = (
          >
             <div id="match-summary-top">
                <div id="checkbox-container">
-                  <div id="match-summary-label">
+                  <div id="match-summary-label"
+                     onClick={() => setClimbed(!climbed)}
+                  >
                      Climbed
                      <button
                         id="match-summary-checkbox"
@@ -58,7 +60,9 @@ const Endgame = (
                            : <></>}
                      </button>
                   </div>
-                  <div id="match-summary-label">
+                  <div id="match-summary-label"
+                     onClick={() => setDefense(!defense)}
+                  >
                      Defense
                      <button
                         id="match-summary-checkbox"

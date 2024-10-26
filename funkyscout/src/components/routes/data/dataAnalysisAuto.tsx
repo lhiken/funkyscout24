@@ -56,7 +56,10 @@ const DataAnalysisAuto = (
             note.draw(ctx!, false);
          }
          for (const note of AutoPath) {
-            note.draw(ctx!, false);
+            const note1= new Note(note.num);
+            note1.isClicked=note.isClicked;
+            note1.success=note.success
+            note1.draw(ctx!, false);
          }
    
          const catmullRom = (

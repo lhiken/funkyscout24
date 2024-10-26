@@ -2,7 +2,6 @@ import { Json } from '../../../../utils/database/database.types';
 import DataAnalysisAuto from '../../../../components/routes/data/dataAnalysisAuto';
 import './styles.css'
 import { useState } from 'react';
-import Note from '../../../../components/routes/auto/note';
 
 const AutosTab = (
    { teamData }: {
@@ -16,7 +15,8 @@ const AutosTab = (
    const [matchIndex,setMatchIndex] = useState(0);
    const [match,setMatch] = useState(teamData[matchIndex].match);
    const [alliance,setAlliance] = useState(teamData[matchIndex].alliance);
-   const [auto,setAuto] = useState(JSON.parse(JSON.stringify(teamData[matchIndex].auto)));
+   const [auto,setAuto] = useState(JSON.parse(teamData[matchIndex].auto));
+   console.log(auto);
    const [startPosition,setPos]= useState(0);
    console.log(auto);
 

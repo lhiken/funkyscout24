@@ -16,6 +16,7 @@ interface MatchData {
    team: number;
    alliance: boolean;
    auto: Note[];
+   auto_position: number;
    miss: number;
    amp: number;
    speaker: number;
@@ -50,6 +51,9 @@ const MatchScouting = () => {
       auto: AutoPath,
       miss: 0,
       amp: 0,
+      auto_position: Number(
+         id?.substring(id.indexOf("P") + 1),
+      ),
       speaker: 0,
       climb: false,
       defense: false,

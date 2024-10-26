@@ -34,6 +34,52 @@ export type Database = {
   }
   public: {
     Tables: {
+      event_2024cacc: {
+        Row: {
+          alliance: boolean
+          author: string | null
+          event: string
+          match: number
+          team: number
+        }
+        Insert: {
+          alliance: boolean
+          author?: string | null
+          event: string
+          match: number
+          team: number
+        }
+        Update: {
+          alliance?: boolean
+          author?: string | null
+          event?: string
+          match?: number
+          team?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_author"
+            columns: ["author"]
+            isOneToOne: false
+            referencedRelation: "users_2024cacc"
+            referencedColumns: ["name"]
+          },
+          {
+            foreignKeyName: "fk_event"
+            columns: ["event"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["event"]
+          },
+          {
+            foreignKeyName: "fk_teams"
+            columns: ["team"]
+            isOneToOne: false
+            referencedRelation: "teams_2024cacc"
+            referencedColumns: ["team"]
+          },
+        ]
+      }
       event_2024casf: {
         Row: {
           alliance: boolean
@@ -76,98 +122,6 @@ export type Database = {
             columns: ["team"]
             isOneToOne: false
             referencedRelation: "teams_2024casf"
-            referencedColumns: ["team"]
-          },
-        ]
-      }
-      event_2024casj: {
-        Row: {
-          alliance: boolean
-          author: string | null
-          event: string
-          match: number
-          team: number
-        }
-        Insert: {
-          alliance: boolean
-          author?: string | null
-          event: string
-          match: number
-          team: number
-        }
-        Update: {
-          alliance?: boolean
-          author?: string | null
-          event?: string
-          match?: number
-          team?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "fk_author"
-            columns: ["author"]
-            isOneToOne: false
-            referencedRelation: "users_2024casj"
-            referencedColumns: ["name"]
-          },
-          {
-            foreignKeyName: "fk_event"
-            columns: ["event"]
-            isOneToOne: false
-            referencedRelation: "events"
-            referencedColumns: ["event"]
-          },
-          {
-            foreignKeyName: "fk_teams"
-            columns: ["team"]
-            isOneToOne: false
-            referencedRelation: "teams_2024casj"
-            referencedColumns: ["team"]
-          },
-        ]
-      }
-      event_2024idbo: {
-        Row: {
-          alliance: boolean
-          author: string | null
-          event: string
-          match: number
-          team: number
-        }
-        Insert: {
-          alliance: boolean
-          author?: string | null
-          event: string
-          match: number
-          team: number
-        }
-        Update: {
-          alliance?: boolean
-          author?: string | null
-          event?: string
-          match?: number
-          team?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "fk_author"
-            columns: ["author"]
-            isOneToOne: false
-            referencedRelation: "users_2024idbo"
-            referencedColumns: ["name"]
-          },
-          {
-            foreignKeyName: "fk_event"
-            columns: ["event"]
-            isOneToOne: false
-            referencedRelation: "events"
-            referencedColumns: ["event"]
-          },
-          {
-            foreignKeyName: "fk_teams"
-            columns: ["team"]
-            isOneToOne: false
-            referencedRelation: "teams_2024idbo"
             referencedColumns: ["team"]
           },
         ]
@@ -220,6 +174,7 @@ export type Database = {
           amp: number
           author: string
           auto: Json
+          auto_position: number
           climb: boolean
           comment: string
           defense: boolean
@@ -235,6 +190,7 @@ export type Database = {
           amp: number
           author: string
           auto: Json
+          auto_position?: number
           climb: boolean
           comment: string
           defense: boolean
@@ -250,6 +206,7 @@ export type Database = {
           amp?: number
           author?: string
           auto?: Json
+          auto_position?: number
           climb?: boolean
           comment?: string
           defense?: boolean
@@ -262,12 +219,13 @@ export type Database = {
         }
         Relationships: []
       }
-      matches_2024casf: {
+      matches_2024cacc: {
         Row: {
           alliance: boolean
           amp: number
           author: string
           auto: Json
+          auto_position: number
           climb: boolean
           comment: string
           defense: boolean
@@ -283,6 +241,7 @@ export type Database = {
           amp: number
           author: string
           auto: Json
+          auto_position?: number
           climb: boolean
           comment: string
           defense: boolean
@@ -298,6 +257,66 @@ export type Database = {
           amp?: number
           author?: string
           auto?: Json
+          auto_position?: number
+          climb?: boolean
+          comment?: string
+          defense?: boolean
+          disabled?: number
+          event?: string
+          match?: number
+          miss?: number
+          speaker?: number
+          team?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_match"
+            columns: ["event", "match", "team"]
+            isOneToOne: true
+            referencedRelation: "event_2024cacc"
+            referencedColumns: ["event", "match", "team"]
+          },
+        ]
+      }
+      matches_2024casf: {
+        Row: {
+          alliance: boolean
+          amp: number
+          author: string
+          auto: Json
+          auto_position: number
+          climb: boolean
+          comment: string
+          defense: boolean
+          disabled: number
+          event: string
+          match: number
+          miss: number
+          speaker: number
+          team: number
+        }
+        Insert: {
+          alliance: boolean
+          amp: number
+          author: string
+          auto: Json
+          auto_position?: number
+          climb: boolean
+          comment: string
+          defense: boolean
+          disabled: number
+          event: string
+          match: number
+          miss: number
+          speaker: number
+          team: number
+        }
+        Update: {
+          alliance?: boolean
+          amp?: number
+          author?: string
+          auto?: Json
+          auto_position?: number
           climb?: boolean
           comment?: string
           defense?: boolean
@@ -322,118 +341,6 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "event_2024casf"
             referencedColumns: ["match", "event", "team"]
-          },
-        ]
-      }
-      matches_2024casj: {
-        Row: {
-          alliance: boolean
-          amp: number
-          author: string
-          auto: Json
-          climb: boolean
-          comment: string
-          defense: boolean
-          disabled: number
-          event: string
-          match: number
-          miss: number
-          speaker: number
-          team: number
-        }
-        Insert: {
-          alliance: boolean
-          amp: number
-          author: string
-          auto: Json
-          climb: boolean
-          comment: string
-          defense: boolean
-          disabled: number
-          event: string
-          match: number
-          miss: number
-          speaker: number
-          team: number
-        }
-        Update: {
-          alliance?: boolean
-          amp?: number
-          author?: string
-          auto?: Json
-          climb?: boolean
-          comment?: string
-          defense?: boolean
-          disabled?: number
-          event?: string
-          match?: number
-          miss?: number
-          speaker?: number
-          team?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "fk_match"
-            columns: ["event", "match", "team"]
-            isOneToOne: true
-            referencedRelation: "event_2024casj"
-            referencedColumns: ["event", "match", "team"]
-          },
-        ]
-      }
-      matches_2024idbo: {
-        Row: {
-          alliance: boolean
-          amp: number
-          author: string
-          auto: Json
-          climb: boolean
-          comment: string
-          defense: boolean
-          disabled: number
-          event: string
-          match: number
-          miss: number
-          speaker: number
-          team: number
-        }
-        Insert: {
-          alliance: boolean
-          amp: number
-          author: string
-          auto: Json
-          climb: boolean
-          comment: string
-          defense: boolean
-          disabled: number
-          event: string
-          match: number
-          miss: number
-          speaker: number
-          team: number
-        }
-        Update: {
-          alliance?: boolean
-          amp?: number
-          author?: string
-          auto?: Json
-          climb?: boolean
-          comment?: string
-          defense?: boolean
-          disabled?: number
-          event?: string
-          match?: number
-          miss?: number
-          speaker?: number
-          team?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "fk_match"
-            columns: ["event", "match", "team"]
-            isOneToOne: true
-            referencedRelation: "event_2024idbo"
-            referencedColumns: ["event", "match", "team"]
           },
         ]
       }
@@ -466,6 +373,44 @@ export type Database = {
           team?: number
         }
         Relationships: []
+      }
+      teams_2024cacc: {
+        Row: {
+          avg_amp: number
+          avg_score: number
+          avg_speaker: number
+          defense: number
+          event: string
+          failures: number
+          team: number
+        }
+        Insert: {
+          avg_amp: number
+          avg_score: number
+          avg_speaker: number
+          defense: number
+          event: string
+          failures: number
+          team: number
+        }
+        Update: {
+          avg_amp?: number
+          avg_score?: number
+          avg_speaker?: number
+          defense?: number
+          event?: string
+          failures?: number
+          team?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_event"
+            columns: ["event"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["event"]
+          },
+        ]
       }
       teams_2024casf: {
         Row: {
@@ -505,82 +450,6 @@ export type Database = {
           },
         ]
       }
-      teams_2024casj: {
-        Row: {
-          avg_amp: number
-          avg_score: number
-          avg_speaker: number
-          defense: number
-          event: string
-          failures: number
-          team: number
-        }
-        Insert: {
-          avg_amp: number
-          avg_score: number
-          avg_speaker: number
-          defense: number
-          event: string
-          failures: number
-          team: number
-        }
-        Update: {
-          avg_amp?: number
-          avg_score?: number
-          avg_speaker?: number
-          defense?: number
-          event?: string
-          failures?: number
-          team?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "fk_event"
-            columns: ["event"]
-            isOneToOne: false
-            referencedRelation: "events"
-            referencedColumns: ["event"]
-          },
-        ]
-      }
-      teams_2024idbo: {
-        Row: {
-          avg_amp: number
-          avg_score: number
-          avg_speaker: number
-          defense: number
-          event: string
-          failures: number
-          team: number
-        }
-        Insert: {
-          avg_amp: number
-          avg_score: number
-          avg_speaker: number
-          defense: number
-          event: string
-          failures: number
-          team: number
-        }
-        Update: {
-          avg_amp?: number
-          avg_score?: number
-          avg_speaker?: number
-          defense?: number
-          event?: string
-          failures?: number
-          team?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "fk_event"
-            columns: ["event"]
-            isOneToOne: false
-            referencedRelation: "events"
-            referencedColumns: ["event"]
-          },
-        ]
-      }
       users: {
         Row: {
           event: string
@@ -601,6 +470,35 @@ export type Database = {
           name?: string
         }
         Relationships: []
+      }
+      users_2024cacc: {
+        Row: {
+          event: string
+          id: number
+          matches: number
+          name: string
+        }
+        Insert: {
+          event: string
+          id: number
+          matches: number
+          name: string
+        }
+        Update: {
+          event?: string
+          id?: number
+          matches?: number
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_event"
+            columns: ["event"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["event"]
+          },
+        ]
       }
       users_2024casf: {
         Row: {
@@ -624,64 +522,6 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "users_2024casf_event_fkey"
-            columns: ["event"]
-            isOneToOne: false
-            referencedRelation: "events"
-            referencedColumns: ["event"]
-          },
-        ]
-      }
-      users_2024casj: {
-        Row: {
-          event: string
-          id: number
-          matches: number
-          name: string
-        }
-        Insert: {
-          event: string
-          id: number
-          matches: number
-          name: string
-        }
-        Update: {
-          event?: string
-          id?: number
-          matches?: number
-          name?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "fk_event"
-            columns: ["event"]
-            isOneToOne: false
-            referencedRelation: "events"
-            referencedColumns: ["event"]
-          },
-        ]
-      }
-      users_2024idbo: {
-        Row: {
-          event: string
-          id: number
-          matches: number
-          name: string
-        }
-        Insert: {
-          event: string
-          id: number
-          matches: number
-          name: string
-        }
-        Update: {
-          event?: string
-          id?: number
-          matches?: number
-          name?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "fk_event"
             columns: ["event"]
             isOneToOne: false
             referencedRelation: "events"

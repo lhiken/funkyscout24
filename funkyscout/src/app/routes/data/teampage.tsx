@@ -266,7 +266,7 @@ const TeamPage = () => {
                      ? <AutosTab />
                      : currentTab == 1
                      ? <GraphsTab data={teamData}/>
-                     : <NotesTab />}
+                     : <NotesTab data={teamData}/>}
                </div>
             </div>
          </motion.div>

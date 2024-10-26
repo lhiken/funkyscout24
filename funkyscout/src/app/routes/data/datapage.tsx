@@ -173,15 +173,15 @@ const DataPage = () => {
       rank: number;
    }
 
-   interface RankData {
-      [key: string]: {
-         qual: {
-            ranking: {
-               rank: number;
-            };
-         };
-      };
-   }
+   // interface RankData {
+   //    [key: string]: {
+   //       qual: {
+   //          ranking: {
+   //             rank: number;
+   //          };
+   //       };
+   //    };
+   // }
 
    const fetchEventTeams = async (): Promise<Team[]> => {
       const response = await fetch(
@@ -227,12 +227,12 @@ const DataPage = () => {
          throw new Error(`Error fetching data: ${response.statusText}`);
       }
 
-      const rankData: RankData = await rankResponse.json();
+      // const rankData: RankData = await rankResponse.json();
 
       const rankedTeams: Team[] = newTeams.map((team) => ({
          key: team.key,
          name: team.name,
-         rank: rankData[`frc${team.key}`]?.qual.ranking.rank || 0,
+         rank: /* rankData[`frc${team.key}`]?.qual.ranking.rank || */ 0,
       }));
 
       return rankedTeams;
@@ -447,11 +447,11 @@ const DataPage = () => {
                   </div>
                   <div id="teams-container">
                      {queriedTeams.length != 0
-                        ? queriedTeams?.sort((a, b) => {
+                        ? queriedTeams/*?.sort((a, b) => {
                            if (a.rank > b.rank) return 1;
                            if (a.rank < b.rank) return -1;
                            return 0;
-                        }).map((team, index) => (
+                        })*/.map((team, index) => (
                            <motion.div
                               initial={{ y: 10, opacity: 0 }}
                               animate={{ y: 0, opacity: 1 }}

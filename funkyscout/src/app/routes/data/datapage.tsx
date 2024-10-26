@@ -125,13 +125,15 @@ const DataPage = () => {
       const nextMatchKey = data?.[eventKey]?.next_match_key ||
          data?.[eventKey]?.last_match_key;
 
+      console.log(data);
+
       if (nextMatchKey) {
          const matchNumber = nextMatchKey.substring(
             nextMatchKey.indexOf("_") + 3,
          );
          setNextMatch(matchNumber);
 
-         const res = await getMatchData(nextMatchKey);
+         const res = await getMatchData(matchNumber);
          if (res) {
             setNextMatchTime(res.startTime);
             setBlueTeams(res.blueTeams);

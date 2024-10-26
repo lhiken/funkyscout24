@@ -12,12 +12,14 @@ class Note {
         [157.5, 295],
     ].map((point) => point.map((coord) => coord * this.offset));
     static Position = [
-        {x:44,y:380},
-        {x:101,y:350},
-        {x:157.5,y:380},
+        { x: 44, y: 380 },
+        { x: 101, y: 350 },
+        { x: 157.5, y: 380 },
     ];
     static color: string = "#CDA745";
     static colorDim: string = "#CDA74533"
+    static colorSuccess: string = "#387E39"
+    static colorMiss: string = "#B54545"
     static stroke: string = "#CDA74577"
     static width: number = 17.5;
     static buttonSize: number = 100;
@@ -37,11 +39,27 @@ class Note {
         }
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
-        if (!this.isClicked) {
-            ctx.strokeStyle = Note.color;
-        } else {
-            ctx.strokeStyle = Note.colorDim;
+    draw(ctx: CanvasRenderingContext2D, scouting: boolean): void {
+        if (scouting == true) {
+            if (!this.isClicked) {
+                ctx.strokeStyle = Note.color;
+            } else {
+                ctx.strokeStyle = Note.colorDim;
+            }
+        }
+        else {
+            if (this.success == true) {
+                ctx!.strokeStyle = Note.colorSuccess;
+            }
+            else if (this.success == false) {
+                ctx!.strokeStyle = Note.colorMiss;
+            }
+            else if (this.isClicked == true){
+                ctx!.strokeStyle = Note.color;
+            }
+            else{
+                ctx!.strokeStyle = Note.colorDim;
+            }
         }
         ctx.lineWidth = Note.width * 0.35;
         ctx.beginPath();

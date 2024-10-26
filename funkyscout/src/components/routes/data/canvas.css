@@ -1,0 +1,103 @@
+#auto {
+   display: flex;
+   width: 20.5625rem;
+   flex-direction: column;
+   align-items: flex-end;
+   gap: 0.875rem;
+   width: 100%;
+
+   @media (min-width: 400px) {
+      max-width: 22rem;
+   }
+
+   justify-content: center;
+}
+
+#canvas {
+   display: flex;
+   position: absolute;
+   bottom: 0rem;
+   left: 0rem;
+   width: 100%;
+   aspect-ratio: 0.81;
+}
+
+#svg {
+   display: flex;
+   position: relative;
+   width: 100%;
+   margin-top: 10rem;
+}
+
+#svg-border {
+   position: relative;
+   width: 100%;
+   border-radius: var(--soft-corner, 0.9375rem);
+   border: 6px solid var(--accent-dimmed, rgba(205, 167, 69, 0.15));
+   background: var(--light-bg, #121212);
+   overflow: hidden;
+}
+
+#auto-button-bar {
+   position: relative;
+   display: flex;
+   padding: 0.75rem 1.25rem;
+   justify-content: space-between;
+   align-items: flex-start;
+   align-self: stretch;
+   border-radius: var(--soft-corner, 0.9375rem);
+   background: var(--dark-nav, #0F0F0F);
+   gap: 0.5rem;
+}
+
+#auto-button {
+   position: relative;
+   display: flex;
+   height: 3.2rem;
+   justify-content: center;
+   align-items: center;
+   border-radius: var(--soft-corner, 0.9375rem);
+   flex-grow: 1;
+   font-size: 1rem;
+   font-weight: 500;
+   transition: 0.1s;
+}
+
+#auto-button.active {
+   background: var(--light-nav, #141414);
+   color: var(--accent, #CDA745);
+}
+
+#auto-button.inactive {
+   background: var(--light-bg, #121212);
+   color: var(--accent-dimmed, rgba(205, 167, 69, 0.15));
+}
+
+#auto-undo-button {
+   display: flex;
+   height: 3.2rem;
+   width: 3.2rem;
+   justify-content: center;
+   align-items: center;
+   border-radius: 62.5rem;
+   font-size: 1.6rem;
+   transition: 0.1s;
+}
+
+#auto-undo-button.active {
+   background: var(--light-nav, #141414);
+   color: var(--accent, #CDA745);
+}
+
+#auto-undo-button.inactive {
+   background: var(--light-bg, #121212);
+   color: var(--accent-dimmed, rgba(205, 167, 69, 0.15));
+}
+
+#svg.flipped {
+   transform: scaleX(-1);
+}
+
+#canvas.flipped {
+   transform: scaleX(-1);
+}

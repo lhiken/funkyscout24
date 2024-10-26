@@ -1,11 +1,7 @@
-import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
-import "../styles/canvas.css";
-import Note from "../../../../components/routes/auto/note";
-import throwNotification from "../../../../components/notification/notifiication";
-
+import "./canvas.css";
+import Note from "../auto/note";
+import { useEffect, useRef } from "react";
 const Notes: Note[] = [
-   new Note(-1), // pre-load
    new Note(0),
    new Note(1),
    new Note(2),
@@ -16,94 +12,86 @@ const Notes: Note[] = [
    new Note(7),
 ];
 
-const Auto = (
-   { alliance, startPosition, AutoPath, setAutoData }: {
+const DataAnalysisAuto = (
+   { alliance, startPosition, AutoPath }: {
       alliance: boolean;
-      startPosition: number; //-1, 0, 1 for left, center, right
+      startPosition: number;
       AutoPath: Note[];
-      setAutoData: React.Dispatch<React.SetStateAction<Note[]>>;
    },
 ) => {
-   if (alliance == true) {
-      startPosition = -startPosition;
-   }
-
 
    const canvasRef = useRef<HTMLCanvasElement>(null);
-   const [active, setActive] = useState(true);
-
-   useEffect(() => {
-      for (const note of Notes) {
-         note.isClicked = false;
-      }
-   }, []);
-
-   const handleCanvasClick = (event: React.MouseEvent) => {
-      const canvas = canvasRef.current;
-      if (canvas && !active) {
-         const rect = canvas.getBoundingClientRect();
-         const x = event.clientX - rect.left;
-         const y = event.clientY - rect.top;
-
-         for (const note of Notes) {
-            const clicked = alliance
-               ? x <= 325 - note.x + 15 &&
-                  x >= 325 - note.x - Note.width - 15 && y >= note.y - 15 &&
-                  y <= note.y + Note.width + 15
-               : x >= note.x - 15 && x <= note.x + Note.width + 15 &&
-                  y >= note.y - 15 && y <= note.y + Note.width + 15;
-
-            if (!note.isClicked && clicked) {
-               note.isClicked = true;
-               setAutoData((prev) => [...prev, note]);
-               setActive(true);
-               break;
-            }
-         }
-      } else {
-         throwNotification("error", "Score piece first!");
-      }
-   };
 
    useEffect(() => {
       const canvas = canvasRef.current;
       if (canvas) {
          const ctx = canvas.getContext("2d");
          const dpr = window.devicePixelRatio || 1; // Get the device pixel ratio for high-DPI screens
-
+   
          // Set original width and height of your design
          const originalWidth = 330;
          const originalHeight = 410;
-
+   
          // Get scale factor to maintain aspect ratio
          const scaleX = canvas.getBoundingClientRect().width / originalWidth;
          const scaleY = canvas.getBoundingClientRect().height / originalHeight;
          const scale = Math.min(scaleX, scaleY);
-
+   
          // Set canvas resolution (internal pixels)
          canvas.width = originalWidth * scale * dpr;
          canvas.height = originalHeight * scale * dpr;
-
+   
          // Set the CSS size (what you see)
          canvas.style.width = `${originalWidth * scale}px`;
          canvas.style.height = `${originalHeight * scale}px`;
-
+   
          // Scale the context for high-DPI rendering
          ctx!.scale(scale * dpr, scale * dpr);
-
+   
          // Clear canvas
          ctx!.clearRect(0, 0, canvas.width, canvas.height);
-
+   
          // Draw the notes
          for (const note of Notes) {
-            note.draw(ctx!,true);
+            note.draw(ctx!, false);
          }
-
+         for (const note of AutoPath) {
+            note.draw(ctx!, false);
+         }
+   
          const catmullRom = (
-            p0: Note | { x: number; y: number },
-            p1: Note | { x: number; y: number },
-            p2: Note,
-            p3: Note | { x: number; y: number },
+            p0: Note | { x: number; y: number }|
+            {
+               isClicked:boolean;
+               num:number;
+               x:number;
+               y:number;
+               success:boolean;
+            },
+            p1: Note | { x: number; y: number }|
+            {
+               isClicked:boolean;
+               num:number;
+               x:number;
+               y:number;
+               success:boolean;
+            },
+            p2: Note|
+            {
+               isClicked:boolean;
+               num:number;
+               x:number;
+               y:number;
+               success:boolean;
+            },
+            p3: Note | { x: number; y: number }|
+            {
+               isClicked:boolean;
+               num:number;
+               x:number;
+               y:number;
+               success:boolean;
+            },
             t: number,
          ) => {
             const t2 = t * t;
@@ -129,12 +117,12 @@ const Auto = (
             const p0 = AutoPath[1];
             const p1 = AutoPath[2];
             const p3 = AutoPath[AutoPath.length - 1];
-
+   
             for (let t = 0; t <= 1; t += 0.03) {
                const p = catmullRom(start, start, p0, p1, t);
                ctx!.lineTo(p.x + 7.5, p.y + 7.5);
             }
-
+   
             if (AutoPath.length === 3) {
                for (let t = 0; t <= 1; t += 0.03) {
                   const p = catmullRom(start, p0, p1, p1, t);
@@ -185,9 +173,10 @@ const Auto = (
             }
             ctx!.moveTo(p3.x + 8.5, p3.y + 8.5);
             ctx!.arc(p3.x + 8.5, p3.y + 8.5, 3, 0, Math.PI * 2);
-         } else if (AutoPath.length == 2) {
+         }
+         else if (AutoPath.length == 2) {
             const p0 = AutoPath[1];
-
+   
             for (let t = 0; t <= 1; t += 0.03) {
                const p = catmullRom(start, start, p0, p0, t);
                ctx!.lineTo(p.x + 7.5, p.y + 7.5);
@@ -195,96 +184,14 @@ const Auto = (
             ctx!.moveTo(p0.x + 8.5, p0.y + 8.5);
             ctx!.arc(p0.x + 8.5, p0.y + 8.5, 3, 0, Math.PI * 2);
          }
-
+   
          ctx!.stroke();
       }
-
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [active]);
-
-   const handleScore = () => {
-      if (active) {
-         setActive(false);
-         setAutoData((prev) => {
-            const updatedPath = [...prev];
-            updatedPath[updatedPath.length - 1].isClicked = true;
-            updatedPath[updatedPath.length - 1].success = true;
-            return updatedPath;
-         });
-         setUndoActive(true);
-         throwNotification("success", "Logged scored note!");
-      } else {
-         throwNotification("error", "Select path first!");
-      }
-   };
-
-   const handleMiss = () => {
-      if (active) {
-         setActive(false);
-         setAutoData((prev) => {
-            const updatedPath = [...prev];
-            updatedPath[updatedPath.length - 1].isClicked = true;
-            updatedPath[updatedPath.length - 1].success = false;
-            return updatedPath;
-         });
-         setUndoActive(true);
-         throwNotification("success", "Logged missed note!");
-      } else {
-         throwNotification("error", "Select path first!");
-      }
-   };
-   const [undoActive, setUndoActive] = useState(false);
-
-   const handleUndo = () => {
-      if (AutoPath.length > 1 && undoActive) {
-         if (active) {
-            const n = AutoPath[AutoPath.length - 1];
-            setAutoData((prev) => {
-               const updatedPath = [...prev];
-               for (const note of Notes) {
-                  if (n.num === note.num) {
-                     note.isClicked = false;
-                     break;
-                  }
-               }
-               updatedPath.pop();
-               return updatedPath;
-            });
-            setActive(false);
-            throwNotification("success", "Undid path selection!");
-         } else {
-            setAutoData((prev) => {
-               const updatedPath = [...prev];
-               updatedPath[updatedPath.length - 1].isClicked = true;
-               updatedPath[updatedPath.length - 1].success = undefined;
-               return updatedPath;
-            });
-            setActive(true);
-            throwNotification("success", "Undid note scoring!");
-         }
-      } else if (AutoPath.length == 1 && AutoPath[0].isClicked) {
-         setAutoData((prev) => {
-            const updatedPath = [...prev];
-            updatedPath[updatedPath.length - 1].isClicked = true;
-            updatedPath[updatedPath.length - 1].success = undefined;
-            return updatedPath;
-         });
-         setActive(true);
-         setUndoActive(false);
-      } else {
-         throwNotification("error", "Nothing to undo.");
-      }
-   };
-
+   })
+   
    return (
       <>
-         <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: -20, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            id="auto"
-         >
+         <div id="auto">
             <div id="svg-border">
                {alliance
                   ? (
@@ -331,39 +238,14 @@ const Auto = (
                   )}
 
                <canvas
-                  ref={canvasRef}
                   id="canvas"
-                  onClick={handleCanvasClick}
+                  ref={canvasRef}
                   className={alliance ? "flipped" : ""}
                >
                </canvas>
             </div>
-            <div id="auto-button-bar">
-               <button
-                  id="auto-button"
-                  className={active ? "active" : "inactive"}
-                  onClick={handleScore}
-               >
-                  Score
-               </button>
-               <button
-                  id="auto-button"
-                  className={active ? "active" : "inactive"}
-                  onClick={handleMiss}
-               >
-                  Miss
-               </button>
-               <button
-                  id="auto-undo-button"
-                  className={undoActive ? "active" : "inactive"}
-                  onClick={handleUndo}
-               >
-                  <i className="fa-solid fa-rotate-left"></i>
-               </button>
-            </div>
-         </motion.div>
+         </div>
       </>
-   );
-};
-
-export default Auto;
+   )
+}
+export default DataAnalysisAuto;

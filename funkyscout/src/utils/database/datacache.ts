@@ -3,6 +3,7 @@ import supabase from "./supabase";
 import { Tables } from "./database.types";
 import { MatchData } from "../../app/routes/scouting/matches/matchScouting";
 import throwNotification from "../../components/notification/notifiication";
+import { compiledData, getEventData } from "../helpers/fetch";
 
 /* To store match data we use indexeddb, a built in
  * browser feature that's essentially localStorage
@@ -164,11 +165,45 @@ const getNextMatch = async (database: string, user: string) => {
    const assignedMatches = await eventStore.index("eventAuthors").getAll(user);
    const completeMatches = await matchStore.index("matchAuthors").getAll(user);
 
-   const nextMatch = assignedMatches.find((assignedMatch) =>
-      !completeMatches.some((completeMatch) =>
-         completeMatch.match == assignedMatch.match
-      )
-   );
+   let nextMatch;
+
+   if (isOnline()) {
+      const currentTime = Date.now();
+
+      let matchData: compiledData[];
+
+      await getEventData().then((res) => {
+         matchData = res;
+
+         nextMatch = matchData
+            .filter((assignedMatch) =>
+               assignedMatches.some((assigned) =>
+                  assigned.match === assignedMatch.match
+               ) &&
+               !completeMatches.some((completeMatch) =>
+                  completeMatch.match === assignedMatch.match
+               )
+            )
+            .reduce((closestMatch, currentMatch) => {
+               const currentMatchTimeDiff = Math.abs(
+                  currentMatch.startTime - currentTime,
+               );
+               const closestMatchTimeDiff = closestMatch
+                  ? Math.abs(closestMatch.startTime - currentTime)
+                  : Infinity;
+
+               return currentMatchTimeDiff < closestMatchTimeDiff
+                  ? currentMatch
+                  : closestMatch;
+            }, null as compiledData | null);
+      });
+   } else {
+      nextMatch = assignedMatches.find((assignedMatch) =>
+         !completeMatches.some((completeMatch) =>
+            completeMatch.match == assignedMatch.match
+         )
+      );
+   }
 
    if (nextMatch) {
       return nextMatch;

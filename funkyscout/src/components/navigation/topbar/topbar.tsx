@@ -1,8 +1,9 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { setTheme } from "../../../utils/theme";
 import "./topbar.css";
+import throwNotification from "../../notification/notifiication";
 
 interface Settings {
    active: boolean;
@@ -45,13 +46,26 @@ const Topbar = () => {
    const [dropdown, setDropdown] = useState(false);
    const [notificationEnabled, setNotificationEnabled] = useState(false);
 
+   const [menu, setMenu] = useState(false);
+   const [logoutPrompt, setLogoutPrompt] = useState(false);
+
    const navigate = useNavigate();
+   const location = useLocation();
 
    const handleExitClick = () => {
-      localStorage.removeItem("user");
-      localStorage.removeItem("event");
-      setDropdown(false);
-      navigate("/auth");
+      setLogoutPrompt(true);
+   };
+
+   const handleLogout = () => {
+      if (window.navigator.onLine) {
+         localStorage.removeItem("user");
+         localStorage.removeItem("event");
+         setDropdown(false);
+         navigate("/auth");
+         throwNotification("info", "Logged out");
+      } else {
+         throwNotification("error", "No logging off without a connection >:(");
+      }
    };
 
    const handleNotifClick = () => {
@@ -60,7 +74,7 @@ const Topbar = () => {
    };
 
    const handleMenuToggle = () => {
-      return;
+      setMenu(true);
    };
 
    const handleThemeSwitch = () => {
@@ -75,8 +89,151 @@ const Topbar = () => {
       setDropdown(!dropdown);
    };
 
+   const handleNavigate = (path: string) => {
+      navigate(path);
+   };
+
    return (
       <>
+         <AnimatePresence>
+            {menu && (
+               <motion.div
+                  initial={{ y: -20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  id="menu"
+                  onClick={() => setMenu(false)}
+               >
+                  <div id="menu-box">
+                     {location.pathname != "/auth"
+                        ? (
+                           <>
+                              <button
+                                 id="menu-previous"
+                                 className="menu-button"
+                                 onClick={() => navigate(-1)}
+                              >
+                                 <i
+                                    style={{
+                                       fontSize: "1.25rem",
+                                       width: "2rem",
+                                    }}
+                                    className="fa-solid fa-backward"
+                                 />
+                                 Previous
+                              </button>
+                              <button
+                                 id="menu-dash"
+                                 className="menu-button"
+                                 onClick={() => handleNavigate("/dashboard")}
+                              >
+                                 <i
+                                    style={{
+                                       fontSize: "1.25rem",
+                                       width: "2rem",
+                                    }}
+                                    className="fa-solid fa-gauge"
+                                 />
+                                 Dashboard
+                              </button>
+                              <button
+                                 id="menu-data"
+                                 className="menu-button"
+                                 onClick={() => handleNavigate("/data")}
+                              >
+                                 <i
+                                    style={{
+                                       fontSize: "1.25rem",
+                                       width: "2rem",
+                                    }}
+                                    className="fa-solid fa-server"
+                                 />
+                                 View Data
+                              </button>
+                              <button
+                                 id="menu-scouting"
+                                 className="menu-button"
+                                 onClick={() => handleNavigate("/scouting")}
+                              >
+                                 <i
+                                    style={{
+                                       fontSize: "1.25rem",
+                                       width: "2rem",
+                                    }}
+                                    className="fa-solid fa-binoculars"
+                                 />
+                                 Scouting
+                              </button>
+                              <button
+                                 id="menu-logout"
+                                 className="menu-button"
+                                 onClick={handleExitClick}
+                              >
+                                 <i
+                                    style={{
+                                       fontSize: "1.5rem",
+                                       width: "2rem",
+                                    }}
+                                    className="fa-solid fa-right-from-bracket"
+                                 />
+                                 Logout
+                              </button>
+                           </>
+                        )
+                        : "Sign in first"}
+                  </div>
+               </motion.div>
+            )}
+         </AnimatePresence>
+         <AnimatePresence>
+            {logoutPrompt && (
+               <motion.div
+                  initial={{ y: -20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  id="menu"
+                  onClick={() => setLogoutPrompt(false)}
+               >
+                  <div id="menu-box">
+                     Are you sure?
+                     <div id="menu-details">
+                        You won't be able to sign in again without an internet
+                        connection.
+                     </div>
+                     <div id="menu-confirmation">
+                        <button
+                           className="confirm-button"
+                           onClick={() => setLogoutPrompt(false)}
+                        >
+                           <i
+                              style={{
+                                 fontSize: "1.25rem",
+                                 width: "2rem",
+                                 color: "var(--accent)",
+                              }}
+                              className="fa-solid fa-xmark"
+                           />
+                        </button>
+                        <button
+                           className="confirm-button"
+                           onClick={handleLogout}
+                        >
+                           <i
+                              style={{
+                                 fontSize: "1.25rem",
+                                 width: "2rem",
+                                 color: "var(--dark-text)",
+                              }}
+                              className="fa-solid fa-check"
+                           />
+                        </button>
+                     </div>
+                  </div>
+               </motion.div>
+            )}
+         </AnimatePresence>
          <motion.div
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}

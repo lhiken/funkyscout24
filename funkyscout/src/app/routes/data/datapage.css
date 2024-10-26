@@ -15,6 +15,9 @@
 .progress-container {
    position: relative;
    width: 100%;
+   border-radius: 100rem;
+   overflow: hidden;
+   height: 1.6rem;
 }
 
 #data-match-left {

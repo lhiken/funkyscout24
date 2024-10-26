@@ -363,15 +363,15 @@ const DataPage = () => {
                         <progress
                            id="progress-bar"
                            value={nextMatchProbabilities.red != 0
-                              ? 1 / nextMatchProbabilities.red
+                              ? nextMatchProbabilities.red
                               : 0.5}
                            max="1"
                         />
                         <span className="progress-bar-text left">
-                           {nextMatchProbabilities.blue * 100}%
+                           {(nextMatchProbabilities.red * 100).toFixed(0)}%
                         </span>
                         <span className="progress-bar-text right">
-                           {nextMatchProbabilities.red * 100}%
+                           {(nextMatchProbabilities.blue * 100).toFixed(0)}%
                         </span>
                      </div>
                   </div>

@@ -24,6 +24,9 @@
    height: 6rem;
    width: 100%;
 
+
+   z-index: 0;
+
    @media (min-width: 500px) {
       max-width: 24rem;
   }

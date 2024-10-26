@@ -105,6 +105,24 @@ const writeTable = async <dataType>(
    }
 };
 
+const writeClear = async <dataType>(
+   database: string,
+   table: string,
+   data: dataType[],
+) => {
+   const db = await openDB(database);
+
+   // Clear the table
+   const tx = db.transaction(table, "readwrite");
+   await tx.store.clear();
+   await tx.done;
+
+   // Add each entry to the table
+   for (const entry of data) {
+      await db.put(table, entry);
+   }
+};
+
 //Not recommended for things that require performance!
 //There is probably a better alternative out there!
 const getCount = async (
@@ -252,6 +270,9 @@ const syncData = async (event: string) => {
          attempts++;
       }
    }
+
+   const eventData = await fetchEvent(localStorage.getItem("event")!);
+   await writeClear(event, "event_data", eventData!);
 
    throwNotification("info", `${matches}/${attempts} matches synced`);
    if (!isOnline()) {

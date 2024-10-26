@@ -148,10 +148,10 @@ const TeamPage = () => {
                               fontWeight: "500",
                               height: "1.5rem",
                               width: "8rem",
-                              whiteSpace: "nowrap", // Prevent text wrapping
-                              overflow: "hidden", // Hide any overflowed text
-                              textOverflow: "ellipsis", // Add ellipsis for overflowed text
-                              display: "block", // Ensure the display type is suitable for ellipsis
+                              whiteSpace: "nowrap",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              display: "block",
                            }}
                         >
                            {team.name}
@@ -171,10 +171,12 @@ const TeamPage = () => {
                            <div id="teamdata-stats-normal">
                               <div>Amp Ratio</div>
                               <div>
-                                 {(teamAverages.avgAmp /
-                                    (teamAverages.avgAmp +
-                                       teamAverages.avgSpeaker) *
-                                    100).toFixed(0)}%
+                                 {teamData.length > 0
+                                    ? (teamAverages.avgAmp /
+                                       (teamAverages.avgAmp +
+                                          teamAverages.avgSpeaker) *
+                                       100).toFixed(0) + "%"
+                                    : "N/A"}
                               </div>
                            </div>
                            <progress

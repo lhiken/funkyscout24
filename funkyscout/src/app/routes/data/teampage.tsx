@@ -265,7 +265,7 @@ const TeamPage = () => {
                   {currentTab == 0
                      ? <AutosTab teamData={teamData} />
                      : currentTab == 1
-                     ? <GraphsTab />
+                     ? <GraphsTab data={teamData}/>
                      : <NotesTab />}
                </div>
             </div>

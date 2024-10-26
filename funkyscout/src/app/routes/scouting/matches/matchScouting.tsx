@@ -63,11 +63,14 @@ const MatchScouting = () => {
    const alliance = id?.indexOf("r") != -1 ? true : false;
 
    const time = Date.now();
-   const teleTime = time + 1000 * 150;
+   const teleTime = time + 1000 * 152;
 
    const [currentTime, setCurrentTime] = useState(0);
+   const [displayTime, setDisplayTime] = useState(150);
    const [gameState, setGameState] = useState(0);
    const [timerStarted, setTimerStarted] = useState(false);
+
+   const offsetTimeSeconds = 2;
 
    const updateTime = (interval: NodeJS.Timeout) => {
       setCurrentTime(
@@ -88,6 +91,7 @@ const MatchScouting = () => {
       if (seconds <= 0) {
          setGameState(-1);
          setCurrentTime(0);
+         setDisplayTime(0);
          clearInterval(interval);
       } else if (seconds < 1350) {
          setGameState(1);
@@ -120,6 +124,16 @@ const MatchScouting = () => {
       amp: 0,
       speaker: 0,
    });
+
+   useEffect(() => {
+      if (currentTime > 135 && currentTime < 135 + offsetTimeSeconds) {
+         setDisplayTime(135);
+      } else {
+         setDisplayTime(
+            currentTime - offsetTimeSeconds,
+         );
+      }
+   }, [currentTime])
 
    const cycleTime = useMemo(() => {
       if (matchData?.amp != 0 || matchData?.speaker != 0) {
@@ -189,7 +203,7 @@ const MatchScouting = () => {
                   : gameState == 1
                   ? "Teleop"
                   : "Match Notes"}{" "}
-               {currentTime > 0 ? `| ${currentTime.toFixed(1)}s` : null}
+               {currentTime > 0 ? `| ${displayTime.toFixed(1)}s` : null}
             </div>
             <div id="scouting-tab-container">
                <AnimatePresence>

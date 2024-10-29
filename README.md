@@ -1,6 +1,6 @@
 # Funkyscout
 
-FRC 846's scouting app for the 2025-2026 season.
+FRC 846's 2024 scouting app rewrite
 ___
 
 #### Preface
